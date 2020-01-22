@@ -7,19 +7,17 @@ import torch.nn as nn
 import torch.optim as optim
 import torch.utils.tensorboard
 
-from . import misc_utils
 
-
-class TrainingBuddy:
+class Buddy:
     def __init__(self, experiment_name, model, optimizer_names=["primary"], load_checkpoint=True,
                  log_dir="logs", checkpoint_dir="checkpoints"):
         """
-        TrainingBuddy constructor for encapsulating PyTorch boilerplate.
+        Buddy is a model manager that abstracts away PyTorch boilerplate.
 
         Helps with:
             - Creating/using/managing optimizers
-            - Checkpointing
-            - Tensorboard logging
+            - Checkpointing (models + optimizers)
+            - Namespaced/scoped Tensorboard logging
         """
         # CUDA boilerplate
         if torch.cuda.is_available():
@@ -39,7 +37,7 @@ class TrainingBuddy:
         # The writer is lazily instantiated in TrainingBuddy.log()
         self._writer = None
         self._log_dir = log_dir
-        self._log_namespaces = []
+        self._log_scopes = []
 
         # Checkpointing variables
         self._checkpoint_dir = checkpoint_dir
@@ -74,25 +72,25 @@ class TrainingBuddy:
         if self._steps % checkpoint_interval == 0:
             self.save_checkpoint()
 
-    def log_namespace(self, namespace):
+    def log_scope(self, scope):
         """
-        Returns a namespace to log tensors in.
+        Returns a scope to log tensors in.
 
         Example usage:
 
         ```
-            with buddy.log_namespace("namespace"):
-                # Logs to namespace/loss
+            with buddy.log_scope("scope"):
+                # Logs to scope/loss
                 buddy.log("loss", loss_tensor)
         ```
         """
         class _Namespace:
             def __enter__(unused_self):
-                self._log_namespaces.append(namespace)
+                self._log_scopes.append(scope)
                 return unused_self
 
             def __exit__(*unused):
-                self._log_namespaces.pop()
+                self._log_scopes.pop()
                 return
 
         return _Namespace()
@@ -101,8 +99,8 @@ class TrainingBuddy:
         """
         Log a tensor for visualization in Tensorboard. Currently only supports scalars.
         """
-        if len(self._log_namespaces) > 0:
-            name = "{}/{}".format("/".join(self._log_namespaces), name)
+        if len(self._log_scopes) > 0:
+            name = "{}/{}".format("/".join(self._log_scopes), name)
         if self._writer is None:
             self._writer = torch.utils.tensorboard.SummaryWriter(
                 self._log_dir + "/" + self._experiment_name)
@@ -178,73 +176,3 @@ class TrainingBuddy:
         self._steps = state['steps']
 
         print("Loaded checkpoint from path:", path)
-
-
-def to_device(x, device, detach=True):
-    """
-    Copies a tensor, list of tensors, or dictionary of tensors to a different device.
-    """
-    if type(x) == torch.Tensor:
-        # Convert plain arrays
-        if detach:
-            x = x.detach()
-        output = x.to(device)
-    elif type(x) == dict:
-        # Convert dictionaries of values
-        output = {}
-        for key, value in x.items():
-            output[key] = to_device(value, device, detach)
-    elif type(x) in (list, tuple):
-        # Convert lists of values
-        output = []
-        for value in x:
-            output.append(to_device(value, device, detach))
-    else:
-        assert False, "Invalid datatype {}!".format(type(x))
-    return output
-
-
-def to_torch(x, device='cpu'):
-    """
-    Converts a numpy array, list of np arrays, or dictionary of np arrays for use in PyTorch.
-    """
-    if type(x) == np.ndarray:
-        # Convert plain arrays
-        output = torch.from_numpy(x).float().to(device)
-    elif type(x) == dict:
-        # Convert dictionaries of values
-        output = {}
-        for key, value in x.items():
-            output[key] = to_torch(value, device)
-    elif type(x) in (list, tuple):
-        # Convert lists of values
-        output = []
-        for value in x:
-            output.append(to_torch(value, device))
-    else:
-        assert False, "Invalid datatype {}!".format(type(x))
-
-    return output
-
-
-def to_numpy(x):
-    """
-    Converts a tensor, list of tensors, or dictionary of tensors for use in Numpy.
-    """
-    if type(x) == torch.Tensor:
-        # Convert plain tensors
-        output = x.detach().cpu().numpy()
-    elif type(x) == dict:
-        # Convert dictionaries of values
-        output = {}
-        for key, value in x.items():
-            output[key] = to_numpy(value)
-    elif type(x) in (list, tuple):
-        # Convert lists of values
-        output = []
-        for value in x:
-            output.append(to_numpy(value))
-    else:
-        assert False, "Invalid datatype {}!".format(type(x))
-
-    return output
