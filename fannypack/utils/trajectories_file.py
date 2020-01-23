@@ -7,7 +7,8 @@ import h5py
 
 
 class TrajectoriesFile:
-    def __init__(self, path, convert_doubles=True, compress=True):
+    def __init__(self, path, convert_doubles=True,
+                 compress=True, diagnostics=False):
         """Constructor for the TrajectoriesFile class, which provides a simple
         interface for reading from/writing to hdf5 files.
 
@@ -22,6 +23,7 @@ class TrajectoriesFile:
         self._path = path
         self._convert_doubles = convert_doubles
         self._compress = compress
+        self._diagnostics = diagnostics
 
         # Maps observation key => observation list
         self._obs_dict = {}
@@ -29,20 +31,32 @@ class TrajectoriesFile:
         # Count the number of trajectories that already exist
         self._trajectory_prefix = "trajectory"
         with self._h5py_file() as f:
+            self._print("Loading trajectory from file:", f)
             if len(f.keys()) > 0:
                 prefix_length = len(self._trajectory_prefix)
                 ids = [int(k[prefix_length:]) for k in f.keys()]
                 self._trajectory_count = max(ids) + 1
             else:
                 self._trajectory_count = 0
+
+            self._print("Existing trajectory count:", self._trajectory_count)
+
         assert type(self._trajectory_count) == int
 
         self._file = None
+
+    def _print(self, *args, **kwargs):
+        if self._diagnostics:
+            assert type(args[0]) == str
+            args = list(args)
+            args[0] = f"[TrajectoriesFile: {self._path}] {args[0]}"
+            print(*args, **kwargs)
 
     def __enter__(self):
         """Automatic file opening, for use in `with` statements.
         """
         if self._file is None:
+            self._print("Opening file...")
             self._file = self._h5py_file()
         return self
 
@@ -50,6 +64,7 @@ class TrajectoriesFile:
         """Automatic file closing, for use in `with` statements.
         """
         if self._file is not None:
+            self._print("Closing file...")
             self._file.close()
             self._file = None
 
@@ -93,6 +108,12 @@ class TrajectoriesFile:
             assert type(self._obs_dict[key]) == list
             self._obs_dict[key].append(np.copy(value))
 
+    def clear_trajectory(self):
+        """Abandon the current trajectory.
+        """
+        self._print("Clearing trajectory!")
+        self._obs_dict = {}
+
     def end_trajectory(self):
         """Write the current trajectory to disk, and mark the start of a new
         trajectory.
@@ -100,6 +121,9 @@ class TrajectoriesFile:
         The next call to `add_timestep()` will be time 0 of the next trajectory.
         """
         assert self._file is not None, "Not called in with statement!"
+
+        length = len(list(self._obs_dict.values())[0])
+        self._print(f"Ending trajectory! (length={length})")
 
         # Put all pushed observations into a new group
         trajectory_name = self._trajectory_prefix + \
@@ -121,6 +145,8 @@ class TrajectoriesFile:
 
         self._obs_dict = {}
         self._trajectory_count += 1
+
+        self._print("Existing trajectory count:", self._trajectory_count)
 
     def reencode(self, target_path):
         """Re-encode contents into a new hdf5 file.
