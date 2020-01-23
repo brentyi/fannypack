@@ -75,6 +75,7 @@ class TrajectoriesFile:
 
         # Check that the index is sane
         assert type(index) == int
+
         if index >= len(self):
             # For use as a standard Python iterator
             raise IndexError
@@ -89,6 +90,23 @@ class TrajectoriesFile:
             assert type(output[key]) == np.ndarray
 
         return output
+
+    def __setitem__(self, index, item):
+        """Assignment operation for modifying or mutating trajectories.
+        """
+        assert self._file is not None, "Not called in with statement!"
+
+        # Check that the inputs are sane
+        assert type(index) == int
+        assert type(item) == dict
+
+        if index >= len(self):
+            raise IndexError
+
+        traj_key = self._trajectory_prefix + str(index)
+        for key, value in item.items():
+            self._file[traj_key][key][...] = value
+
 
     def __len__(self):
         """Returns the number of recorded trajectories.
