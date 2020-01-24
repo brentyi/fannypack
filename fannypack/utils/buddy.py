@@ -1,5 +1,6 @@
 import abc
 import glob
+import os
 
 import numpy as np
 import torch
@@ -111,6 +112,11 @@ class Buddy:
         """
         Saves a checkpoint!
         """
+
+        # Create directory if it doesn't exist yet
+        if not os.path.isdir(self._checkpoint_dir):
+            os.makedirs(self._checkpoint_dir)
+
         if path is None and label is None:
             path = "{}/{}-{:016d}.ckpt".format(self._checkpoint_dir,
                                                self._experiment_name, self._steps)
