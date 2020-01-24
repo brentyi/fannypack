@@ -7,7 +7,7 @@ import h5py
 
 
 class TrajectoriesFile:
-    def __init__(self, path, convert_doubles=True,
+    def __init__(self, path, convert_doubles=True, read_only=True,
                  compress=True, diagnostics=False):
         """Constructor for the TrajectoriesFile class, which provides a simple
         interface for reading from/writing to hdf5 files.
@@ -22,6 +22,7 @@ class TrajectoriesFile:
         # Meta
         self._path = path
         self._convert_doubles = convert_doubles
+        self._read_only = read_only
         self._compress = compress
         self._diagnostics = diagnostics
 
@@ -107,7 +108,6 @@ class TrajectoriesFile:
         for key, value in item.items():
             self._file[traj_key][key][...] = value
 
-
     def __len__(self):
         """Returns the number of recorded trajectories.
         """
@@ -186,7 +186,10 @@ class TrajectoriesFile:
                 print("Wrote ", name)
         return target
 
-    def _h5py_file(self, mode='a'):
+    def _h5py_file(self, mode=None):
         """Private helper for creating h5py file objects.
         """
+        if mode is None:
+            mode = "r" if self._read_only else "a"
+
         return h5py.File(self._path, mode)
