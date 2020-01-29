@@ -131,7 +131,7 @@ class Buddy:
             name = "{}/{}".format("/".join(self._log_scopes), name)
         if self._writer is None:
             self._writer = torch.utils.tensorboard.SummaryWriter(
-                self._log_dir + "/" + self._experiment_name)
+                self._config['log_dir'] + "/" + self._experiment_name)
 
         self._writer.add_scalar(name, value, global_step=self._steps)
 
@@ -140,14 +140,14 @@ class Buddy:
         """
 
         # Create directory if it doesn't exist yet
-        if not os.path.isdir(self._checkpoint_dir):
-            os.makedirs(self._checkpoint_dir)
+        if not os.path.isdir(self._config['checkpoint_dir']):
+            os.makedirs(self._config['checkpoint_dir'])
 
         if path is None and label is None:
-            path = "{}/{}-{:016d}.ckpt".format(self._checkpoint_dir,
+            path = "{}/{}-{:016d}.ckpt".format(self._config['checkpoint_dir'],
                                                self._experiment_name, self._steps)
         else:
-            path = "{}/{}-{}.ckpt".format(self._checkpoint_dir,
+            path = "{}/{}-{}.ckpt".format(self._config['checkpoint_dir'],
                                           self._experiment_name, label)
 
         optimizer_states = {}
@@ -171,14 +171,14 @@ class Buddy:
 
         if path is None and label is None:
             path_choices = glob.glob(
-                "{}/{}-*.ckpt".format(self._checkpoint_dir, self._experiment_name))
+                "{}/{}-*.ckpt".format(self._config['checkpoint_dir'], self._experiment_name))
             if len(path_choices) == 0:
                 print("No checkpoint found")
                 return False
             steps = []
             for choice in path_choices:
                 prefix_len = len(
-                    "{}/{}-".format(self._checkpoint_dir, self._experiment_name))
+                    "{}/{}-".format(self._config['checkpoint_dir'], self._experiment_name))
                 suffix_len = len(".ckpt")
                 string_steps = choice[prefix_len:-suffix_len]
                 try:
@@ -192,7 +192,7 @@ class Buddy:
             state = torch.load(path, map_location=self._device)
             assert state['steps'] == np.max(steps)
         elif path is None and label is not None:
-            path = "{}/{}-{}.ckpt".format(self._checkpoint_dir,
+            path = "{}/{}-{}.ckpt".format(self._config['checkpoint_dir'],
                                           self._experiment_name, label)
             print(path)
             state = torch.load(path, map_location=self._device)
