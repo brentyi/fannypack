@@ -49,8 +49,8 @@ class Buddy:
         # Assign and validate our configuration
         self._config = self.DEFAULT_CONFIG.copy()
         for key, value in config.items():
-            assert key in self._config
-            assert type(value) == type(self._config[key])
+            assert key in self.DEFAULT_CONFIG.keys()
+            assert type(value) == type(self.DEFAULT_CONFIG[key])
             self._config[key] = config[key]
 
         # Create some misc state variables for tensorboard
@@ -200,6 +200,12 @@ class Buddy:
             state = torch.load(path, map_location=self._device)
         else:
             assert False, "invalid arguments!"
+
+        # Sanity check: something's probably wrong if we're overwriting any
+        # explicitly set, non-default configuration values
+        for key, value in state['config']:
+            assert state['config'][key] in (
+                self._config[key], self.DEFAULT_CONFIG[key])
 
         # Load model parameters
         self._model.load_state_dict(state['state_dict'])
