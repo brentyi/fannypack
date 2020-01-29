@@ -10,17 +10,55 @@ import torch.utils.tensorboard
 
 
 class Buddy:
-    def __init__(self, experiment_name, model, optimizer_names=["primary"], load_checkpoint=True,
-                 log_dir="logs", checkpoint_dir="checkpoints"):
-        """
-        Buddy is a model manager that abstracts away PyTorch boilerplate.
+    """Buddy is a model manager that abstracts away PyTorch boilerplate.
 
-        Helps with:
-            - Creating/using/managing optimizers
-            - Checkpointing (models + optimizers)
-            - Namespaced/scoped Tensorboard logging
+    Helps with:
+        - Creating/using/managing optimizers
+        - Checkpointing (models + optimizers)
+        - Namespaced/scoped Tensorboard logging
+    """
+
+    # Default configuration parameters
+    DEFAULT_CONFIG = {
+        'optimizer_type': "adam",
+        'optimizer_names': ["primary"],
+        'log_dir': "logs",
+        'checkpoint_dir': "checkpoints",
+    }
+
+    # Supported optimizer types
+    OPTIMIZER_TYPES = {
+        'adam': torch.optim.Adam,
+        'adadelta': torch.optim.Adadelta,
+    }
+    DEFAULT_LEARNING_RATES = {
+        'adam': 1e-4,
+        'adadelta': 1
+    }
+
+    def __init__(self, experiment_name, model, load_checkpoint=True, **config):
+        """Constructor
         """
-        # CUDA boilerplate
+
+        # Assign and validate core parameters
+        assert type(experiment) == str
+        assert isinstance(model, nn.Module)
+        self._experiment_name = experiment_name
+        self._model = model
+
+        # Assign and validate our configuration
+        self._config = self.DEFAULT_CONFIG.copy()
+        for key, value in config.items():
+            assert key in self._config
+            assert type(value) == type(self._config[key])
+            self._config[key] = config[key]
+
+        # Create some misc state variables for tensorboard
+        # The writer is lazily instantiated in TrainingBuddy.log()
+        self._writer = None
+        self._log_scopes = []
+
+        # What device are we using for training?
         if torch.cuda.is_available():
             self._device = torch.device("cuda")
             model.cuda()
@@ -29,36 +67,27 @@ class Buddy:
         print("Using device:", self._device)
         torch.autograd.set_detect_anomaly(True)
 
-        # Model and experiment parameters
-        assert isinstance(model, nn.Module)
-        self._experiment_name = experiment_name
-        self._model = model
-
-        # State variables for tensorboard
-        # The writer is lazily instantiated in TrainingBuddy.log()
-        self._writer = None
-        self._log_dir = log_dir
-        self._log_scopes = []
-
-        # Checkpointing variables
-        self._checkpoint_dir = checkpoint_dir
+        # Instantiate optimizers, step count -- note that these may be
+        # overriden by our loaded checkpoint
+        self._optimizers = self._instantiate_optimizers()
         self._steps = 0
-
-        # Create optimizers -- we use a different one for each loss function
-        # TODO: add support for non-Adadelta optimizers (at least ADAM...)
-        self._optimizers = {}
-        for optimizer_name in optimizer_names:
-            self._optimizers[optimizer_name] = optim.Adadelta(
-                self._model.parameters())
 
         # Load checkpoint using model name
         if load_checkpoint:
             self.load_checkpoint()
 
-    def minimize(self, loss, retain_graph=False,
-                 optimizer_name="primary", checkpoint_interval=1000):
+    def set_learning_rate(self, value, optimizer_name="primary"):
+        """Sets an optimizer learning rate.
         """
-        Compute gradients and use them to minimize a loss function.
+        assert optimizer_name in self._optimizers.keys()
+
+        optimizer = self._optimizers[optimizer_name]
+        for param_group in optimizer.param_groups:
+            param_group['lr'] = value
+
+    def minimize(self, loss, optimizer_name="primary",
+                 retain_graph=False, checkpoint_interval=1000):
+        """Compute gradients and use them to minimize a loss function.
         """
 
         assert optimizer_name in self._optimizers.keys()
@@ -74,8 +103,7 @@ class Buddy:
             self.save_checkpoint()
 
     def log_scope(self, scope):
-        """
-        Returns a scope to log tensors in.
+        """Returns a scope to log tensors in.
 
         Example usage:
 
@@ -97,8 +125,7 @@ class Buddy:
         return _Namespace()
 
     def log(self, name, value):
-        """
-        Log a tensor for visualization in Tensorboard. Currently only supports scalars.
+        """Log a tensor for visualization in Tensorboard. Currently only supports scalars.
         """
         if len(self._log_scopes) > 0:
             name = "{}/{}".format("/".join(self._log_scopes), name)
@@ -109,8 +136,7 @@ class Buddy:
         self._writer.add_scalar(name, value, global_step=self._steps)
 
     def save_checkpoint(self, label=None, path=None):
-        """
-        Saves a checkpoint!
+        """Saves a checkpoint!
         """
 
         # Create directory if it doesn't exist yet
@@ -131,7 +157,8 @@ class Buddy:
         state = {
             'state_dict': self._model.state_dict(),
             'optimizers': optimizer_states,
-            'steps': self._steps
+            'steps': self._steps,
+            'config': self._config
         }
         torch.save(state, path)
         print("Saved checkpoint to path:", path)
@@ -147,7 +174,7 @@ class Buddy:
                 "{}/{}-*.ckpt".format(self._checkpoint_dir, self._experiment_name))
             if len(path_choices) == 0:
                 print("No checkpoint found")
-                return
+                return False
             steps = []
             for choice in path_choices:
                 prefix_len = len(
@@ -174,11 +201,33 @@ class Buddy:
         else:
             assert False, "invalid arguments!"
 
+        # Load model parameters
         self._model.load_state_dict(state['state_dict'])
+        self._steps = state['steps']
+        self._config = state['config']
 
+        # Instantiate optimizers and set their states
+        self._optimizers = self._instantiate_optimizers()
         for name, state_dict in state['optimizers'].items():
             self._optimizers[name].load_state_dict(state_dict)
 
-        self._steps = state['steps']
-
         print("Loaded checkpoint from path:", path)
+        return True
+
+    def _instantiate_optimizers(self):
+        """Private method for instantiating optimizer objects, setting default learning rates.
+        """
+
+        # Make sure we're creating a valid optimizer
+        optimizer_type = self._config['optimizer_type']
+        assert optimizer_type in self.OPTIMIZER_TYPES
+
+        # Instantiate an optimizer for each value in _config['optimizer_names']
+        Optimizer = self.OPTIMIZER_TYPES[optimizer_type]
+        initial_learning_rate = self.DEFAULT_LEARNING_RATES[optimizer_type]
+        optimizer_instances = {}
+        for name in self._config['optimizer_names']:
+            optimizer_instances[name] = Optimizer(
+                self._model.parameters(), lr=initial_learning_rate)
+
+        return optimizer_instances
