@@ -17,6 +17,7 @@ setup(
         'tensorboard',
         'jupyter',
         'scipy',
-        'tqdm'
+        'tqdm',
+        'dill'
     ],
 )

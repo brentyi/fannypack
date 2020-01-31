@@ -7,6 +7,7 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 import torch.utils.tensorboard
+import dill
 
 
 class Buddy:
@@ -82,11 +83,17 @@ class Buddy:
         learning rate or a schedule function (int steps -> float LR).
         """
 
+        schedulers = self._config['learning_rate_schedulers']
         if callable(value):
+            # Store a scheduler
             assert type(value(0)) == float
-            self._config['learning_rate_schedulers'][optimizer_name] = value
+            schedulers[optimizer_name] = value
         else:
-            self._config['learning_rate_schedulers'].pop(optimizer_name)
+            # Delete scheduler
+            if optimizer_name in schedulers:
+                schedulers.pop(optimizer_name)
+
+            # Set scalar learning rate
             self._set_learning_rate(value, optimizer_name)
 
     def _set_learning_rate(self, value, optimizer_name):
@@ -180,16 +187,16 @@ class Buddy:
             'steps': self._steps,
             'config': self._config
         }
-        torch.save(state, path)
+        torch.save(state, path, pickle_module=dill)
         print("Saved checkpoint to path:", path)
 
     def load_checkpoint(self, label=None, path=None):
-        """
-        Loads a checkpoint!
+        """Loads a checkpoint!
         By default, loads the one with the highest number of training iterations.
         """
 
         if path is None and label is None:
+            # Find and load the latest checkpoint
             path_choices = glob.glob(
                 "{}/{}-*.ckpt".format(self._config['checkpoint_dir'], self._experiment_name))
             if len(path_choices) == 0:
@@ -207,19 +214,18 @@ class Buddy:
                     steps.append(-1)
 
             path = path_choices[np.argmax(steps)]
-            expected_steps = np.max(steps)
 
-            state = torch.load(path, map_location=self._device)
-            assert state['steps'] == np.max(steps)
         elif path is None and label is not None:
+            # Load a labeled checkpoint
             path = "{}/{}-{}.ckpt".format(self._config['checkpoint_dir'],
                                           self._experiment_name, label)
-            print(path)
-            state = torch.load(path, map_location=self._device)
         elif path is not None:
-            state = torch.load(path, map_location=self._device)
+            # Load a checkpoint by its location
+            path = path
         else:
             assert False, "invalid arguments!"
+
+        state = torch.load(path, map_location=self._device, pickle_module=dill)
 
         # Sanity check: something's probably wrong if we're overwriting any
         # explicitly set, non-default configuration values
