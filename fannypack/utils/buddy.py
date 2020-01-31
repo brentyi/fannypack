@@ -24,6 +24,7 @@ class Buddy:
         'optimizer_names': ["primary"],
         'log_dir': "logs",
         'checkpoint_dir': "checkpoints",
+        'learning_rate_schedulers': {},
     }
 
     # Supported optimizer types
@@ -77,8 +78,21 @@ class Buddy:
             self.load_checkpoint()
 
     def set_learning_rate(self, value, optimizer_name="primary"):
-        """Sets an optimizer learning rate.
+        """Sets an optimizer learning rate. Accepts either a floating point
+        learning rate or a schedule function (int steps -> float LR).
         """
+
+        if callable(value):
+            assert type(value(0)) == float
+            self._config['learning_rate_schedulers'][optimizer_name] = value
+        else:
+            self._config['learning_rate_schedulers'].pop(optimizer_name)
+            self._set_learning_rate(value, optimizer_name)
+
+    def _set_learning_rate(self, value, optimizer_name):
+        """(Private) Sets an optimizer's learning rate.
+        """
+
         assert optimizer_name in self._optimizers.keys()
 
         optimizer = self._optimizers[optimizer_name]
@@ -91,6 +105,12 @@ class Buddy:
         """
 
         assert optimizer_name in self._optimizers.keys()
+
+        # Update learning rate using scheduler if possible
+        schedulers = self._config['learning_rate_schedulers']
+        if optimizer_name in schedulers:
+            self._set_learning_rate(
+                schedulers[optimizer_name](self._steps), optimizer_name)
 
         # Take gradient step
         self._optimizers[optimizer_name].zero_grad()
@@ -229,6 +249,9 @@ class Buddy:
         assert optimizer_type in self.OPTIMIZER_TYPES
 
         # Instantiate an optimizer for each value in _config['optimizer_names']
+        #
+        # Note that if we're loading from a checkpoint, the initial learning
+        # rate may be immediately overwritten
         Optimizer = self.OPTIMIZER_TYPES[optimizer_type]
         initial_learning_rate = self.DEFAULT_LEARNING_RATES[optimizer_type]
         optimizer_instances = {}
