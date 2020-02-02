@@ -4,7 +4,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 
-class AbstractResBlock(nn.Module, abc.ABC):
+class _AbstractResBlock(nn.Module, abc.ABC):
     default_activation = "relu"
 
     def __init__(self, activation=None):
@@ -36,7 +36,7 @@ class AbstractResBlock(nn.Module, abc.ABC):
         ])[activation]
 
 
-class Linear(AbstractResBlock):
+class Linear(_AbstractResBlock):
     default_activation = "relu"
 
     def __init__(self, units, bottleneck_units=None, **kwargs):
@@ -48,7 +48,7 @@ class Linear(AbstractResBlock):
         self.block2 = nn.Linear(bottleneck_units, units)
 
 
-class Conv2d(AbstractResBlock):
+class Conv2d(_AbstractResBlock):
     default_activation = "relu"
     default_kernel_size = 3
 
