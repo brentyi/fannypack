@@ -1,0 +1,136 @@
+import glob
+import os
+
+import numpy as np
+import torch
+import dill
+
+
+class _BuddyCheckpointing:
+    """Private mixin for encapsulating checkpointing functions.
+    """
+
+    def __init__(self):
+        """Checkpointing-specific setup.
+        """
+        super().__init__()
+        self._unlabeled_checkpoint_files = self._find_unlabeled_checkpoints()
+
+    def save_checkpoint(self, label=None, path=None):
+        """Saves a checkpoint, which can optionally be labeled.
+        """
+
+        # Create directory if it doesn't exist yet
+        if not os.path.isdir(self._config['checkpoint_dir']):
+            os.makedirs(self._config['checkpoint_dir'])
+
+        unlabeled = False
+        if path is None and label is None:
+            path = "{}/{}-{:016d}.ckpt".format(self._config['checkpoint_dir'],
+                                               self._experiment_name, self._steps)
+            unlabeled = True
+        elif path is None:
+            # Numerical labels are reserved for step counts (see above)
+            assert not label.isdigit()
+            path = "{}/{}-{}.ckpt".format(self._config['checkpoint_dir'],
+                                          self._experiment_name, label)
+
+        # Create state to save
+        optimizer_states = {}
+        for name, optimizer in self._optimizers.items():
+            optimizer_states[name] = optimizer.state_dict()
+        state = {
+            'state_dict': self._model.state_dict(),
+            'optimizers': optimizer_states,
+            'steps': self._steps,
+            'config': self._config
+        }
+
+        # "Atomic" saving
+        tmp_path = "/tmp/buddy-" + str(np.random.randint(1e10)) + ".ckpt"
+        torch.save(state, tmp_path, pickle_module=dill)
+        os.rename(tmp_path, path)
+        print("Saved checkpoint to path:", path)
+
+        # If unlabeled, add to list
+        if unlabeled:
+            self._unlabeled_checkpoint_files.append(path)
+
+        # Prune checkpoint files
+        while len(self._unlabeled_checkpoint_files) > \
+                self._config['checkpoint_max_to_keep']:
+            os.remove(self._unlabeled_checkpoint_files.pop(0))
+
+    def load_checkpoint(self, label=None, path=None):
+        """Loads a checkpoint. By default, loads the one with the highest
+        number of training iterations.
+        """
+
+        if path is None and label is None:
+            # Load latest unlabeled checkpoint
+            print(self._unlabeled_checkpoint_files)
+            if len(self._unlabeled_checkpoint_files) == 0:
+                print("No checkpoint found")
+                return False
+            path = self._unlabeled_checkpoint_files[-1]
+        elif path is None and label is not None:
+            # Load a labeled checkpoint
+            path = "{}/{}-{}.ckpt".format(self._config['checkpoint_dir'],
+                                          self._experiment_name, label)
+        elif path is not None:
+            # Load a checkpoint by its location
+            path = path
+        else:
+            assert False, "invalid arguments!"
+
+        state = torch.load(path, map_location=self._device, pickle_module=dill)
+
+        # Sanity check: something's probably wrong if we're overwriting any
+        # explicitly set, non-default configuration values
+        for key, value in state['config'].items():
+            assert state['config'][key] in (
+                self._config[key], self.DEFAULT_CONFIG[key])
+
+        # Load model parameters
+        self._model.load_state_dict(state['state_dict'])
+        self._steps = state['steps']
+        self._config = state['config']
+
+        # Instantiate optimizers and set their states
+        self._optimizers = self._instantiate_optimizers()
+        for name, state_dict in state['optimizers'].items():
+            self._optimizers[name].load_state_dict(state_dict)
+
+        print("Loaded checkpoint from path:", path)
+        return True
+
+    def _find_unlabeled_checkpoints(self):
+        """(Private) Returns a list of all unlabeled checkpoints associated
+        with this experiment, sorted from oldest to newest.
+        """
+
+        # Find all matching checkpoint files
+        path_choices = glob.glob("{}/{}-*.ckpt".format(
+            self._config['checkpoint_dir'], self._experiment_name))
+        if len(path_choices) == 0:
+            return []
+
+        # Find unlabeled checkpoint files + associated step counts
+        output = []
+        for choice in path_choices:
+            prefix_len = len("{}/{}-".format(
+                self._config['checkpoint_dir'], self._experiment_name))
+
+            suffix_len = len(".ckpt")
+            string_steps = choice[prefix_len:-suffix_len]
+            try:
+                steps = int(string_steps)
+                output.append((choice, steps))
+            except ValueError:
+                pass
+
+        # Sort output by steps
+        output.sort(key=lambda x: x[1])
+
+        # Return paths only
+        return [x[0] for x in output]
