@@ -43,7 +43,7 @@ class Buddy:
         """
 
         # Assign and validate core parameters
-        assert type(experiment) == str
+        assert type(experiment_name) == str
         assert isinstance(model, nn.Module)
         self._experiment_name = experiment_name
         self._model = model
