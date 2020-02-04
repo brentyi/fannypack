@@ -68,7 +68,6 @@ class _BuddyCheckpointing:
 
         if path is None and label is None:
             # Load latest unlabeled checkpoint
-            print(self._unlabeled_checkpoint_files)
             if len(self._unlabeled_checkpoint_files) == 0:
                 print("No checkpoint found")
                 return False
