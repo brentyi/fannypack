@@ -1,7 +1,5 @@
 import torch
 import torch.nn as nn
-import torch.optim as optim
-import torch.utils.tensorboard
 
 from ._buddy_mixins._checkpointing import _BuddyCheckpointing
 from ._buddy_mixins._logging import _BuddyLogging

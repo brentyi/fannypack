@@ -1,4 +1,4 @@
-import torch
+import torch.optim
 
 
 class _BuddyOptimization:
