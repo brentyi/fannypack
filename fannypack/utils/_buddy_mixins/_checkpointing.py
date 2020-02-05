@@ -50,7 +50,7 @@ class _BuddyCheckpointing:
         tmp_path = "/tmp/buddy-" + str(np.random.randint(1e10)) + ".ckpt"
         torch.save(state, tmp_path, pickle_module=dill)
         os.rename(tmp_path, path)
-        print("Saved checkpoint to path:", path)
+        self._log("Saved checkpoint to path:", path)
 
         # If unlabeled, add to list
         if unlabeled:
@@ -69,7 +69,7 @@ class _BuddyCheckpointing:
         if path is None and label is None:
             # Load latest unlabeled checkpoint
             if len(self._unlabeled_checkpoint_files) == 0:
-                print("No checkpoint found")
+                self._log("No checkpoint found")
                 return False
             path = self._unlabeled_checkpoint_files[-1]
         elif path is None and label is not None:
@@ -100,7 +100,7 @@ class _BuddyCheckpointing:
         for name, state_dict in state['optimizers'].items():
             self._optimizers[name].load_state_dict(state_dict)
 
-        print("Loaded checkpoint from path:", path)
+        self._log("Loaded checkpoint from path:", path)
         return True
 
     def _find_unlabeled_checkpoints(self):

@@ -25,15 +25,18 @@ class Buddy(_BuddyCheckpointing, _BuddyLogging, _BuddyOptimization):
         learning_rate_schedulers={},
     )
 
-    def __init__(self, experiment_name, model, load_checkpoint=True, **config):
+    def __init__(self, experiment_name, model,
+                 verbose=True, load_checkpoint=True, **config):
         """Constructor
         """
         # Validate and assign core parameters.
         assert type(experiment_name) == str
         assert isinstance(model, nn.Module)
+        assert type(verbose) == bool
 
         self._experiment_name = experiment_name
         self._model = model
+        self._verbose = True
 
         # Validate and assign our training configuration.
         self._config = self.DEFAULT_CONFIG.copy()
@@ -48,7 +51,7 @@ class Buddy(_BuddyCheckpointing, _BuddyLogging, _BuddyOptimization):
             model.cuda()
         else:
             self._device = torch.device("cpu")
-        print("Using device:", self._device)
+        self._log("Using device:", self._device)
 
         # Enable autograd anomaly detection by default
         torch.autograd.set_detect_anomaly(True)
@@ -64,3 +67,11 @@ class Buddy(_BuddyCheckpointing, _BuddyLogging, _BuddyOptimization):
         # Note that this is called _after_ checkpointing is set up above
         if load_checkpoint:
             self.load_checkpoint()
+
+    def _log(self, *args ** kwargs):
+        # Only print in verbose mode
+        if not self._verbose:
+            return
+
+        args[0] = f"[buddy-{self._experiment_name}] " + args[0]
+        print(*args, **kwargs)
