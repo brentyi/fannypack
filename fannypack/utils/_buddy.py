@@ -3,10 +3,10 @@ import torch.nn as nn
 
 from ._buddy_mixins._checkpointing import _BuddyCheckpointing
 from ._buddy_mixins._logging import _BuddyLogging
-from ._buddy_mixins._optimization import _BuddyOptimization
+from ._buddy_mixins._optimizer import _BuddyOptimizer
 
 
-class Buddy(_BuddyCheckpointing, _BuddyLogging, _BuddyOptimization):
+class Buddy(_BuddyCheckpointing, _BuddyLogging, _BuddyOptimizer):
     """Buddy is a model manager that abstracts away PyTorch boilerplate.
 
     Helps with:
@@ -51,7 +51,7 @@ class Buddy(_BuddyCheckpointing, _BuddyLogging, _BuddyOptimization):
             model.cuda()
         else:
             self._device = torch.device("cpu")
-        self._log("Using device:", self._device)
+        self._print("Using device:", self._device)
 
         # Enable autograd anomaly detection by default
         torch.autograd.set_detect_anomaly(True)
@@ -68,10 +68,11 @@ class Buddy(_BuddyCheckpointing, _BuddyLogging, _BuddyOptimization):
         if load_checkpoint:
             self.load_checkpoint()
 
-    def _log(self, *args ** kwargs):
+    def _print(self, *args, **kwargs):
         # Only print in verbose mode
         if not self._verbose:
             return
 
+        args = list(args)
         args[0] = f"[buddy-{self._experiment_name}] " + args[0]
         print(*args, **kwargs)

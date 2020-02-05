@@ -10,9 +10,9 @@ class _BuddyLogging:
         """
         super().__init__()
 
-        # Create some misc state variables for tensorboard
-        # The writer is lazily instantiated in TrainingBuddy.log()
-        self._writer = None
+        # State variables for tensorboard
+        # Note that the writer is lazily instantiated in TrainingBuddy.log()
+        self._log_writer = None
         self._log_scopes = []
 
     def log_scope(self, scope):
@@ -42,8 +42,8 @@ class _BuddyLogging:
         """
         if len(self._log_scopes) > 0:
             name = "{}/{}".format("/".join(self._log_scopes), name)
-        if self._writer is None:
-            self._writer = torch.utils.tensorboard.SummaryWriter(
+        if self._log_writer is None:
+            self._log_writer = torch.utils.tensorboard.SummaryWriter(
                 self._config['log_dir'] + "/" + self._experiment_name)
 
-        self._writer.add_scalar(name, value, global_step=self._steps)
+        self._log_writer.add_scalar(name, value, global_step=self._optimizer_steps)
