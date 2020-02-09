@@ -3,7 +3,8 @@ import torch
 
 
 def to_device(x, device, detach=True):
-    """Copies a tensor, list of tensors, or dictionary of tensors to a different device.
+    """Copies a tensor, list of tensors, or dict of tensors to a different
+    device.
     """
     if type(x) == torch.Tensor:
         # Convert plain arrays
@@ -26,7 +27,8 @@ def to_device(x, device, detach=True):
 
 
 def to_torch(x, device='cpu'):
-    """Converts a numpy array, list of np arrays, or dictionary of np arrays for use in PyTorch.
+    """Converts a numpy array, list of numpy arrays, or dict of numpy arrays
+    for use in PyTorch.
     """
     if type(x) == np.ndarray:
         # Convert plain arrays
@@ -48,7 +50,7 @@ def to_torch(x, device='cpu'):
 
 
 def to_numpy(x):
-    """Converts a tensor, list of tensors, or dictionary of tensors for use in Numpy.
+    """Converts a tensor, list of tensors, or dict of tensors for use in Numpy.
     """
     if type(x) == torch.Tensor:
         # Convert plain tensors

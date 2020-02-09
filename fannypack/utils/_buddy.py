@@ -69,10 +69,12 @@ class Buddy(_BuddyCheckpointing, _BuddyLogging, _BuddyOptimizer):
             self.load_checkpoint()
 
     def _print(self, *args, **kwargs):
+        """Private helper for logging.
+        """
         # Only print in verbose mode
         if not self._verbose:
             return
 
         args = list(args)
-        args[0] = f"[buddy-{self._experiment_name}] " + args[0]
+        args[0] = f"[buddy-{self._experiment_name}] {args[0]}"
         print(*args, **kwargs)
