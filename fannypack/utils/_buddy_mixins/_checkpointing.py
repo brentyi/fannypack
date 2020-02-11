@@ -18,10 +18,11 @@ class _BuddyCheckpointing:
         super().__init__()
 
         # Find all unlabeled checkpoints for this experiment
-        self._checkpointing_unlabeled_files = _BuddyCheckpointing._find_unlabeled_checkpoints(
-            checkpoint_dir=self._config['checkpoint_dir'],
-            experiment_name=self._experiment_name
-        )
+        self._checkpointing_unlabeled_files = \
+            _BuddyCheckpointing._find_unlabeled_checkpoints(
+                checkpoint_dir=self._config['checkpoint_dir'],
+                experiment_name=self._experiment_name
+            )
 
     def save_checkpoint(self, label=None, path=None):
         """Saves a checkpoint, which can optionally be labeled.
@@ -34,10 +35,14 @@ class _BuddyCheckpointing:
         # Determine path to checkpoint file
         unlabeled = False
         if path is None and label is None:
-            path = "{}/{}-{:016d}.ckpt".format(self._config['checkpoint_dir'],
-                                               self._experiment_name, self._optimizer_steps)
+            path = "{}/{}-{:016d}.ckpt".format(
+                self._config['checkpoint_dir'],
+                self._experiment_name,
+                self._optimizer_steps
+            )
 
-            if path == self._checkpointing_unlabeled_files[-1]:
+            if self._checkpointing_unlabeled_files and \
+                    path == self._checkpointing_unlabeled_files[-1]:
                 self._print("Skipping redundant checkpoint save")
                 return
 
