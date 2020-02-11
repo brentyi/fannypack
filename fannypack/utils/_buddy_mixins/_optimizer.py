@@ -74,6 +74,12 @@ class _BuddyOptimizer:
             # Set scalar learning rate
             self._set_learning_rate(value, optimizer_name)
 
+    @property
+    def optimizer_steps(self):
+        """Read-only interface for # of steps taken by optimizer.
+        """
+        return self._optimizer_steps
+
     def _set_learning_rate(self, value, optimizer_name):
         """(Private) Sets an optimizer's learning rate.
         """
