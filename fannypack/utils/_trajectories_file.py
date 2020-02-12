@@ -168,13 +168,13 @@ class TrajectoriesFile:
             assert type(self._content_dict[key]) == list
             self._content_dict[key].append(np.copy(value))
 
-    def clear_trajectory(self):
+    def abandon_trajectory(self):
         """Abandon the current trajectory.
         """
-        self._print("Clearing trajectory!")
+        self._print("Abandoning trajectory")
         self._content_dict = {}
 
-    def end_trajectory(self):
+    def complete_trajectory(self):
         """Write the current trajectory to disk, and mark the start of a new
         trajectory.
         Must be called with the TrajectoriesFile object in a `with` statement.
@@ -189,7 +189,7 @@ class TrajectoriesFile:
 
         length = len(list(self._content_dict.values())[0])
 
-        self._print(f"Ending trajectory! (length={length})")
+        self._print(f"Completing trajectory! (length={length})")
 
         # Put all pushed contents into a new group
         trajectory_name = self._trajectory_prefix + \
