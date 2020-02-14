@@ -1,5 +1,6 @@
 import numpy as np
 
+
 class DictIterator:
     """Wrapper for manipulating the contents of dictionaries that contain
     same-length iterables
@@ -47,9 +48,18 @@ class DictIterator:
     def extend(self, other):
         for key, value in other.items():
             if key in self._data.keys():
-                self._data[key].extend(value)
+                assert type(self._data[key]) == type(value)
+
+                # Handle numpy arrays (inefficient)
+                if type(value) == np.ndarray:
+                    self._data[key] = np.concatenate(
+                        (self._data[key], value), axis=0)
+
+                # Handle standard Python lists
+                else:
+                    self._data[key].extend(value)
             else:
-                self._data[key] = [value]
+                self._data[key] = value
 
     def convert_to_numpy(self):
         for key, value in self._data.items():
