@@ -68,6 +68,12 @@ class Buddy(_BuddyCheckpointing, _BuddyLogging, _BuddyOptimizer):
         if load_checkpoint:
             self.load_checkpoint()
 
+    @property
+    def device(self):
+        """Read-only interface for the active torch device.
+        """
+        return self._device
+
     def _print(self, *args, **kwargs):
         """Private helper for logging.
         """
