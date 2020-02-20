@@ -1,6 +1,7 @@
 import glob
 import os
 import pathlib
+import signal
 
 import numpy as np
 import torch
@@ -70,14 +71,21 @@ class _BuddyCheckpointing:
             'steps': self._optimizer_steps,
         }
 
+        # Ignore SIGINT (eg ctrl+c) events while we save to disk...
+        orig_handler = signal.getsignal(signal.SIGINT)
+        signal.signal(signal.SIGINT, lambda _sig, _frame: None)
+
         # "Atomic" checkpoint saving
         tmp_path = "{}/tmp-{}.ckpt".format(
-            self._config['checkpoint_dir'],
+            checkpoint_dir,
             np.random.randint(1e10),
         )
         torch.save(state, tmp_path, pickle_module=dill)
         os.rename(tmp_path, path)
         self._print("Saved checkpoint to path:", path)
+
+        # Restore SIGINT handler
+        signal.signal(signal.SIGINT, orig_handler)
 
         # If unlabeled, add to list
         if unlabeled:
