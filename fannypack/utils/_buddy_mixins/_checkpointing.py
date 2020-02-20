@@ -97,9 +97,109 @@ class _BuddyCheckpointing:
                 self._config['checkpoint_max_to_keep']:
             os.remove(self._checkpointing_unlabeled_files.pop(0))
 
+    def load_checkpoint_module(
+            self, source, target=None, label=None, path=None):
+        """ TODO documentation; see examples/buddy_checkpoints.py
+        """
+
+        if target is None:
+            target = source
+
+        # Find and read our checkpoint file
+        checkpoint = self._read_checkpoint_file(label, path)
+        if checkpoint is None:
+            return
+
+        # Get possible target modules
+        module_dict = dict(self._model.named_modules())
+        assert target in module_dict.keys(), "Nonexistent target module!"
+
+        # Build a state dict for this module only
+        source_state_dict = {}
+        key_prefix = ""
+        if len(source) > 0:
+            key_prefix = f"{source}."
+        for key, value in checkpoint['state_dict'].items():
+            if key.startswith(key_prefix):
+                source_state_dict[key[len(key_prefix):]] = value
+
+        # Load state dict
+        missing, unexpected = module_dict[target].load_state_dict(
+            source_state_dict)
+        assert len(missing) == 0
+        assert len(unexpected) == 0
+
+        self._print(f"Loaded module: {source} => {target}")
+
+    def load_checkpoint_optimizer(
+            self, source, target=None, label=None, path=None):
+        """ TODO documentation; see examples/buddy_checkpoints.py
+        """
+
+        if target is None:
+            target = source
+
+        # Find and read our checkpoint file
+        checkpoint = self._read_checkpoint_file(label, path)
+        if checkpoint is None:
+            return
+
+        # Sanity check
+        assert source in checkpoint['optimizers'].keys(), \
+            "Nonexistent source optimizer!"
+        assert target in self._optimizer_dict.keys(), \
+            "Nonexistent target optimizer!"
+
+        # Load optimizer state
+        state_dict = checkpoint['optimizers'][source]
+        self._optimizer_dict[target].load_state_dict(state_dict)
+        self._print(f"Loaded optimizer: {source} => {target}")
+
     def load_checkpoint(self, label=None, path=None):
         """Loads a checkpoint. By default, loads the one with the highest
         number of training iterations.
+
+        Can also be specified via a label or file path.
+        """
+
+        # Find and read our checkpoint file
+        checkpoint = self._read_checkpoint_file(label, path)
+        if checkpoint is None:
+            return
+
+        # Load Buddy configuration
+        self._config = checkpoint['config']
+
+        # Instantiate optimizers
+        self._optimizer_dict = _BuddyOptimizer._instantiate_optimizers(
+            model=self._model,
+            optimizer_type=self._config['optimizer_type'],
+            optimizer_names=self._config['optimizer_names']
+        )
+
+        # Load optimizer states
+        for name, state_dict in checkpoint['optimizers'].items():
+            self._optimizer_dict[name].load_state_dict(state_dict)
+
+        # Load model parameters
+        missing, unexpected = self._model.load_state_dict(
+            checkpoint['state_dict'])
+        assert len(missing) == 0
+        assert len(unexpected) == 0
+
+        # Load optimizer steps
+        self._optimizer_steps = checkpoint['steps']
+
+        self._print("Loaded checkpoint at step:", self._optimizer_steps)
+        return True
+
+    def _read_checkpoint_file(self, label=None, path=None):
+        """Find a checkpoint to load.
+
+        This is one of three options:
+          1) The latest, based on step # (must have same experiment name)
+          2) A file saved with a label (must have same experiment name)
+          3) One specified by a path
         """
 
         # Determine path to checkpoint file
@@ -107,7 +207,7 @@ class _BuddyCheckpointing:
             # Load latest unlabeled checkpoint
             if len(self._checkpointing_unlabeled_files) == 0:
                 self._print("No checkpoint found")
-                return False
+                return None
 
             path = self._checkpointing_unlabeled_files[-1]
         elif path is None and label is not None:
@@ -120,47 +220,29 @@ class _BuddyCheckpointing:
         else:
             assert False, "invalid arguments!"
 
-        # Load checkpoint state
-        state = torch.load(path, map_location=self._device, pickle_module=dill)
+        # Load and return checkpoint dict
+        checkpoint = torch.load(
+            path, map_location=self._device, pickle_module=dill)
 
         # Sanity check: our checkpoint file is a sensible-looking dict
-        assert set(state.keys()) == \
+        assert set(checkpoint.keys()) == \
             set(['config', 'state_dict', 'optimizers', 'steps'])
 
         # Sanity check: something's probably wrong if we're overwriting any
         # explicitly set, non-default configuration values
-        for key, value in state['config'].items():
-            assert state['config'][key] in (
+        for key, value in checkpoint['config'].items():
+            assert checkpoint['config'][key] in (
                 self._config[key], self.DEFAULT_CONFIG[key])
 
-        # Sanity check: our optimizer names and type should be consistent
-        if state['optimizers'].keys() != self._optimizer_dict.keys():
+        # Sanity check: optimizer names and type should typically be consistent
+        if checkpoint['optimizers'].keys() != self._optimizer_dict.keys():
              warnings.warn("Checkpoint loading: overriding optimizer names.")
-        if state['config']['optimizer_type'] != self._config['optimizer_type']:
+        if checkpoint['config']['optimizer_type'] != \
+                self._config['optimizer_type']:
             warnings.warn("Checkpoint loading: overriding optimizer type.")
 
-        # Load Buddy configuration
-        self._config = state['config']
-
-        # Instantiate optimizers
-        self._optimizer_dict = _BuddyOptimizer._instantiate_optimizers(
-            model=self._model,
-            optimizer_type=self._config['optimizer_type'],
-            optimizer_names=self._config['optimizer_names']
-        )
-
-        # Load optimizer states
-        for name, state_dict in state['optimizers'].items():
-            self._optimizer_dict[name].load_state_dict(state_dict)
-
-        # Load model parameters
-        self._model.load_state_dict(state['state_dict'])
-
-        # Load optimizer steps
-        self._optimizer_steps = state['steps']
-
-        self._print("Loaded checkpoint from path:", path)
-        return True
+        self._print("Read checkpoint from path:", path)
+        return checkpoint
 
     @staticmethod
     def _find_unlabeled_checkpoints(checkpoint_dir, experiment_name):
