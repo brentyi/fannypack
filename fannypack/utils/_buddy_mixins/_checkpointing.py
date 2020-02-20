@@ -2,6 +2,7 @@ import glob
 import os
 import pathlib
 import signal
+import warnings
 
 import numpy as np
 import torch
@@ -122,29 +123,41 @@ class _BuddyCheckpointing:
         # Load checkpoint state
         state = torch.load(path, map_location=self._device, pickle_module=dill)
 
+        # Sanity check: our checkpoint file is a sensible-looking dict
+        assert set(state.keys()) == \
+            set(['config', 'state_dict', 'optimizers', 'steps'])
+
         # Sanity check: something's probably wrong if we're overwriting any
         # explicitly set, non-default configuration values
         for key, value in state['config'].items():
             assert state['config'][key] in (
                 self._config[key], self.DEFAULT_CONFIG[key])
 
+        # Sanity check: our optimizer names and type should be consistent
+        if state['optimizers'].keys() != self._optimizer_dict.keys():
+             warnings.warn("Checkpoint loading: overriding optimizer names.")
+        if state['config']['optimizer_type'] != self._config['optimizer_type']:
+            warnings.warn("Checkpoint loading: overriding optimizer type.")
+
         # Load Buddy configuration
         self._config = state['config']
+
+        # Instantiate optimizers
+        self._optimizer_dict = _BuddyOptimizer._instantiate_optimizers(
+            model=self._model,
+            optimizer_type=self._config['optimizer_type'],
+            optimizer_names=self._config['optimizer_names']
+        )
+
+        # Load optimizer states
+        for name, state_dict in state['optimizers'].items():
+            self._optimizer_dict[name].load_state_dict(state_dict)
 
         # Load model parameters
         self._model.load_state_dict(state['state_dict'])
 
         # Load optimizer steps
         self._optimizer_steps = state['steps']
-
-        # Instantiate optimizers and load their states
-        self._optimizer_dict = _BuddyOptimizer._instantiate_optimizers(
-            model=self._model,
-            optimizer_type=self._config['optimizer_type'],
-            optimizer_names=self._config['optimizer_names']
-        )
-        for name, state_dict in state['optimizers'].items():
-            self._optimizer_dict[name].load_state_dict(state_dict)
 
         self._print("Loaded checkpoint from path:", path)
         return True
