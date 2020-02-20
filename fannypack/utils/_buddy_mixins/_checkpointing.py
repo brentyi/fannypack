@@ -1,5 +1,6 @@
 import glob
 import os
+import pathlib
 
 import numpy as np
 import torch
@@ -28,10 +29,6 @@ class _BuddyCheckpointing:
         """Saves a checkpoint, which can optionally be labeled.
         """
 
-        # Create directory if it doesn't exist yet
-        if not os.path.isdir(self._config['checkpoint_dir']):
-            os.makedirs(self._config['checkpoint_dir'])
-
         # Determine path to checkpoint file
         unlabeled = False
         if path is None and label is None:
@@ -52,6 +49,11 @@ class _BuddyCheckpointing:
             assert not label.isdigit()
             path = "{}/{}-{}.ckpt".format(self._config['checkpoint_dir'],
                                           self._experiment_name, label)
+
+        # Create directory if it doesn't exist yet
+        checkpoint_dir = pathlib.Path(path).parents[0]
+        if not os.path.isdir(checkpoint_dir):
+            os.makedirs(checkpoint_dir)
 
         # Create state to save. This includes:
         # > Model state
