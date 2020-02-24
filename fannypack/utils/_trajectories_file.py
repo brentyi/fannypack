@@ -226,6 +226,14 @@ class TrajectoriesFile:
 
         self._print("Existing trajectory count:", self._trajectory_count)
 
+    def clear_file():
+        """Clear the contents of the TrajectoriesFile.
+        """
+        assert self._file is not None, "Not called in with statement!"
+
+        for key in self._file.keys():
+            del self._file[key]
+
     def reencode(self, target_path):
         """Re-encode contents into a new hdf5 file.
 
@@ -244,7 +252,7 @@ class TrajectoriesFile:
 
         source = self._file
         target = TrajectoriesFile(target_path)
-        with source, target:
+        with target:
             for name, trajectory in source.items():
                 keys = trajectory.keys()
                 for content_step in zip(*trajectory.values()):
