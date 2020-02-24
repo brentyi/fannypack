@@ -7,8 +7,7 @@ class TrajectoriesFile:
 
     Each TrajectoriesFile represents an iterable list of trajectories, where
     each trajectory is stored as a dictionary that maps `str` keys to
-    `np.ndarray` contents. The first dimension of each n-dimensional content
-    array is always time.
+    `np.ndarray` contents.
 
     Example usage (read):
     ```
@@ -23,15 +22,17 @@ class TrajectoriesFile:
     ```
     traj_file = TrajectoriesFile('test.hdf5', read_only=False)
 
+    traj_file.add_meta({'label': 5})
     traj_file.add_timestep({'a': 1, 'b': 2})
     traj_file.add_timestep({'a': 3, 'b': 4})
 
     with traj_file:
-        traj_file.end_trajectory()
+        traj_file.complete_trajectory()
 
     print(len(traj_file)) # 1 trajectory!
 
     with traj_file:
+        print(traj_file[0]['label']) # 5
         print(traj_file[0]['a']) # [1, 3]
         print(traj_file[0]['b']) # [2, 4]
     ```
@@ -168,6 +169,16 @@ class TrajectoriesFile:
             assert type(self._content_dict[key]) == list
             self._content_dict[key].append(np.copy(value))
 
+    def add_meta(self, content):
+        """Add some metadata to the current trajectory.
+
+        Args:
+            content (dict): Map from metadata keys (str) to values (np.ndarray).
+        """
+        for key, value in content.items():
+            assert key not in self._content_dict.keys()
+            self._content_dict[key] = value
+
     def abandon_trajectory(self):
         """Abandon the current trajectory.
         """
@@ -184,7 +195,8 @@ class TrajectoriesFile:
         assert self._file is not None, "Not called in with statement!"
 
         if not self._content_dict:
-            self._print("Empty observation dictionary; skipping trajectory end")
+            self._print(
+                "Empty observation dictionary; skipping trajectory end")
             return
 
         length = len(list(self._content_dict.values())[0])
@@ -237,7 +249,7 @@ class TrajectoriesFile:
                 keys = trajectory.keys()
                 for content_step in zip(*trajectory.values()):
                     target.add_timestep(dict(zip(keys, content_step)))
-                target.end_trajectory()
+                target.complete_trajectory()
                 print("Wrote ", name)
         return target
 
