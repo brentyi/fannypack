@@ -226,7 +226,7 @@ class TrajectoriesFile:
 
         self._print("Existing trajectory count:", self._trajectory_count)
 
-    def clear_file():
+    def clear(self):
         """Clear the contents of the TrajectoriesFile.
         """
         assert self._file is not None, "Not called in with statement!"
