@@ -156,6 +156,25 @@ class TrajectoriesFile:
         """
         return self._trajectory_count
 
+    def get_all(self, key):
+        """Get contents associated with a key from all trajectories.
+
+        Args:
+            key (str): Content identifier.
+        Returns:
+            list: List of contents. First index is trajectory #.
+        """
+        assert self._file is not None, "Not called in with statement!"
+
+        # Copy values to numpy array
+        output = []
+        for index in range(self._trajectory_count):
+            traj_key = self._trajectory_prefix + str(index)
+            assert traj_key in self._file.keys()
+            output.append(self._file[traj_key][key][:])
+
+        return output
+
     def add_timestep(self, content):
         """Add a timestep to the current trajectory.
 
@@ -177,7 +196,7 @@ class TrajectoriesFile:
         """
         for key, value in content.items():
             assert key not in self._content_dict.keys()
-            self._content_dict[key] = value
+            self._content_dict[key] = np.copy(value)
 
     def abandon_trajectory(self):
         """Abandon the current trajectory.
