@@ -149,12 +149,37 @@ class TrajectoriesFile:
 
         traj_key = self._trajectory_prefix + str(index)
         for key, value in item.items():
-            self._file[traj_key][key][...] = value
+            if key not in self._file[traj_key]:
+                if self._compress:
+                    self._file[traj_key].create_dataset(
+                        key, data=value, chunks=True, compression="gzip")
+                else:
+                    self._file[traj_key].create_dataset(
+                        key, data=value, chunks=True)
+            else:
+                self._file[traj_key][key][...] = value
 
     def __len__(self):
         """Returns the number of recorded trajectories.
         """
         return self._trajectory_count
+
+    def resize(self, count):
+        """Expand or contract our TrajectoriesFile.
+        """
+        if self._trajectory_count <= count:
+            # Expand
+            for index in range(self._trajectory_count, count):
+                traj_key = self._trajectory_prefix + str(index)
+                group = self._file.create_group(traj_key)
+
+        elif self._trajectory_count > count:
+            # Contract
+            for index in range(count, self._trajectory_count):
+                traj_key = self._trajectory_prefix + str(index)
+                del self._file[traj_key]
+
+        self._trajectory_count = count
 
     def get_all(self, key):
         """Get contents associated with a key from all trajectories.
@@ -223,9 +248,8 @@ class TrajectoriesFile:
         self._print(f"Completing trajectory! (length={length})")
 
         # Put all pushed contents into a new group
-        trajectory_name = self._trajectory_prefix + \
-            str(self._trajectory_count)
-        group = self._file.create_group(trajectory_name)
+        traj_key = self._trajectory_prefix + str(self._trajectory_count)
+        group = self._file.create_group(traj_key)
         for key, content_list in self._content_dict.items():
             # Convert list of contents to a numpy array
             data = np.array(content_list)
@@ -250,8 +274,8 @@ class TrajectoriesFile:
         """
         assert self._file is not None, "Not called in with statement!"
 
-        for key in self._file.keys():
-            del self._file[key]
+        for traj_key in self._file.keys():
+            del self._file[traj_key]
 
     def reencode(self, target_path):
         """Re-encode contents into a new hdf5 file.
