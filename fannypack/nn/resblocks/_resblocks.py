@@ -5,11 +5,12 @@ import torch.nn as nn
 class _AbstractResBlock(nn.Module, abc.ABC):
     default_activation = "relu"
 
-    def __init__(self, activation=None):
+    def __init__(self, activation=None, activations_inplace=True):
         super().__init__()
 
         if activation is None:
             activation = self.default_activation
+        self.activations_inplace = activations_inplace
 
         self.block1 = None
         self.block2 = None
@@ -27,9 +28,9 @@ class _AbstractResBlock(nn.Module, abc.ABC):
 
     def _activation_func(self, activation):
         return nn.ModuleDict([
-            ['relu', nn.ReLU(inplace=True)],
-            ['leaky_relu', nn.LeakyReLU(inplace=True)],
-            ['selu', nn.SELU(inplace=True)],
+            ['relu', nn.ReLU(inplace=self.activations_inplace)],
+            ['leaky_relu', nn.LeakyReLU(inplace=self.activations_inplace)],
+            ['selu', nn.SELU(inplace=self.activations_inplace)],
             ['none', nn.Identity()],
         ])[activation]
 
