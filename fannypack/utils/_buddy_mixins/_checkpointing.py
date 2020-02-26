@@ -98,7 +98,7 @@ class _BuddyCheckpointing:
             os.remove(self._checkpointing_unlabeled_files.pop(0))
 
     def load_checkpoint_module(
-            self, source, target=None, label=None, path=None):
+            self, source, target=None, label=None, path=None, experiment_name=None):
         """ TODO documentation; see examples/buddy_checkpoints.py
         """
 
@@ -106,7 +106,7 @@ class _BuddyCheckpointing:
             target = source
 
         # Find and read our checkpoint file
-        checkpoint = self._read_checkpoint_file(label, path)
+        checkpoint = self._read_checkpoint_file(label, path, experiment_name)
         if checkpoint is None:
             return
 
@@ -132,7 +132,7 @@ class _BuddyCheckpointing:
         self._print(f"Loaded module: {source} => {target}")
 
     def load_checkpoint_optimizer(
-            self, source, target=None, label=None, path=None):
+            self, source, target=None, label=None, path=None, experiment_name=None):
         """ TODO documentation; see examples/buddy_checkpoints.py
         """
 
@@ -140,7 +140,7 @@ class _BuddyCheckpointing:
             target = source
 
         # Find and read our checkpoint file
-        checkpoint = self._read_checkpoint_file(label, path)
+        checkpoint = self._read_checkpoint_file(label, path, experiment_name)
         if checkpoint is None:
             return
 
@@ -155,7 +155,7 @@ class _BuddyCheckpointing:
         self._optimizer_dict[target].load_state_dict(state_dict)
         self._print(f"Loaded optimizer: {source} => {target}")
 
-    def load_checkpoint(self, label=None, path=None):
+    def load_checkpoint(self, label=None, path=None, experiment_name=None):
         """Loads a checkpoint. By default, loads the one with the highest
         number of training iterations.
 
@@ -163,7 +163,7 @@ class _BuddyCheckpointing:
         """
 
         # Find and read our checkpoint file
-        checkpoint = self._read_checkpoint_file(label, path)
+        checkpoint = self._read_checkpoint_file(label, path, experiment_name)
         if checkpoint is None:
             return
 
@@ -193,7 +193,8 @@ class _BuddyCheckpointing:
         self._print("Loaded checkpoint at step:", self._optimizer_steps)
         return True
 
-    def _read_checkpoint_file(self, label=None, path=None):
+    def _read_checkpoint_file(
+            self, label, path, experiment_name):
         """Find a checkpoint to load.
 
         This is one of three options:
@@ -205,13 +206,24 @@ class _BuddyCheckpointing:
         # Determine path to checkpoint file
         if path is None and label is None:
             # Load latest unlabeled checkpoint
-            if len(self._checkpointing_unlabeled_files) == 0:
-                self._print("No checkpoint found")
-                return None
+            if experiment_name is None:
+                # Use our current experiment name by default
+                if len(self._checkpointing_unlabeled_files) == 0:
+                    self._print("No checkpoint found")
+                    return None
+                path = self._checkpointing_unlabeled_files[-1]
+            else:
+                # Use specified experiment name
+                path = _BuddyCheckpointing._find_unlabeled_checkpoints(
+                    checkpoint_dir=self._config['checkpoint_dir'],
+                    experiment_name=experiment_name
+                )[-1]
 
-            path = self._checkpointing_unlabeled_files[-1]
         elif path is None and label is not None:
             # Load a labeled checkpoint
+            if experiment_name is None:
+                # Use our current experiment name by default
+                experiment_name = self._experiment_name
             path = "{}/{}-{}.ckpt".format(self._config['checkpoint_dir'],
                                           self._experiment_name, label)
         elif path is not None:
