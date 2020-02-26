@@ -225,7 +225,7 @@ class _BuddyCheckpointing:
                 # Use our current experiment name by default
                 experiment_name = self._experiment_name
             path = "{}/{}-{}.ckpt".format(self._config['checkpoint_dir'],
-                                          self._experiment_name, label)
+                                          experiment_name, label)
         elif path is not None:
             # Load a checkpoint by its location
             path = path
