@@ -168,7 +168,8 @@ class _BuddyCheckpointing:
             return
 
         # Load Buddy configuration
-        self._config = checkpoint['config']
+        for key, value in checkpoint['config'].items():
+            self._config[key] = value
 
         # Instantiate optimizers
         self._optimizer_dict = _BuddyOptimizer._instantiate_optimizers(
