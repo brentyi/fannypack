@@ -3,16 +3,23 @@ import torch.nn as nn
 
 from ._buddy_mixins._checkpointing import _BuddyCheckpointing
 from ._buddy_mixins._logging import _BuddyLogging
+from ._buddy_mixins._metadata import _BuddyMetadata
 from ._buddy_mixins._optimizer import _BuddyOptimizer
 
 
-class Buddy(_BuddyCheckpointing, _BuddyLogging, _BuddyOptimizer):
+class Buddy(
+        _BuddyCheckpointing,
+        _BuddyLogging,
+        _BuddyMetadata,
+        _BuddyOptimizer):
+
     """Buddy is a model manager that abstracts away PyTorch boilerplate.
 
     Helps with:
         - Creating/using/managing optimizers
         - Checkpointing (models + optimizers)
         - Namespaced/scoped Tensorboard logging
+        - Saving human-readable metadata files
     """
 
     # Default configuration parameters
@@ -21,6 +28,7 @@ class Buddy(_BuddyCheckpointing, _BuddyLogging, _BuddyOptimizer):
         optimizer_names=["primary"],
         log_dir="logs",
         checkpoint_dir="checkpoints",
+        metadata_dir="metadata",
         checkpoint_max_to_keep=5,
         learning_rate_schedulers={},
     )
