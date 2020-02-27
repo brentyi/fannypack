@@ -50,7 +50,7 @@ class _BuddyMetadata:
             self._print("Wrote metadata to:", metadata_path)
 
     @property
-    def metadata():
+    def metadata(self):
         """Read-only interface for experiment metadata.
         """
         return self._metadata
