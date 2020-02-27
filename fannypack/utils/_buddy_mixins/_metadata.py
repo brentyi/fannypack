@@ -17,7 +17,7 @@ class _BuddyMetadata:
             self._experiment_name)
         try:
             with open(metadata_path, "r") as file:
-                self._metadata = yaml.load(file)
+                self._metadata = yaml.load(file, Loader=yaml.SafeLoader)
                 self._print("Loaded metadata:", self._metadata)
         except FileNotFoundError:
             self._metadata = {}
