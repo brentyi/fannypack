@@ -8,7 +8,7 @@ def squeeze(x, axis=None):
         elif axis == i:
             assert False, "Desired axis can't be squeezed"
         else:
-            slices.append(slice(0, dim))
+            slices.append(slice(None))
 
     slices = tuple(slices)
     return x[slices]
