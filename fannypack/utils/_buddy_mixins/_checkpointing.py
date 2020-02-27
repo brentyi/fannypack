@@ -243,9 +243,9 @@ class _BuddyCheckpointing:
 
         # Sanity check: something's probably wrong if we're overwriting any
         # explicitly set, non-default configuration values
-        for key, value in checkpoint['config'].items():
-            assert checkpoint['config'][key] in (
-                self._config[key], self.DEFAULT_CONFIG[key])
+        # for key, value in checkpoint['config'].items():
+        #     assert checkpoint['config'][key] in (
+        #         self._config[key], self.DEFAULT_CONFIG[key])
 
         # Sanity check: optimizer names and type should typically be consistent
         if checkpoint['optimizers'].keys() != self._optimizer_dict.keys():
