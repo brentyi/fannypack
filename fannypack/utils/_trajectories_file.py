@@ -301,7 +301,7 @@ class TrajectoriesFile:
                 for content_step in zip(*trajectory.values()):
                     target.add_timestep(dict(zip(keys, content_step)))
                 target.complete_trajectory()
-                print("Wrote ", name)
+                self._print("Wrote ", name)
         return target
 
     def _h5py_file(self, mode=None):
