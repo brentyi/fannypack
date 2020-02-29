@@ -28,22 +28,50 @@ class _BuddyLogging:
         """
         class _Namespace:
             def __enter__(unused_self):
-                self._log_scopes.append(scope)
+                self.log_scope_push(scope)
                 return unused_self
 
             def __exit__(*unused):
-                self._log_scopes.pop()
+                self.log_scope_pop(scope)
                 return
 
         return _Namespace()
 
-    def log(self, name, value):
-        """Log a tensor for visualization in Tensorboard. Currently only supports scalars.
+    def log_scope_push(self, scope):
+        """Push a scope to log tensors into.
+
+        Example usage:
+        ```
+            buddy.log_scope_push("scope")
+
+            # Logs to scope/loss
+            buddy.log("loss", loss_tensor)
+
+            buddy.log_scope_pop("scope") # name parameter is optional
+        ```
         """
+        self._log_scopes.append(scope)
+
+    def log_scope_pop(self, scope=None):
+        """Pop a scope we logged tensors into. See `log_scope_push()`.
+        """
+        popped = self._log_scopes.pop()
+        if scope is not None:
+            assert popped == scope
+
+    def log(self, name, value):
+        """Log a tensor for visualization in Tensorboard. Currently only
+        supports scalars.
+        """
+        # Add scope prefixes
         if len(self._log_scopes) > 0:
             name = "{}/{}".format("/".join(self._log_scopes), name)
+
+        # Lazy instantiation for tensorboard writer
         if self._log_writer is None:
             self._log_writer = torch.utils.tensorboard.SummaryWriter(
                 self._config['log_dir'] + "/" + self._experiment_name)
 
-        self._log_writer.add_scalar(name, value, global_step=self._optimizer_steps)
+        # Log scalar
+        self._log_writer.add_scalar(
+            name, value, global_step=self._optimizer_steps)
