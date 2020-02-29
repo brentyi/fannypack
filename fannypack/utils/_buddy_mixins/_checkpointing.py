@@ -194,6 +194,33 @@ class _BuddyCheckpointing:
         self._print("Loaded checkpoint at step:", self._optimizer_steps)
         return True
 
+    @property
+    def checkpoint_labels(self):
+        """ Accessorv for listing available checkpoint labels.
+        """
+
+        experiment_name = self._experiment_name
+        checkpoint_dir = self._config['checkpoint_dir']
+
+        # Find all matching checkpoint files
+        path_choices = glob.glob(
+            "{}/{}-*.ckpt".format(checkpoint_dir, experiment_name))
+        if len(path_choices) == 0:
+            return []
+
+        # Pull out labels
+        output = []
+        for choice in path_choices:
+            prefix_len = len("{}/{}-".format(checkpoint_dir, experiment_name))
+
+            suffix_len = len(".ckpt")
+            string_label = choice[prefix_len:-suffix_len]
+            output.append(string_label)
+
+        # Sort output alphabetically and return
+        output.sort()
+        return output
+
     def _read_checkpoint_file(
             self, label, path, experiment_name):
         """Find a checkpoint to load.
