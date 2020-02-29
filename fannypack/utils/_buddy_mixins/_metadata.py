@@ -12,15 +12,30 @@ class _BuddyMetadata:
         super().__init__()
 
         # Attempt to read existing metadata
-        metadata_path = "{}/{}.yaml".format(
-            self._config['metadata_dir'],
-            self._experiment_name)
         try:
-            with open(metadata_path, "r") as file:
-                self._metadata = yaml.load(file, Loader=yaml.SafeLoader)
-                self._print("Loaded metadata:", self._metadata)
+            self.load_metadata()
         except FileNotFoundError:
             self._metadata = {}
+
+    def load_metadata(self, experiment_name=None,
+                      metadata_dir=None, path=None):
+        """Read existing metadata file.
+        """
+        if path is None:
+            if experiment_name is None:
+                experiment_name = self._experiment_name
+            if metadata_dir is None:
+                metadata_dir = self._config['metadata_dir']
+            path = "{}/{}.yaml".format(
+                metadata_dir,
+                experiment_name
+            )
+        else:
+            assert experiment_name is None and metadata_dir is None
+
+        with open(path, "r") as file:
+            self._metadata = yaml.load(file, Loader=yaml.SafeLoader)
+            self._print("Loaded metadata:", self._metadata)
 
     def add_metadata(self, content):
         """Add human-readable metadata for this experiment. Input should be a
