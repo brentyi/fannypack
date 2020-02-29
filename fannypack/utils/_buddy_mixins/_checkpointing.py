@@ -3,7 +3,6 @@ import os
 import pathlib
 import signal
 import warnings
-import threading
 
 import numpy as np
 import torch
@@ -74,11 +73,13 @@ class _BuddyCheckpointing:
         }
 
         # Ignore SIGINT (eg ctrl+c) events while we save to disk...
-        # Note that this only makes sense for the main thread
-        orig_handler = None
-        if threading.current_thread() is threading.main_thread():
+        try:
             orig_handler = signal.getsignal(signal.SIGINT)
             signal.signal(signal.SIGINT, lambda _sig, _frame: None)
+        except ValueError as e:
+            # signal throws a ValueError if we're not in the main thread
+            self._print("Error while attaching SIGINT handler:", e)
+            orig_handler = None
 
         # "Atomic" checkpoint saving
         tmp_path = "{}/tmp-{}.ckpt".format(
@@ -281,7 +282,7 @@ class _BuddyCheckpointing:
 
         # Sanity check: optimizer names and type should typically be consistent
         if checkpoint['optimizers'].keys() != self._optimizer_dict.keys():
-             warnings.warn("Checkpoint loading: overriding optimizer names.")
+            warnings.warn("Checkpoint loading: overriding optimizer names.")
         if checkpoint['config']['optimizer_type'] != \
                 self._config['optimizer_type']:
             warnings.warn("Checkpoint loading: overriding optimizer type.")
