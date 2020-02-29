@@ -61,10 +61,7 @@ class Buddy(
             self._device = torch.device("cpu")
         self._print("Using device:", self._device)
 
-        # Enable autograd anomaly detection by default
-        torch.autograd.set_detect_anomaly(True)
-
-        # Call constructors for each of our three mixins.
+        # Call constructors for each of our mixins.
         # This sets up logging, checkpointing, and optimization-specific state.
         #
         # State within each mixin should be encapsulated. (exception:
