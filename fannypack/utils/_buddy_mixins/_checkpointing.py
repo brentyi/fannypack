@@ -3,6 +3,7 @@ import os
 import pathlib
 import signal
 import warnings
+import threading
 
 import numpy as np
 import torch
@@ -73,8 +74,11 @@ class _BuddyCheckpointing:
         }
 
         # Ignore SIGINT (eg ctrl+c) events while we save to disk...
-        orig_handler = signal.getsignal(signal.SIGINT)
-        signal.signal(signal.SIGINT, lambda _sig, _frame: None)
+        # Note that this only makes sense for the main thread
+        orig_handler = None
+        if threading.current_thread() is threading.main_thread():
+            orig_handler = signal.getsignal(signal.SIGINT)
+            signal.signal(signal.SIGINT, lambda _sig, _frame: None)
 
         # "Atomic" checkpoint saving
         tmp_path = "{}/tmp-{}.ckpt".format(
@@ -86,7 +90,8 @@ class _BuddyCheckpointing:
         self._print("Saved checkpoint to path:", path)
 
         # Restore SIGINT handler
-        signal.signal(signal.SIGINT, orig_handler)
+        if orig_handler is not None:
+            signal.signal(signal.SIGINT, orig_handler)
 
         # If unlabeled, add to list
         if unlabeled:
