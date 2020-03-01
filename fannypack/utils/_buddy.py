@@ -70,6 +70,7 @@ class Buddy(
 
         # Automatically load latest checkpoint
         # Note that this is called _after_ checkpointing is set up above
+        self._print("Available checkpoint labels:", self.checkpoint_labels)
         if load_checkpoint:
             self.load_checkpoint()
 
