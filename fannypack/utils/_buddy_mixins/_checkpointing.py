@@ -15,15 +15,16 @@ class _BuddyCheckpointing:
     """Private mixin for encapsulating checkpointing functions.
     """
 
-    def __init__(self):
+    def __init__(self, checkpoint_dir, checkpoint_max_to_keep):
         """Checkpointing-specific setup.
         """
-        super().__init__()
+        self._checkpoint_dir = checkpoint_dir
+        self._checkpoint_max_to_keep = checkpoint_max_to_keep
 
         # Find all unlabeled checkpoints for this experiment
         self._checkpointing_unlabeled_files = \
             _BuddyCheckpointing._find_unlabeled_checkpoints(
-                checkpoint_dir=self._config['checkpoint_dir'],
+                checkpoint_dir=self._checkpoint_dir,
                 experiment_name=self._experiment_name
             )
 
@@ -35,7 +36,7 @@ class _BuddyCheckpointing:
         unlabeled = False
         if path is None and label is None:
             path = "{}/{}-{:016d}.ckpt".format(
-                self._config['checkpoint_dir'],
+                self._checkpoint_dir,
                 self._experiment_name,
                 self._optimizer_steps
             )
@@ -49,7 +50,7 @@ class _BuddyCheckpointing:
         elif path is None:
             # Numerical labels are reserved for step counts (see above)
             assert not label.isdigit()
-            path = "{}/{}-{}.ckpt".format(self._config['checkpoint_dir'],
+            path = "{}/{}-{}.ckpt".format(self._checkpoint_dir,
                                           self._experiment_name, label)
 
         # Create directory if it doesn't exist yet
@@ -100,7 +101,7 @@ class _BuddyCheckpointing:
 
         # Prune checkpoint files
         while len(self._checkpointing_unlabeled_files) > \
-                self._config['checkpoint_max_to_keep']:
+                self._checkpoint_max_to_keep:
             os.remove(self._checkpointing_unlabeled_files.pop(0))
 
     def load_checkpoint_module(
@@ -175,6 +176,10 @@ class _BuddyCheckpointing:
 
         # Load Buddy configuration
         for key, value in checkpoint['config'].items():
+            if key not in self._config.keys():
+                warnings.warn(
+                    f"Skipping invalid configuration key: {key}={value}")
+                continue
             self._config[key] = value
 
         # Instantiate optimizers
@@ -206,7 +211,7 @@ class _BuddyCheckpointing:
         """
 
         experiment_name = self._experiment_name
-        checkpoint_dir = self._config['checkpoint_dir']
+        checkpoint_dir = self._checkpoint_dir
 
         # Find all matching checkpoint files
         path_choices = glob.glob(
@@ -249,7 +254,7 @@ class _BuddyCheckpointing:
             else:
                 # Use specified experiment name
                 path = _BuddyCheckpointing._find_unlabeled_checkpoints(
-                    checkpoint_dir=self._config['checkpoint_dir'],
+                    checkpoint_dir=self._checkpoint_dir,
                     experiment_name=experiment_name
                 )[-1]
 
@@ -258,7 +263,7 @@ class _BuddyCheckpointing:
             if experiment_name is None:
                 # Use our current experiment name by default
                 experiment_name = self._experiment_name
-            path = "{}/{}-{}.ckpt".format(self._config['checkpoint_dir'],
+            path = "{}/{}-{}.ckpt".format(self._checkpoint_dir,
                                           experiment_name, label)
         elif path is not None:
             # Load a checkpoint by its location

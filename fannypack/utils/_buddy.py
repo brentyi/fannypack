@@ -26,15 +26,19 @@ class Buddy(
     DEFAULT_CONFIG = dict(
         optimizer_type="adam",
         optimizer_names=["primary"],
-        log_dir="logs",
-        checkpoint_dir="checkpoints",
-        metadata_dir="metadata",
-        checkpoint_max_to_keep=5,
         learning_rate_schedulers={},
     )
 
-    def __init__(self, experiment_name, model,
-                 verbose=True, load_checkpoint=True, **config):
+    def __init__(
+            self,
+            experiment_name,
+            model,
+            verbose=True,
+            checkpoint_dir="checkpoints",
+            checkpoint_max_to_keep=5,
+            metadata_dir="metadata",
+            log_dir="logs",
+            **config):
         """Constructor
         """
         # Validate and assign core parameters.
@@ -66,13 +70,14 @@ class Buddy(
         #
         # State within each mixin should be encapsulated. (exception:
         # checkpointing automatically saves optimizer state)
-        super().__init__()
+        _BuddyCheckpointing.__init__(
+            self, checkpoint_dir, checkpoint_max_to_keep)
+        _BuddyMetadata.__init__(self, metadata_dir)
+        _BuddyLogging.__init__(self, log_dir)
+        _BuddyOptimizer.__init__(self)
 
-        # Automatically load latest checkpoint
-        # Note that this is called _after_ checkpointing is set up above
+        # Print available checkpoints
         self._print("Available checkpoint labels:", self.checkpoint_labels)
-        if load_checkpoint:
-            self.load_checkpoint()
 
     @property
     def device(self):

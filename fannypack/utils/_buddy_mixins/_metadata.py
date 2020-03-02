@@ -6,12 +6,12 @@ class _BuddyMetadata:
     """Private mixin for encapsulating experiment metadata management.
     """
 
-    def __init__(self):
+    def __init__(self, metadata_dir):
         """Metadata-specific setup.
         """
-        super().__init__()
 
         # Attempt to read existing metadata
+        self._metadata_dir = metadata_dir
         try:
             self.load_metadata()
         except FileNotFoundError:
@@ -25,7 +25,7 @@ class _BuddyMetadata:
             if experiment_name is None:
                 experiment_name = self._experiment_name
             if metadata_dir is None:
-                metadata_dir = self._config['metadata_dir']
+                metadata_dir = self._metadata_dir
             path = "{}/{}.yaml".format(
                 metadata_dir,
                 experiment_name
@@ -48,13 +48,13 @@ class _BuddyMetadata:
             self._metadata[key] = value
 
         # Create metadata directory if needed
-        if not os.path.isdir(self._config['metadata_dir']):
-            os.makedirs(self._config['metadata_dir'])
-            self._print("Created directory:", self._config['metadata_dir'])
+        if not os.path.isdir(self._metadata_dir):
+            os.makedirs(self._metadata_dir)
+            self._print("Created directory:", self._metadata_dir)
 
         # Write metadata to file
         metadata_path = "{}/{}.yaml".format(
-            self._config['metadata_dir'],
+            self._metadata_dir,
             self._experiment_name)
         with open(metadata_path, "w") as file:
             yaml.dump(

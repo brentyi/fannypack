@@ -5,10 +5,10 @@ class _BuddyLogging:
     """Private mixin for encapsulating logging functions.
     """
 
-    def __init__(self):
+    def __init__(self, log_dir):
         """Logging-specific setup.
         """
-        super().__init__()
+        self._log_dir = log_dir
 
         # State variables for tensorboard
         # Note that the writer is lazily instantiated in TrainingBuddy.log()
@@ -70,7 +70,7 @@ class _BuddyLogging:
         # Lazy instantiation for tensorboard writer
         if self._log_writer is None:
             self._log_writer = torch.utils.tensorboard.SummaryWriter(
-                self._config['log_dir'] + "/" + self._experiment_name)
+                self._log_dir + "/" + self._experiment_name)
 
         # Log scalar
         self._log_writer.add_scalar(
