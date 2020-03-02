@@ -5,6 +5,13 @@ class _BuddyOptimizer:
     """Private mixin for encapsulating optimizer functions.
     """
 
+    # Default configuration parameters
+    OPTIMIZER_DEFAULT_CONFIG = dict(
+        optimizer_type="adam",
+        optimizer_names=["primary"],
+        learning_rate_schedulers={},
+    )
+
     # Supported optimizer types
     OPTIMIZER_TYPES = {
         'adam': torch.optim.Adam,
@@ -17,17 +24,22 @@ class _BuddyOptimizer:
         'adadelta': 1,
     }
 
-    def __init__(self):
+    def __init__(self, optimizer_config):
         """Optimizer-specific setup.
         """
-        super().__init__()
+        # Validate and assign our training configuration.
+        self._optimizer_config = self.OPTIMIZER_DEFAULT_CONFIG.copy()
+        for key, value in optimizer_config.items():
+            assert key in self.OPTIMIZER_DEFAULT_CONFIG.keys()
+            assert type(value) == type(self.OPTIMIZER_DEFAULT_CONFIG[key])
+            self._optimizer_config[key] = optimizer_config[key]
 
         # Instantiate optimizers, step count -- note that these may be
         # overriden by a loaded checkpoint
         self._optimizer_dict = _BuddyOptimizer._instantiate_optimizers(
             model=self._model,
-            optimizer_type=self._config['optimizer_type'],
-            optimizer_names=self._config['optimizer_names']
+            optimizer_type=self._optimizer_config['optimizer_type'],
+            optimizer_names=self._optimizer_config['optimizer_names']
         )
         self._optimizer_steps = 0
 
@@ -39,7 +51,7 @@ class _BuddyOptimizer:
         assert optimizer_name in self._optimizer_dict.keys()
 
         # Update learning rate using scheduler if possible
-        schedulers = self._config['learning_rate_schedulers']
+        schedulers = self._optimizer_config['learning_rate_schedulers']
         if optimizer_name in schedulers:
             self._set_learning_rate(
                 schedulers[optimizer_name](self._optimizer_steps), optimizer_name)
@@ -59,7 +71,7 @@ class _BuddyOptimizer:
         learning rate or a schedule function (int steps -> float LR).
         """
 
-        schedulers = self._config['learning_rate_schedulers']
+        schedulers = self._optimizer_config['learning_rate_schedulers']
         if callable(value):
             # Store a scheduler
             assert type(value(0)) == float
@@ -99,7 +111,7 @@ class _BuddyOptimizer:
         optimizer_type = optimizer_type
         assert optimizer_type in cls.OPTIMIZER_TYPES
 
-        # Instantiate an optimizer for each value in _config['optimizer_names']
+        # Instantiate an optimizer for each optimizer name
         #
         # Note that if we're loading from a checkpoint, the initial learning
         # rate may be immediately overwritten

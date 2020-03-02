@@ -67,7 +67,7 @@ class _BuddyCheckpointing:
         for name, optimizer in self._optimizer_dict.items():
             optimizer_states[name] = optimizer.state_dict()
         state = {
-            'config': self._config,
+            'config': self._optimizer_config,
             'state_dict': self._model.state_dict(),
             'optimizers': optimizer_states,
             'steps': self._optimizer_steps,
@@ -174,19 +174,19 @@ class _BuddyCheckpointing:
         if checkpoint is None:
             return
 
-        # Load Buddy configuration
+        # Load Buddy optimizer configuration
         for key, value in checkpoint['config'].items():
-            if key not in self._config.keys():
+            if key not in self._optimizer_config.keys():
                 warnings.warn(
                     f"Skipping invalid configuration key: {key}={value}")
                 continue
-            self._config[key] = value
+            self._optimizer_config[key] = value
 
         # Instantiate optimizers
         self._optimizer_dict = _BuddyOptimizer._instantiate_optimizers(
             model=self._model,
-            optimizer_type=self._config['optimizer_type'],
-            optimizer_names=self._config['optimizer_names']
+            optimizer_type=self._optimizer_config['optimizer_type'],
+            optimizer_names=self._optimizer_config['optimizer_names']
         )
 
         # Load optimizer states
@@ -283,13 +283,13 @@ class _BuddyCheckpointing:
         # explicitly set, non-default configuration values
         # for key, value in checkpoint['config'].items():
         #     assert checkpoint['config'][key] in (
-        #         self._config[key], self.DEFAULT_CONFIG[key])
+        #         self._optimizer_config[key], self.DEFAULT_CONFIG[key])
 
         # Sanity check: optimizer names and type should typically be consistent
         if checkpoint['optimizers'].keys() != self._optimizer_dict.keys():
             warnings.warn("Checkpoint loading: overriding optimizer names.")
         if checkpoint['config']['optimizer_type'] != \
-                self._config['optimizer_type']:
+                self._optimizer_config['optimizer_type']:
             warnings.warn("Checkpoint loading: overriding optimizer type.")
 
         self._print("Read checkpoint from path:", path)

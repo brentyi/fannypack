@@ -22,23 +22,17 @@ class Buddy(
         - Saving human-readable metadata files
     """
 
-    # Default configuration parameters
-    DEFAULT_CONFIG = dict(
-        optimizer_type="adam",
-        optimizer_names=["primary"],
-        learning_rate_schedulers={},
-    )
-
     def __init__(
             self,
             experiment_name,
             model,
+            *,
             verbose=True,
             checkpoint_dir="checkpoints",
             checkpoint_max_to_keep=5,
             metadata_dir="metadata",
             log_dir="logs",
-            **config):
+            **optimizer_config):
         """Constructor
         """
         # Validate and assign core parameters.
@@ -49,13 +43,6 @@ class Buddy(
         self._experiment_name = experiment_name
         self._model = model
         self._verbose = True
-
-        # Validate and assign our training configuration.
-        self._config = self.DEFAULT_CONFIG.copy()
-        for key, value in config.items():
-            assert key in self.DEFAULT_CONFIG.keys()
-            assert type(value) == type(self.DEFAULT_CONFIG[key])
-            self._config[key] = config[key]
 
         # Use GPU for training if available.
         if torch.cuda.is_available():
@@ -74,7 +61,7 @@ class Buddy(
             self, checkpoint_dir, checkpoint_max_to_keep)
         _BuddyMetadata.__init__(self, metadata_dir)
         _BuddyLogging.__init__(self, log_dir)
-        _BuddyOptimizer.__init__(self)
+        _BuddyOptimizer.__init__(self, optimizer_config)
 
         # Print available checkpoints
         self._print("Available checkpoint labels:", self.checkpoint_labels)
