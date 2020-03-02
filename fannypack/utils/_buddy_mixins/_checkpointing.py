@@ -247,16 +247,18 @@ class _BuddyCheckpointing:
             # Load latest unlabeled checkpoint
             if experiment_name is None:
                 # Use our current experiment name by default
-                if len(self._checkpointing_unlabeled_files) == 0:
-                    self._print("No checkpoint found")
-                    return None
-                path = self._checkpointing_unlabeled_files[-1]
+                paths = self._checkpointing_unlabeled_files
             else:
                 # Use specified experiment name
-                path = _BuddyCheckpointing._find_unlabeled_checkpoints(
+                paths = _BuddyCheckpointing._find_unlabeled_checkpoints(
                     checkpoint_dir=self._checkpoint_dir,
                     experiment_name=experiment_name
-                )[-1]
+                )
+            if len(paths) == 0:
+                raise FileNotFoundError("Failed to find checkpoint file")
+
+            # The list of paths will be sorted by optimizer step count
+            path = paths[-1]
 
         elif path is None and label is not None:
             # Load a labeled checkpoint
