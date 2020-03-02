@@ -5,13 +5,6 @@ class _BuddyOptimizer:
     """Private mixin for encapsulating optimizer functions.
     """
 
-    # Default configuration parameters
-    OPTIMIZER_DEFAULT_CONFIG = dict(
-        optimizer_type="adam",
-        optimizer_names=["primary"],
-        learning_rate_schedulers={},
-    )
-
     # Supported optimizer types
     OPTIMIZER_TYPES = {
         'adam': torch.optim.Adam,
@@ -24,22 +17,22 @@ class _BuddyOptimizer:
         'adadelta': 1,
     }
 
-    def __init__(self, optimizer_config):
+    def __init__(self, optimizer_type, optimizer_names):
         """Optimizer-specific setup.
         """
-        # Validate and assign our training configuration.
-        self._optimizer_config = self.OPTIMIZER_DEFAULT_CONFIG.copy()
-        for key, value in optimizer_config.items():
-            assert key in self.OPTIMIZER_DEFAULT_CONFIG.keys()
-            assert type(value) == type(self.OPTIMIZER_DEFAULT_CONFIG[key])
-            self._optimizer_config[key] = optimizer_config[key]
+        # Assign our training configuration.
+        self._optimizer_config = {
+            'optimizer_type': optimizer_type,
+            'optimizer_names': optimizer_names,
+            'learning_rate_schedulers': {},
+        }
 
         # Instantiate optimizers, step count -- note that these may be
         # overriden by a loaded checkpoint
         self._optimizer_dict = _BuddyOptimizer._instantiate_optimizers(
             model=self._model,
-            optimizer_type=self._optimizer_config['optimizer_type'],
-            optimizer_names=self._optimizer_config['optimizer_names']
+            optimizer_type=optimizer_type,
+            optimizer_names=optimizer_names,
         )
         self._optimizer_steps = 0
 

@@ -32,7 +32,8 @@ class Buddy(
             checkpoint_max_to_keep=5,
             metadata_dir="metadata",
             log_dir="logs",
-            **optimizer_config):
+            optimizer_type="adam",
+            optimizer_names=["primary"]):
         """Constructor
         """
         # Validate and assign core parameters.
@@ -61,7 +62,7 @@ class Buddy(
             self, checkpoint_dir, checkpoint_max_to_keep)
         _BuddyMetadata.__init__(self, metadata_dir)
         _BuddyLogging.__init__(self, log_dir)
-        _BuddyOptimizer.__init__(self, optimizer_config)
+        _BuddyOptimizer.__init__(self, optimizer_type, optimizer_names)
 
         # Print available checkpoints
         self._print("Available checkpoint labels:", self.checkpoint_labels)
