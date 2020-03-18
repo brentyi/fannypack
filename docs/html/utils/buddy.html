@@ -1,0 +1,393 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Buddy &mdash; fannypack  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="TrajectoriesFile" href="trajectoriesfile.html" />
+    <link rel="prev" title="fannypack.utils" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> fannypack
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">fannypack.utils</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Buddy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="trajectoriesfile.html">TrajectoriesFile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dictiterator.html">DictIterator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="potpourri.html">Potpourri</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../nn/index.html">fannypack.nn</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">fannypack</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">fannypack.utils</a> &raquo;</li>
+        
+      <li>Buddy</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/utils/buddy.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="buddy">
+<h1>Buddy<a class="headerlink" href="#buddy" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="fannypack.utils.Buddy">
+<em class="property">class </em><code class="sig-prename descclassname">fannypack.utils.</code><code class="sig-name descname">Buddy</code><span class="sig-paren">(</span><em class="sig-param">experiment_name, model, *, checkpoint_dir='checkpoints', checkpoint_max_to_keep=5, metadata_dir='metadata', log_dir='logs', optimizer_type='adam', optimizer_names=['primary'], verbose=True</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils.Buddy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#fannypack.utils._buddy_interfaces._checkpointing._BuddyCheckpointing" title="fannypack.utils._buddy_interfaces._checkpointing._BuddyCheckpointing"><code class="xref py py-class docutils literal notranslate"><span class="pre">fannypack.utils._buddy_interfaces._checkpointing._BuddyCheckpointing</span></code></a>, <a class="reference internal" href="#fannypack.utils._buddy_interfaces._optimizer._BuddyOptimizer" title="fannypack.utils._buddy_interfaces._optimizer._BuddyOptimizer"><code class="xref py py-class docutils literal notranslate"><span class="pre">fannypack.utils._buddy_interfaces._optimizer._BuddyOptimizer</span></code></a>, <a class="reference internal" href="#fannypack.utils._buddy_interfaces._logging._BuddyLogging" title="fannypack.utils._buddy_interfaces._logging._BuddyLogging"><code class="xref py py-class docutils literal notranslate"><span class="pre">fannypack.utils._buddy_interfaces._logging._BuddyLogging</span></code></a>, <a class="reference internal" href="#fannypack.utils._buddy_interfaces._metadata._BuddyMetadata" title="fannypack.utils._buddy_interfaces._metadata._BuddyMetadata"><code class="xref py py-class docutils literal notranslate"><span class="pre">fannypack.utils._buddy_interfaces._metadata._BuddyMetadata</span></code></a></p>
+<p>Buddy is a model manager that abstracts away PyTorch boilerplate.
+Buddy helps with…</p>
+<ul class="simple">
+<li><p>Creating/using/managing optimizers,</p></li>
+<li><p>Checkpointing (models + optimizers),</p></li>
+<li><p>Namespaced/scoped Tensorboard logging,</p></li>
+<li><p>Saving human-readable metadata files.</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>experiment_name</strong> (<em>str</em>) – Name for the current model/experiment.</p></li>
+<li><p><strong>model</strong> (<em>torch.nn.Module</em>) – PyTorch model to work with.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Keyword Arguments</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>checkpoint_dir</strong> (<em>str</em><em>, </em><em>optional</em>) – Path to save checkpoints into.
+Defaults to <code class="docutils literal notranslate"><span class="pre">&quot;checkpoints&quot;</span></code>.</p></li>
+<li><p><strong>checkpoint_max_to_keep</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of auto-saved
+checkpoints to keep. Set to <code class="docutils literal notranslate"><span class="pre">None</span></code> to keep all. Defaults to <code class="docutils literal notranslate"><span class="pre">5</span></code>.</p></li>
+<li><p><strong>metadata_dir</strong> (<em>str</em><em>, </em><em>optional</em>) – Path to save metadata YAML files into.
+Defaults to <code class="docutils literal notranslate"><span class="pre">&quot;metadata&quot;</span></code>.</p></li>
+<li><p><strong>log_dir</strong> (<em>str</em><em>, </em><em>optional</em>) – Path to save Tensorboard log files into.
+Defaults to <code class="docutils literal notranslate"><span class="pre">&quot;logs&quot;</span></code>.</p></li>
+<li><p><strong>optimizer_type</strong> (<em>str</em><em>, </em><em>optional</em>) – Optimizer type to use: <code class="docutils literal notranslate"><span class="pre">&quot;adam&quot;</span></code> or
+<code class="docutils literal notranslate"><span class="pre">&quot;adadelta&quot;</span></code>. Defaults to <code class="docutils literal notranslate"><span class="pre">&quot;adam&quot;</span></code>.</p></li>
+<li><p><strong>optimizer_names</strong> (<em>list</em><em>, </em><em>optional</em>) – List of optimizer names; a separate
+optimizer is created for each one. Helpful if working with multiple
+loss functions, which may have different gradient scales. Default
+to <code class="docutils literal notranslate"><span class="pre">[&quot;primary&quot;]</span></code>.</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em><em>, </em><em>optional</em>) – Flag for toggling debug messages. Defaults to
+<code class="docutils literal notranslate"><span class="pre">True</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="fannypack.utils.Buddy.device">
+<em class="property">property </em><code class="sig-name descname">device</code><a class="headerlink" href="#fannypack.utils.Buddy.device" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read-only interface for the active torch device.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="fannypack.utils._buddy_interfaces._optimizer._BuddyOptimizer">
+<em class="property">class </em><code class="sig-prename descclassname">fannypack.utils._buddy_interfaces._optimizer.</code><code class="sig-name descname">_BuddyOptimizer</code><span class="sig-paren">(</span><em class="sig-param">optimizer_type</em>, <em class="sig-param">optimizer_names</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils._buddy_interfaces._optimizer._BuddyOptimizer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Buddy’s optimization interface.</p>
+<dl class="method">
+<dt id="fannypack.utils._buddy_interfaces._optimizer._BuddyOptimizer.minimize">
+<code class="sig-name descname">minimize</code><span class="sig-paren">(</span><em class="sig-param">loss</em>, <em class="sig-param">optimizer_name='primary'</em>, <em class="sig-param">retain_graph=False</em>, <em class="sig-param">checkpoint_interval=1000</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils._buddy_interfaces._optimizer._BuddyOptimizer.minimize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute gradients and use them to minimize a loss function.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fannypack.utils._buddy_interfaces._optimizer._BuddyOptimizer.optimizer_steps">
+<em class="property">property </em><code class="sig-name descname">optimizer_steps</code><a class="headerlink" href="#fannypack.utils._buddy_interfaces._optimizer._BuddyOptimizer.optimizer_steps" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read-only interface for # of steps taken by optimizer.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fannypack.utils._buddy_interfaces._optimizer._BuddyOptimizer.set_learning_rate">
+<code class="sig-name descname">set_learning_rate</code><span class="sig-paren">(</span><em class="sig-param">value</em>, <em class="sig-param">optimizer_name='primary'</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils._buddy_interfaces._optimizer._BuddyOptimizer.set_learning_rate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets an optimizer learning rate. Accepts either a floating point
+learning rate or a schedule function (int steps -&gt; float LR).</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="fannypack.utils._buddy_interfaces._checkpointing._BuddyCheckpointing">
+<em class="property">class </em><code class="sig-prename descclassname">fannypack.utils._buddy_interfaces._checkpointing.</code><code class="sig-name descname">_BuddyCheckpointing</code><span class="sig-paren">(</span><em class="sig-param">checkpoint_dir</em>, <em class="sig-param">checkpoint_max_to_keep</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils._buddy_interfaces._checkpointing._BuddyCheckpointing" title="Permalink to this definition">¶</a></dt>
+<dd><p>Buddy’s model checkpointing interface.</p>
+<dl class="method">
+<dt id="fannypack.utils._buddy_interfaces._checkpointing._BuddyCheckpointing.checkpoint_labels">
+<em class="property">property </em><code class="sig-name descname">checkpoint_labels</code><a class="headerlink" href="#fannypack.utils._buddy_interfaces._checkpointing._BuddyCheckpointing.checkpoint_labels" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor for listing available checkpoint labels.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fannypack.utils._buddy_interfaces._checkpointing._BuddyCheckpointing.load_checkpoint">
+<code class="sig-name descname">load_checkpoint</code><span class="sig-paren">(</span><em class="sig-param">label=None</em>, <em class="sig-param">path=None</em>, <em class="sig-param">experiment_name=None</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils._buddy_interfaces._checkpointing._BuddyCheckpointing.load_checkpoint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads a checkpoint. By default, loads the one with the highest
+number of training iterations.</p>
+<p>Can also be specified via a label or file path.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fannypack.utils._buddy_interfaces._checkpointing._BuddyCheckpointing.load_checkpoint_module">
+<code class="sig-name descname">load_checkpoint_module</code><span class="sig-paren">(</span><em class="sig-param">source</em>, <em class="sig-param">target=None</em>, <em class="sig-param">label=None</em>, <em class="sig-param">path=None</em>, <em class="sig-param">experiment_name=None</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils._buddy_interfaces._checkpointing._BuddyCheckpointing.load_checkpoint_module" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO documentation; see examples/buddy_checkpoints.py</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fannypack.utils._buddy_interfaces._checkpointing._BuddyCheckpointing.load_checkpoint_optimizer">
+<code class="sig-name descname">load_checkpoint_optimizer</code><span class="sig-paren">(</span><em class="sig-param">source</em>, <em class="sig-param">target=None</em>, <em class="sig-param">label=None</em>, <em class="sig-param">path=None</em>, <em class="sig-param">experiment_name=None</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils._buddy_interfaces._checkpointing._BuddyCheckpointing.load_checkpoint_optimizer" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO documentation; see examples/buddy_checkpoints.py</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fannypack.utils._buddy_interfaces._checkpointing._BuddyCheckpointing.save_checkpoint">
+<code class="sig-name descname">save_checkpoint</code><span class="sig-paren">(</span><em class="sig-param">label=None</em>, <em class="sig-param">path=None</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils._buddy_interfaces._checkpointing._BuddyCheckpointing.save_checkpoint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Saves a checkpoint, which can optionally be labeled.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="fannypack.utils._buddy_interfaces._logging._BuddyLogging">
+<em class="property">class </em><code class="sig-prename descclassname">fannypack.utils._buddy_interfaces._logging.</code><code class="sig-name descname">_BuddyLogging</code><span class="sig-paren">(</span><em class="sig-param">log_dir</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils._buddy_interfaces._logging._BuddyLogging" title="Permalink to this definition">¶</a></dt>
+<dd><p>Buddy’s TensorBoard logging interface.</p>
+<dl class="method">
+<dt id="fannypack.utils._buddy_interfaces._logging._BuddyLogging.log">
+<code class="sig-name descname">log</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">value</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils._buddy_interfaces._logging._BuddyLogging.log" title="Permalink to this definition">¶</a></dt>
+<dd><p>Log a tensor for visualization in TensorBoard. Currently only
+supports scalars.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fannypack.utils._buddy_interfaces._logging._BuddyLogging.log_scope">
+<code class="sig-name descname">log_scope</code><span class="sig-paren">(</span><em class="sig-param">scope</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils._buddy_interfaces._logging._BuddyLogging.log_scope" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a scope to log tensors in.</p>
+<p>Example usage:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">buddy</span><span class="o">.</span><span class="n">log_scope</span><span class="p">(</span><span class="s2">&quot;scope&quot;</span><span class="p">):</span>
+    <span class="c1"># Logs to scope/loss</span>
+    <span class="n">buddy</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s2">&quot;loss&quot;</span><span class="p">,</span> <span class="n">loss_tensor</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="fannypack.utils._buddy_interfaces._logging._BuddyLogging.log_scope_pop">
+<code class="sig-name descname">log_scope_pop</code><span class="sig-paren">(</span><em class="sig-param">scope=None</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils._buddy_interfaces._logging._BuddyLogging.log_scope_pop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pop a scope we logged tensors into. See <code class="docutils literal notranslate"><span class="pre">log_scope_push()</span></code>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fannypack.utils._buddy_interfaces._logging._BuddyLogging.log_scope_push">
+<code class="sig-name descname">log_scope_push</code><span class="sig-paren">(</span><em class="sig-param">scope</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils._buddy_interfaces._logging._BuddyLogging.log_scope_push" title="Permalink to this definition">¶</a></dt>
+<dd><p>Push a scope to log tensors into.</p>
+<p>Example usage:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">buddy</span><span class="o">.</span><span class="n">log_scope_push</span><span class="p">(</span><span class="s2">&quot;scope&quot;</span><span class="p">)</span>
+
+<span class="c1"># Logs to scope/loss</span>
+<span class="n">buddy</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s2">&quot;loss&quot;</span><span class="p">,</span> <span class="n">loss_tensor</span><span class="p">)</span>
+
+<span class="n">buddy</span><span class="o">.</span><span class="n">log_scope_pop</span><span class="p">(</span><span class="s2">&quot;scope&quot;</span><span class="p">)</span> <span class="c1"># name parameter is optional</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="fannypack.utils._buddy_interfaces._metadata._BuddyMetadata">
+<em class="property">class </em><code class="sig-prename descclassname">fannypack.utils._buddy_interfaces._metadata.</code><code class="sig-name descname">_BuddyMetadata</code><span class="sig-paren">(</span><em class="sig-param">metadata_dir</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils._buddy_interfaces._metadata._BuddyMetadata" title="Permalink to this definition">¶</a></dt>
+<dd><p>Buddy’s experiment metadata management interface.</p>
+<dl class="method">
+<dt id="fannypack.utils._buddy_interfaces._metadata._BuddyMetadata.add_metadata">
+<code class="sig-name descname">add_metadata</code><span class="sig-paren">(</span><em class="sig-param">content</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils._buddy_interfaces._metadata._BuddyMetadata.add_metadata" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add human-readable metadata for this experiment. Input should be a
+dictionary.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fannypack.utils._buddy_interfaces._metadata._BuddyMetadata.load_metadata">
+<code class="sig-name descname">load_metadata</code><span class="sig-paren">(</span><em class="sig-param">experiment_name=None</em>, <em class="sig-param">metadata_dir=None</em>, <em class="sig-param">path=None</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils._buddy_interfaces._metadata._BuddyMetadata.load_metadata" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read existing metadata file.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fannypack.utils._buddy_interfaces._metadata._BuddyMetadata.metadata">
+<em class="property">property </em><code class="sig-name descname">metadata</code><a class="headerlink" href="#fannypack.utils._buddy_interfaces._metadata._BuddyMetadata.metadata" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read-only interface for experiment metadata.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="trajectoriesfile.html" class="btn btn-neutral float-right" title="TrajectoriesFile" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral float-left" title="fannypack.utils" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
