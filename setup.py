@@ -13,6 +13,8 @@ setup(
         'dill',
         'h5py',
         'numpy',
+        'pyyaml',
+        'tensorboard',
         'torch',
     ],
 )
