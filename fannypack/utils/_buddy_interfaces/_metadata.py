@@ -3,7 +3,7 @@ import os
 
 
 class _BuddyMetadata:
-    """Private mixin for encapsulating experiment metadata management.
+    """Buddy's experiment metadata management interface.
     """
 
     def __init__(self, metadata_dir):

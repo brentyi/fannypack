@@ -1,25 +1,47 @@
 import torch
 import torch.nn as nn
 
-from ._buddy_mixins._checkpointing import _BuddyCheckpointing
-from ._buddy_mixins._logging import _BuddyLogging
-from ._buddy_mixins._metadata import _BuddyMetadata
-from ._buddy_mixins._optimizer import _BuddyOptimizer
+from ._buddy_interfaces._checkpointing import _BuddyCheckpointing
+from ._buddy_interfaces._optimizer import _BuddyOptimizer
+from ._buddy_interfaces._logging import _BuddyLogging
+from ._buddy_interfaces._metadata import _BuddyMetadata
 
 
 class Buddy(
         _BuddyCheckpointing,
+        _BuddyOptimizer,
         _BuddyLogging,
         _BuddyMetadata,
-        _BuddyOptimizer):
+):
 
     """Buddy is a model manager that abstracts away PyTorch boilerplate.
+    Buddy helps with...
+    - Creating/using/managing optimizers,
+    - Checkpointing (models + optimizers),
+    - Namespaced/scoped Tensorboard logging,
+    - Saving human-readable metadata files.
 
-    Helps with:
-        - Creating/using/managing optimizers
-        - Checkpointing (models + optimizers)
-        - Namespaced/scoped Tensorboard logging
-        - Saving human-readable metadata files
+    Args:
+        experiment_name (str): Name for the current model/experiment.
+        model (torch.nn.Module): PyTorch model to work with.
+
+    Keyword Args:
+        checkpoint_dir (str, optional): Path to save checkpoints into.
+            Defaults to `"checkpoints"`.
+        checkpoint_max_to_keep (int, optional): Number of auto-saved
+            checkpoints to keep. Set to `None` to keep all. Defaults to `5`.
+        metadata_dir (str, optional): Path to save metadata YAML files into.
+            Defaults to `"metadata"`.
+        log_dir (str, optional): Path to save Tensorboard log files into.
+            Defaults to `"logs"`.
+        optimizer_type (str, optional): Optimizer type to use: `"adam"` or
+            `"adadelta"`. Defaults to `"adam"`.
+        optimizer_names (list, optional): List of optimizer names; a separate
+            optimizer is created for each one. Helpful if working with multiple
+            loss functions, which may have different gradient scales. Default
+            to `["primary"]`.
+        verbose (bool, optional): Flag for toggling debug messages. Defaults to
+            `True`.
     """
 
     def __init__(
@@ -27,13 +49,14 @@ class Buddy(
             experiment_name,
             model,
             *,
-            verbose=True,
             checkpoint_dir="checkpoints",
             checkpoint_max_to_keep=5,
             metadata_dir="metadata",
             log_dir="logs",
             optimizer_type="adam",
-            optimizer_names=["primary"]):
+            optimizer_names=["primary"],
+            verbose=True,
+    ):
         """Constructor
         """
         # Validate and assign core parameters.
@@ -53,10 +76,10 @@ class Buddy(
             self._device = torch.device("cpu")
         self._print("Using device:", self._device)
 
-        # Call constructors for each of our mixins.
+        # Call constructors for each of our interfaces.
         # This sets up logging, checkpointing, and optimization-specific state.
         #
-        # State within each mixin should be encapsulated. (exception:
+        # State within each interface should be encapsulated. (exception:
         # checkpointing automatically saves optimizer state)
         _BuddyCheckpointing.__init__(
             self, checkpoint_dir, checkpoint_max_to_keep)

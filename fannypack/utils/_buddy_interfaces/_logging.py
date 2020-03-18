@@ -2,7 +2,7 @@ import torch.utils.tensorboard
 
 
 class _BuddyLogging:
-    """Private mixin for encapsulating logging functions.
+    """Buddy's TensorBoard logging interface.
     """
 
     def __init__(self, log_dir):
@@ -10,7 +10,7 @@ class _BuddyLogging:
         """
         self._log_dir = log_dir
 
-        # State variables for tensorboard
+        # State variables for TensorBoard
         # Note that the writer is lazily instantiated in TrainingBuddy.log()
         self._log_writer = None
         self._log_scopes = []
@@ -60,7 +60,7 @@ class _BuddyLogging:
             assert popped == scope
 
     def log(self, name, value):
-        """Log a tensor for visualization in Tensorboard. Currently only
+        """Log a tensor for visualization in TensorBoard. Currently only
         supports scalars.
         """
         # Add scope prefixes

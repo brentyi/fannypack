@@ -2,17 +2,17 @@ import torch.optim
 
 
 class _BuddyOptimizer:
-    """Private mixin for encapsulating optimizer functions.
+    """Buddy's optimization interface.
     """
 
     # Supported optimizer types
-    OPTIMIZER_TYPES = {
+    _OPTIMIZER_TYPES = {
         'adam': torch.optim.Adam,
         'adadelta': torch.optim.Adadelta,
     }
 
     # Default learning rates
-    OPTIMIZER_DEFAULT_LEARNING_RATES = {
+    _OPTIMIZER_DEFAULT_LEARNING_RATES = {
         'adam': 1e-4,
         'adadelta': 1,
     }
@@ -102,14 +102,14 @@ class _BuddyOptimizer:
 
         # Make sure we're creating a valid optimizer
         optimizer_type = optimizer_type
-        assert optimizer_type in cls.OPTIMIZER_TYPES
+        assert optimizer_type in cls._OPTIMIZER_TYPES
 
         # Instantiate an optimizer for each optimizer name
         #
         # Note that if we're loading from a checkpoint, the initial learning
         # rate may be immediately overwritten
-        Optimizer = cls.OPTIMIZER_TYPES[optimizer_type]
-        initial_learning_rate = cls.OPTIMIZER_DEFAULT_LEARNING_RATES[optimizer_type]
+        Optimizer = cls._OPTIMIZER_TYPES[optimizer_type]
+        initial_learning_rate = cls._OPTIMIZER_DEFAULT_LEARNING_RATES[optimizer_type]
         optimizer_instances = {}
         for name in optimizer_names:
             optimizer_instances[name] = Optimizer(

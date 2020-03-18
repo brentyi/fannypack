@@ -2,14 +2,10 @@ import abc
 import torch.nn as nn
 
 
-class _AbstractResBlock(nn.Module, abc.ABC):
-    default_activation = "relu"
-
-    def __init__(self, activation=None, activations_inplace=True):
+class Base(nn.Module, abc.ABC):
+    def __init__(self, activation="relu", activations_inplace=True):
         super().__init__()
 
-        if activation is None:
-            activation = self.default_activation
         self.activations_inplace = activations_inplace
 
         self.block1 = None
@@ -17,6 +13,8 @@ class _AbstractResBlock(nn.Module, abc.ABC):
         self.activation = self._activation_func(activation)
 
     def forward(self, x):
+        """ResBlock forward pass.
+        """
         residual = x
         x = self.block1(x)
         x = self.activation(x)
@@ -35,11 +33,10 @@ class _AbstractResBlock(nn.Module, abc.ABC):
         ])[activation]
 
 
-class Linear(_AbstractResBlock):
-    default_activation = "relu"
+class Linear(Base):
 
-    def __init__(self, units, bottleneck_units=None, **kwargs):
-        super().__init__(**kwargs)
+    def __init__(self, units, bottleneck_units=None, **resblock_base_args):
+        super().__init__(**resblock_base_args)
 
         if bottleneck_units is None:
             bottleneck_units = units
@@ -47,18 +44,14 @@ class Linear(_AbstractResBlock):
         self.block2 = nn.Linear(bottleneck_units, units)
 
 
-class Conv2d(_AbstractResBlock):
-    default_activation = "relu"
-    default_kernel_size = 3
+class Conv2d(Base):
 
     def __init__(self, channels, bottleneck_channels=None,
-                 kernel_size=None, **kwargs):
-        super().__init__(**kwargs)
+                 kernel_size=3, **resblock_base_args):
+        super().__init__(**resblock_base_args)
 
         if bottleneck_channels is None:
             bottleneck_channels = channels
-        if kernel_size is None:
-            kernel_size = self.default_kernel_size
 
         conv2d_args = {
             'kernel_size': kernel_size,

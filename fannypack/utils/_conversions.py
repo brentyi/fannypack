@@ -1,6 +1,11 @@
+"""
+.. module:: fannypack
+
+blah blah
+"""
+
 import numpy as np
 import torch
-
 
 def to_device(x, device, detach=True):
     """Copies a tensor, list of tensors, or dict of tensors to a different

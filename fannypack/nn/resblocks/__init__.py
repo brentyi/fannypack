@@ -1,1 +1,1 @@
-from ._resblocks import Linear, Conv2d
+from ._resblocks import Base, Linear, Conv2d

@@ -12,7 +12,7 @@ from ._optimizer import _BuddyOptimizer
 
 
 class _BuddyCheckpointing:
-    """Private mixin for encapsulating checkpointing functions.
+    """Buddy's model checkpointing interface.
     """
 
     def __init__(self, checkpoint_dir, checkpoint_max_to_keep):
@@ -207,7 +207,7 @@ class _BuddyCheckpointing:
 
     @property
     def checkpoint_labels(self):
-        """ Accessorv for listing available checkpoint labels.
+        """ Accessor for listing available checkpoint labels.
         """
 
         experiment_name = self._experiment_name
