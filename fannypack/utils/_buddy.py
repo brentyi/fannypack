@@ -8,10 +8,7 @@ from ._buddy_interfaces._metadata import _BuddyMetadata
 
 
 class Buddy(
-        _BuddyCheckpointing,
-        _BuddyOptimizer,
-        _BuddyLogging,
-        _BuddyMetadata,
+    _BuddyCheckpointing, _BuddyOptimizer, _BuddyLogging, _BuddyMetadata,
 ):
 
     """Buddy is a model manager that abstracts away PyTorch boilerplate.
@@ -45,17 +42,17 @@ class Buddy(
     """
 
     def __init__(
-            self,
-            experiment_name,
-            model,
-            *,
-            checkpoint_dir="checkpoints",
-            checkpoint_max_to_keep=5,
-            metadata_dir="metadata",
-            log_dir="logs",
-            optimizer_type="adam",
-            optimizer_names=["primary"],
-            verbose=True,
+        self,
+        experiment_name,
+        model,
+        *,
+        checkpoint_dir="checkpoints",
+        checkpoint_max_to_keep=5,
+        metadata_dir="metadata",
+        log_dir="logs",
+        optimizer_type="adam",
+        optimizer_names=["primary"],
+        verbose=True,
     ):
         """Constructor
         """
@@ -82,7 +79,8 @@ class Buddy(
         # State within each interface should be encapsulated. (exception:
         # checkpointing automatically saves optimizer state)
         _BuddyCheckpointing.__init__(
-            self, checkpoint_dir, checkpoint_max_to_keep)
+            self, checkpoint_dir, checkpoint_max_to_keep
+        )
         _BuddyMetadata.__init__(self, metadata_dir)
         _BuddyLogging.__init__(self, log_dir)
         _BuddyOptimizer.__init__(self, optimizer_type, optimizer_names)

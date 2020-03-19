@@ -53,7 +53,8 @@ class DictIterator:
                 # Handle numpy arrays (inefficient)
                 if type(value) == np.ndarray:
                     self._data[key] = np.concatenate(
-                        (self._data[key], value), axis=0)
+                        (self._data[key], value), axis=0
+                    )
 
                 # Handle standard Python lists
                 else:

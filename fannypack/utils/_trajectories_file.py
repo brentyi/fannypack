@@ -42,8 +42,14 @@ class TrajectoriesFile:
 
     """
 
-    def __init__(self, path, convert_doubles=True, read_only=True,
-                 compress=True, verbose=False):
+    def __init__(
+        self,
+        path,
+        convert_doubles=True,
+        read_only=True,
+        compress=True,
+        verbose=False,
+    ):
         """Constructs an interface for reading from/writing to hdf5 files.
 
         Args:
@@ -152,10 +158,12 @@ class TrajectoriesFile:
             if key not in self._file[traj_key]:
                 if self._compress:
                     self._file[traj_key].create_dataset(
-                        key, data=value, chunks=True, compression="gzip")
+                        key, data=value, chunks=True, compression="gzip"
+                    )
                 else:
                     self._file[traj_key].create_dataset(
-                        key, data=value, chunks=True)
+                        key, data=value, chunks=True
+                    )
             else:
                 self._file[traj_key][key][...] = value
 
@@ -239,8 +247,7 @@ class TrajectoriesFile:
         assert self._file is not None, "Not called in with statement!"
 
         if not self._content_dict:
-            self._print(
-                "Empty observation dictionary; skipping trajectory end")
+            self._print("Empty observation dictionary; skipping trajectory end")
             return
 
         length = len(list(self._content_dict.values())[0])
@@ -260,7 +267,8 @@ class TrajectoriesFile:
 
             if self._compress:
                 group.create_dataset(
-                    key, data=data, chunks=True, compression="gzip")
+                    key, data=data, chunks=True, compression="gzip"
+                )
             else:
                 group.create_dataset(key, data=data, chunks=True)
 

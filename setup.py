@@ -10,11 +10,11 @@ setup(
     license="BSD",
     packages=["fannypack"],
     install_requires=[
-        'dill',
-        'h5py',
-        'numpy',
-        'pyyaml',
-        'tensorboard',
-        'torch',
+        "dill",
+        "h5py",
+        "numpy",
+        "pyyaml",
+        "tensorboard",
+        "torch",
     ],
 )

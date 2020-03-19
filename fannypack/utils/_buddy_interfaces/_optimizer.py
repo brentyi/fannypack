@@ -7,14 +7,14 @@ class _BuddyOptimizer:
 
     # Supported optimizer types
     _OPTIMIZER_TYPES = {
-        'adam': torch.optim.Adam,
-        'adadelta': torch.optim.Adadelta,
+        "adam": torch.optim.Adam,
+        "adadelta": torch.optim.Adadelta,
     }
 
     # Default learning rates
     _OPTIMIZER_DEFAULT_LEARNING_RATES = {
-        'adam': 1e-4,
-        'adadelta': 1,
+        "adam": 1e-4,
+        "adadelta": 1,
     }
 
     def __init__(self, optimizer_type, optimizer_names):
@@ -22,9 +22,9 @@ class _BuddyOptimizer:
         """
         # Assign our training configuration.
         self._optimizer_config = {
-            'optimizer_type': optimizer_type,
-            'optimizer_names': optimizer_names,
-            'learning_rate_schedulers': {},
+            "optimizer_type": optimizer_type,
+            "optimizer_names": optimizer_names,
+            "learning_rate_schedulers": {},
         }
 
         # Instantiate optimizers, step count -- note that these may be
@@ -36,18 +36,25 @@ class _BuddyOptimizer:
         )
         self._optimizer_steps = 0
 
-    def minimize(self, loss, optimizer_name="primary",
-                 retain_graph=False, checkpoint_interval=1000):
+    def minimize(
+        self,
+        loss,
+        optimizer_name="primary",
+        retain_graph=False,
+        checkpoint_interval=1000,
+    ):
         """Compute gradients and use them to minimize a loss function.
         """
 
         assert optimizer_name in self._optimizer_dict.keys()
 
         # Update learning rate using scheduler if possible
-        schedulers = self._optimizer_config['learning_rate_schedulers']
+        schedulers = self._optimizer_config["learning_rate_schedulers"]
         if optimizer_name in schedulers:
             self._set_learning_rate(
-                schedulers[optimizer_name](self._optimizer_steps), optimizer_name)
+                schedulers[optimizer_name](self._optimizer_steps),
+                optimizer_name,
+            )
 
         # Take gradient step
         self._optimizer_dict[optimizer_name].zero_grad()
@@ -64,7 +71,7 @@ class _BuddyOptimizer:
         learning rate or a schedule function (int steps -> float LR).
         """
 
-        schedulers = self._optimizer_config['learning_rate_schedulers']
+        schedulers = self._optimizer_config["learning_rate_schedulers"]
         if callable(value):
             # Store a scheduler
             assert type(value(0)) == float
@@ -93,11 +100,12 @@ class _BuddyOptimizer:
 
         optimizer = self._optimizer_dict[optimizer_name]
         for param_group in optimizer.param_groups:
-            param_group['lr'] = value
+            param_group["lr"] = value
 
     @classmethod
     def _instantiate_optimizers(cls, model, optimizer_type, optimizer_names):
-        """(Private) Instantiates optimizer objects and sets default learning rates.
+        """(Private) Instantiates optimizer objects and sets default learning
+        rates.
         """
 
         # Make sure we're creating a valid optimizer
@@ -109,10 +117,13 @@ class _BuddyOptimizer:
         # Note that if we're loading from a checkpoint, the initial learning
         # rate may be immediately overwritten
         Optimizer = cls._OPTIMIZER_TYPES[optimizer_type]
-        initial_learning_rate = cls._OPTIMIZER_DEFAULT_LEARNING_RATES[optimizer_type]
+        initial_learning_rate = cls._OPTIMIZER_DEFAULT_LEARNING_RATES[
+            optimizer_type
+        ]
         optimizer_instances = {}
         for name in optimizer_names:
             optimizer_instances[name] = Optimizer(
-                model.parameters(), lr=initial_learning_rate)
+                model.parameters(), lr=initial_learning_rate
+            )
 
         return optimizer_instances

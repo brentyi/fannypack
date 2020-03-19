@@ -7,6 +7,7 @@ blah blah
 import numpy as np
 import torch
 
+
 def to_device(x, device, detach=True):
     """Copies a tensor, list of tensors, or dict of tensors to a different
     device.
@@ -27,11 +28,11 @@ def to_device(x, device, detach=True):
         for value in x:
             output.append(to_device(value, device, detach))
     else:
-        assert False, "Invalid datatype {}!".format(type(x))
+        assert False, f"Invalid datatype {type(x)}!"
     return output
 
 
-def to_torch(x, device='cpu'):
+def to_torch(x, device="cpu"):
     """Converts a numpy array, list of numpy arrays, or dict of numpy arrays
     for use in PyTorch.
     """
@@ -49,7 +50,7 @@ def to_torch(x, device='cpu'):
         for value in x:
             output.append(to_torch(value, device))
     else:
-        assert False, "Invalid datatype {}!".format(type(x))
+        assert False, f"Invalid datatype {type(x)}!"
 
     return output
 
@@ -71,6 +72,6 @@ def to_numpy(x):
         for value in x:
             output.append(to_numpy(value))
     else:
-        assert False, "Invalid datatype {}!".format(type(x))
+        assert False, f"Invalid datatype {type(x)}!"
 
     return output

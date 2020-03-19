@@ -26,6 +26,7 @@ class _BuddyLogging:
                 buddy.log("loss", loss_tensor)
         ```
         """
+
         class _Namespace:
             def __enter__(unused_self):
                 self.log_scope_push(scope)
@@ -70,8 +71,10 @@ class _BuddyLogging:
         # Lazy instantiation for tensorboard writer
         if self._log_writer is None:
             self._log_writer = torch.utils.tensorboard.SummaryWriter(
-                self._log_dir + "/" + self._experiment_name)
+                self._log_dir + "/" + self._experiment_name
+            )
 
         # Log scalar
         self._log_writer.add_scalar(
-            name, value, global_step=self._optimizer_steps)
+            name, value, global_step=self._optimizer_steps
+        )

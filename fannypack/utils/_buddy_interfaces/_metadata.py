@@ -17,8 +17,7 @@ class _BuddyMetadata:
         except FileNotFoundError:
             self._metadata = {}
 
-    def load_metadata(self, experiment_name=None,
-                      metadata_dir=None, path=None):
+    def load_metadata(self, experiment_name=None, metadata_dir=None, path=None):
         """Read existing metadata file.
         """
         if path is None:
@@ -26,10 +25,7 @@ class _BuddyMetadata:
                 experiment_name = self._experiment_name
             if metadata_dir is None:
                 metadata_dir = self._metadata_dir
-            path = "{}/{}.yaml".format(
-                metadata_dir,
-                experiment_name
-            )
+            path = "{}/{}.yaml".format(metadata_dir, experiment_name)
         else:
             assert experiment_name is None and metadata_dir is None
 
@@ -54,14 +50,10 @@ class _BuddyMetadata:
 
         # Write metadata to file
         metadata_path = "{}/{}.yaml".format(
-            self._metadata_dir,
-            self._experiment_name)
+            self._metadata_dir, self._experiment_name,
+        )
         with open(metadata_path, "w") as file:
-            yaml.dump(
-                self._metadata,
-                file,
-                default_flow_style=False
-            )
+            yaml.dump(self._metadata, file, default_flow_style=False)
             self._print("Wrote metadata to:", metadata_path)
 
     @property
