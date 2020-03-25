@@ -110,7 +110,11 @@ class _BuddyCheckpointing:
     def load_checkpoint_module(
         self, source, target=None, label=None, path=None, experiment_name=None
     ):
-        """ TODO documentation; see examples/buddy_checkpoints.py
+        """Loads parameters from a specific child module within a checkpoint.
+        By default, loads the checkpoint with the highest number of training
+        iterations.
+
+        Can also be specified via a label or file path.
         """
 
         if target is None:
@@ -146,7 +150,11 @@ class _BuddyCheckpointing:
     def load_checkpoint_optimizer(
         self, source, target=None, label=None, path=None, experiment_name=None
     ):
-        """ TODO documentation; see examples/buddy_checkpoints.py
+        """Loads state associated with a specific optimizer from a checkpoint.
+        By default, loads the checkpoint with the highest number of training
+        iterations.
+
+        Can also be specified via a label or file path.
         """
 
         if target is None:
@@ -170,6 +178,23 @@ class _BuddyCheckpointing:
         self._optimizer_dict[target].load_state_dict(state_dict)
         self._print(f"Loaded optimizer: {source} => {target}")
 
+    def load_checkpoint_optimizers(
+        self, label=None, path=None, experiment_name=None
+    ):
+        """Loads all optimizer settings from a checkpoint. By default, loads
+        the checkpoint with the highest number of training iterations.
+
+        Can also be specified via a label or file path.
+        """
+
+        # Find and read our checkpoint file
+        checkpoint = self._read_checkpoint_file(label, path, experiment_name)
+        if checkpoint is None:
+            return
+
+        # Load optimizer state
+        self._load_checkpoint_optimizers(checkpoint)
+
     def load_checkpoint(self, label=None, path=None, experiment_name=None):
         """Loads a checkpoint. By default, loads the one with the highest
         number of training iterations.
@@ -182,25 +207,8 @@ class _BuddyCheckpointing:
         if checkpoint is None:
             return
 
-        # Load Buddy optimizer configuration
-        for key, value in checkpoint["config"].items():
-            if key not in self._optimizer_config.keys():
-                warnings.warn(
-                    f"Skipping invalid configuration key: {key}={value}"
-                )
-                continue
-            self._optimizer_config[key] = value
-
-        # Instantiate optimizers
-        self._optimizer_dict = _BuddyOptimizer._instantiate_optimizers(
-            model=self._model,
-            optimizer_type=self._optimizer_config["optimizer_type"],
-            optimizer_names=self._optimizer_config["optimizer_names"],
-        )
-
-        # Load optimizer states
-        for name, state_dict in checkpoint["optimizers"].items():
-            self._optimizer_dict[name].load_state_dict(state_dict)
+        # Load optimizer state
+        self._load_checkpoint_optimizers(checkpoint)
 
         # Load model parameters
         missing, unexpected = self._model.load_state_dict(
@@ -242,6 +250,27 @@ class _BuddyCheckpointing:
         # Sort output alphabetically and return
         output.sort()
         return output
+
+    def _load_checkpoint_optimizers(self, checkpoint):
+        # Load Buddy optimizer configuration
+        for key, value in checkpoint["config"].items():
+            if key not in self._optimizer_config.keys():
+                warnings.warn(
+                    f"Skipping invalid configuration key: {key}={value}"
+                )
+                continue
+            self._optimizer_config[key] = value
+
+        # Instantiate optimizers
+        self._optimizer_dict = _BuddyOptimizer._instantiate_optimizers(
+            model=self._model,
+            optimizer_type=self._optimizer_config["optimizer_type"],
+            optimizer_names=self._optimizer_config["optimizer_names"],
+        )
+
+        # Load optimizer states
+        for name, state_dict in checkpoint["optimizers"].items():
+            self._optimizer_dict[name].load_state_dict(state_dict)
 
     def _read_checkpoint_file(self, label, path, experiment_name):
         """Find a checkpoint to load.
@@ -303,6 +332,8 @@ class _BuddyCheckpointing:
         # Sanity check: optimizer names and type should typically be consistent
         if checkpoint["optimizers"].keys() != self._optimizer_dict.keys():
             warnings.warn("Checkpoint loading: overriding optimizer names.")
+            warnings.warn("Before: " + str(self._optimizer_dict.keys()))
+            warnings.warn("After: " + str(checkpoint["optimizers"].keys()))
         if (
             checkpoint["config"]["optimizer_type"]
             != self._optimizer_config["optimizer_type"]
