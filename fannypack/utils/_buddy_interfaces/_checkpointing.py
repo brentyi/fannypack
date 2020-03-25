@@ -102,7 +102,8 @@ class _BuddyCheckpointing:
 
         # Prune checkpoint files
         while (
-            len(self._checkpoint_unlabeled_files) > self._checkpoint_max_to_keep
+            len(self._checkpoint_unlabeled_files)
+            > self._checkpoint_max_to_keep
         ):
             os.remove(self._checkpoint_unlabeled_files.pop(0))
 
