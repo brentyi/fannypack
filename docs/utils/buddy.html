@@ -251,13 +251,27 @@ number of training iterations.</p>
 <dl class="method">
 <dt id="fannypack.utils._buddy_interfaces._checkpointing._BuddyCheckpointing.load_checkpoint_module">
 <code class="sig-name descname">load_checkpoint_module</code><span class="sig-paren">(</span><em class="sig-param">source</em>, <em class="sig-param">target=None</em>, <em class="sig-param">label=None</em>, <em class="sig-param">path=None</em>, <em class="sig-param">experiment_name=None</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils._buddy_interfaces._checkpointing._BuddyCheckpointing.load_checkpoint_module" title="Permalink to this definition">¶</a></dt>
-<dd><p>TODO documentation; see examples/buddy_checkpoints.py</p>
+<dd><p>Loads parameters from a specific child module within a checkpoint.
+By default, loads the checkpoint with the highest number of training
+iterations.</p>
+<p>Can also be specified via a label or file path.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="fannypack.utils._buddy_interfaces._checkpointing._BuddyCheckpointing.load_checkpoint_optimizer">
 <code class="sig-name descname">load_checkpoint_optimizer</code><span class="sig-paren">(</span><em class="sig-param">source</em>, <em class="sig-param">target=None</em>, <em class="sig-param">label=None</em>, <em class="sig-param">path=None</em>, <em class="sig-param">experiment_name=None</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils._buddy_interfaces._checkpointing._BuddyCheckpointing.load_checkpoint_optimizer" title="Permalink to this definition">¶</a></dt>
-<dd><p>TODO documentation; see examples/buddy_checkpoints.py</p>
+<dd><p>Loads state associated with a specific optimizer from a checkpoint.
+By default, loads the checkpoint with the highest number of training
+iterations.</p>
+<p>Can also be specified via a label or file path.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fannypack.utils._buddy_interfaces._checkpointing._BuddyCheckpointing.load_checkpoint_optimizers">
+<code class="sig-name descname">load_checkpoint_optimizers</code><span class="sig-paren">(</span><em class="sig-param">label=None</em>, <em class="sig-param">path=None</em>, <em class="sig-param">experiment_name=None</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils._buddy_interfaces._checkpointing._BuddyCheckpointing.load_checkpoint_optimizers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads all optimizer settings from a checkpoint. By default, loads
+the checkpoint with the highest number of training iterations.</p>
+<p>Can also be specified via a label or file path.</p>
 </dd></dl>
 
 <dl class="method">
