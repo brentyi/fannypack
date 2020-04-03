@@ -11,7 +11,7 @@ def deprecation_wrapper(message, function_or_class):
     """
 
     def curried(*args, **kwargs):
-        warnings.warn(message)
+        warnings.warn(message, DeprecationWarning, stacklevel=2)
         return function_or_class(*args, **kwargs)
 
     return curried
