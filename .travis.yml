@@ -1,6 +1,6 @@
 language: python
 python:
-  - "3.6"      # current default Python on Travis CI
+  - "3.6" # current default Python on Travis CI
   - "3.7"
   - "3.8"
 # command to install dependencies
@@ -9,4 +9,3 @@ install:
 # command to run tests
 script:
   - pytest
-
