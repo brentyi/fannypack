@@ -1,4 +1,4 @@
-DictIterator
+SliceWrapper
 ==========================================
 
 .. autoclass:: fannypack.utils.SliceWrapper

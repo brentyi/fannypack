@@ -61,7 +61,7 @@ def test_write_slice(iterator):
     test_read_slice(iterator)
 
 
-def test_write_slice(iterator):
+def test_write_slice_numpy(iterator):
     """Check that we can write to slices for iterators containing numpy arrays.
     """
     iterator.convert_to_numpy()
