@@ -65,3 +65,7 @@ class DictIterator:
     def convert_to_numpy(self):
         for key, value in self._data.items():
             self._data[key] = np.asarray(value)
+
+    @property
+    def data(self):
+        return self._data

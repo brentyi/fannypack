@@ -1,12 +1,13 @@
 import pytest
+
 import fannypack
 import torch
 
 from ..fixtures import simple_net
 
 
-def test_freeze_module(simple_net):
-    """Simple check to make sure freezing a module behaves as expected.
+def test_freeze_unfreeze(simple_net):
+    """Check to make sure freezing/unfreezing a module behaves as expected.
     """
 
     # All parameters should be initially unfrozen
@@ -25,8 +26,8 @@ def test_freeze_module(simple_net):
     _check_frozen(simple_net, False)
 
 
-def test_freeze_module_children1(simple_net):
-    """Simple check to make sure unfreezing child modules behaves as expected.
+def test_unfreeze_children(simple_net):
+    """Check to make sure unfreezing child modules behaves as expected.
     """
 
     # All parameters should be initially unfrozen
@@ -48,8 +49,8 @@ def test_freeze_module_children1(simple_net):
     _check_frozen(simple_net, False)
 
 
-def test_freeze_module_children2(simple_net):
-    """Simple check to make sure freezing child modules behaves as expected.
+def test_freeze_children(simple_net):
+    """Check to make sure freezing child modules behaves as expected.
     """
 
     # All parameters should be initially unfrozen
