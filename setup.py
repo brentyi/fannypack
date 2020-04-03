@@ -16,5 +16,6 @@ setup(
         "pyyaml",
         "tensorboard",
         "torch",
+        "pytest",
     ],
 )

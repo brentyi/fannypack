@@ -12,14 +12,14 @@ def freeze_module(module, recurse=True):
 
     global _freeze_restore_values
 
-    # Do nothing if module is already frozen
-    if module in _freeze_restore_values:
-        return
-
     # Recursively call on children
     if recurse:
         for child in module.children():
             freeze_module(child)
+
+    # Do nothing if module is already frozen
+    if module in _freeze_restore_values:
+        return
 
     # Freeze parameters
     restore_values = {}
@@ -41,14 +41,14 @@ def unfreeze_module(module, recurse=True):
 
     global _freeze_restore_values
 
-    # Do nothing if module is already unfrozen
-    if module not in _freeze_restore_values:
-        return
-
     # Recursively call on children
     if recurse:
         for child in module.children():
-            freeze_module(child)
+            unfreeze_module(child)
+
+    # Do nothing if module is already unfrozen
+    if module not in _freeze_restore_values:
+        return
 
     # Freeze parameters
     restore_values = _freeze_restore_values.pop(module)
