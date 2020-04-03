@@ -5,6 +5,6 @@ fannypack.utils
    :maxdepth: 2
 
    buddy
-   trajectoriesfile
-   smartiterator
+   trajectories_file
+   slice_wrapper
    potpourri

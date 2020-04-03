@@ -1,7 +1,7 @@
 DictIterator
 ==========================================
 
-.. autoclass:: fannypack.utils.SmartIterator
+.. autoclass:: fannypack.utils.SliceWrapper
     :members:
     :undoc-members:
 

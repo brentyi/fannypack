@@ -36,7 +36,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Potpourri" href="potpourri.html" />
-    <link rel="prev" title="TrajectoriesFile" href="trajectoriesfile.html" /> 
+    <link rel="prev" title="TrajectoriesFile" href="trajectories_file.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -83,7 +83,7 @@
               <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">fannypack.utils</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="buddy.html">Buddy</a></li>
-<li class="toctree-l2"><a class="reference internal" href="trajectoriesfile.html">TrajectoriesFile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="trajectories_file.html">TrajectoriesFile</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">DictIterator</a></li>
 <li class="toctree-l2"><a class="reference internal" href="potpourri.html">Potpourri</a></li>
 </ul>
@@ -142,7 +142,7 @@
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="../_sources/utils/smartiterator.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/utils/slice_wrapper.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -158,30 +158,35 @@
   <div class="section" id="dictiterator">
 <h1>DictIterator<a class="headerlink" href="#dictiterator" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
-<dt id="fannypack.utils.SmartIterator">
-<em class="property">class </em><code class="sig-prename descclassname">fannypack.utils.</code><code class="sig-name descname">SmartIterator</code><span class="sig-paren">(</span><em class="sig-param">data</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils.SmartIterator" title="Permalink to this definition">¶</a></dt>
+<dt id="fannypack.utils.SliceWrapper">
+<em class="property">class </em><code class="sig-prename descclassname">fannypack.utils.</code><code class="sig-name descname">SliceWrapper</code><span class="sig-paren">(</span><em class="sig-param">data</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils.SliceWrapper" title="Permalink to this definition">¶</a></dt>
 <dd><p>Wrapper for manipulating the contents of dictionaries that contain
-same-length iterables</p>
+same-length iterables.</p>
 <p>Nice for slicing/indexing into/appending to groups of Python lists, numpy
-arrays, torch tensors, etc</p>
+arrays, torch tensors, etc.</p>
 <dl class="method">
-<dt id="fannypack.utils.SmartIterator.append">
-<code class="sig-name descname">append</code><span class="sig-paren">(</span><em class="sig-param">other</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils.SmartIterator.append" title="Permalink to this definition">¶</a></dt>
+<dt id="fannypack.utils.SliceWrapper.append">
+<code class="sig-name descname">append</code><span class="sig-paren">(</span><em class="sig-param">other</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils.SliceWrapper.append" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="fannypack.utils.SmartIterator.convert_to_numpy">
-<code class="sig-name descname">convert_to_numpy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils.SmartIterator.convert_to_numpy" title="Permalink to this definition">¶</a></dt>
+<dt id="fannypack.utils.SliceWrapper.convert_to_numpy">
+<code class="sig-name descname">convert_to_numpy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils.SliceWrapper.convert_to_numpy" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="fannypack.utils.SmartIterator.data">
-<em class="property">property </em><code class="sig-name descname">data</code><a class="headerlink" href="#fannypack.utils.SmartIterator.data" title="Permalink to this definition">¶</a></dt>
+<dt id="fannypack.utils.SliceWrapper.data">
+<em class="property">property </em><code class="sig-name descname">data</code><a class="headerlink" href="#fannypack.utils.SliceWrapper.data" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="fannypack.utils.SmartIterator.extend">
-<code class="sig-name descname">extend</code><span class="sig-paren">(</span><em class="sig-param">other</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils.SmartIterator.extend" title="Permalink to this definition">¶</a></dt>
+<dt id="fannypack.utils.SliceWrapper.extend">
+<code class="sig-name descname">extend</code><span class="sig-paren">(</span><em class="sig-param">other</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils.SliceWrapper.extend" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="fannypack.utils.SliceWrapper.shape">
+<em class="property">property </em><code class="sig-name descname">shape</code><a class="headerlink" href="#fannypack.utils.SliceWrapper.shape" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -199,7 +204,7 @@ arrays, torch tensors, etc</p>
         <a href="potpourri.html" class="btn btn-neutral float-right" title="Potpourri" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="trajectoriesfile.html" class="btn btn-neutral float-left" title="TrajectoriesFile" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="trajectories_file.html" class="btn btn-neutral float-left" title="TrajectoriesFile" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

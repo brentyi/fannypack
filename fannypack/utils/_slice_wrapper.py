@@ -5,7 +5,7 @@ _mutable_iterables = (list, np.ndarray, torch.tensor)
 _valid_iterables = _mutable_iterables + (tuple,)
 
 
-class SmartIterator:
+class SliceWrapper:
     """Wrapper for manipulating the contents of dictionaries that contain
     same-length iterables.
 
