@@ -142,7 +142,7 @@
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="../_sources/utils/dictiterator.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/utils/smartiterator.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -157,10 +157,33 @@
             
   <div class="section" id="dictiterator">
 <h1>DictIterator<a class="headerlink" href="#dictiterator" title="Permalink to this headline">¶</a></h1>
-<dl class="attribute">
-<dt id="fannypack.utils.DictIterator">
-<code class="sig-prename descclassname">fannypack.utils.</code><code class="sig-name descname">DictIterator</code><a class="headerlink" href="#fannypack.utils.DictIterator" title="Permalink to this definition">¶</a></dt>
-<dd><p>alias of <code class="xref py py-class docutils literal notranslate"><span class="pre">fannypack.utils._deprecation.deprecation_wrapper.&lt;locals&gt;.curried</span></code></p>
+<dl class="class">
+<dt id="fannypack.utils.SmartIterator">
+<em class="property">class </em><code class="sig-prename descclassname">fannypack.utils.</code><code class="sig-name descname">SmartIterator</code><span class="sig-paren">(</span><em class="sig-param">data</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils.SmartIterator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrapper for manipulating the contents of dictionaries that contain
+same-length iterables</p>
+<p>Nice for slicing/indexing into/appending to groups of Python lists, numpy
+arrays, torch tensors, etc</p>
+<dl class="method">
+<dt id="fannypack.utils.SmartIterator.append">
+<code class="sig-name descname">append</code><span class="sig-paren">(</span><em class="sig-param">other</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils.SmartIterator.append" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="fannypack.utils.SmartIterator.convert_to_numpy">
+<code class="sig-name descname">convert_to_numpy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils.SmartIterator.convert_to_numpy" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="fannypack.utils.SmartIterator.data">
+<em class="property">property </em><code class="sig-name descname">data</code><a class="headerlink" href="#fannypack.utils.SmartIterator.data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="fannypack.utils.SmartIterator.extend">
+<code class="sig-name descname">extend</code><span class="sig-paren">(</span><em class="sig-param">other</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils.SmartIterator.extend" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 </div>

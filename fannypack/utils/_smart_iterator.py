@@ -1,7 +1,7 @@
 import numpy as np
 
 
-class DictIterator:
+class SmartIterator:
     """Wrapper for manipulating the contents of dictionaries that contain
     same-length iterables
 

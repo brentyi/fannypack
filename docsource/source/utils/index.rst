@@ -6,5 +6,5 @@ fannypack.utils
 
    buddy
    trajectoriesfile
-   dictiterator
+   smartiterator
    potpourri
