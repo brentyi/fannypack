@@ -30,12 +30,13 @@ def freeze_module(module, recurse=True):
 
 
 def unfreeze_module(module, recurse=True):
-    """Freeze the weights of a PyTorch module.
+    """Unfreeze the weights of a PyTorch module, which needs to have been
+    frozen with :func:`fannypack.utils.freeze_module`.
 
     Args:
-        module (torch.nn.Module): Module to freeze.
-        recurse (bool, optional): If True, then recursively freezes children.
-            Otherwise, only freezes immediate parameters.
+        module (torch.nn.Module): Module to unfreeze.
+        recurse (bool, optional): If True, then recursively unfreezes children.
+            Otherwise, only unfreezes immediate parameters.
     """
 
     global _freeze_restore_values
