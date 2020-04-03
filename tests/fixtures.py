@@ -32,6 +32,6 @@ class SimpleNet(nn.Module):
 
 @pytest.fixture
 def simple_net():
-    """Simple pytest fixture: returns a simple MLP implemented in PyTorch.
+    """Constructs an MLP implemented in PyTorch.
     """
     return SimpleNet()
