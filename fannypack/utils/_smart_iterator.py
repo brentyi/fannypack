@@ -103,5 +103,33 @@ class SmartIterator:
             self._data = np.asarray(self._data)
 
     @property
+    def shape(self):
+        if self._type == dict:
+            output = None
+            for value in self._data.values():
+                shape = self._shape_helper(value)
+                if output == None:
+                    output = shape
+                else:
+                    for i in range(min(len(output), len(shape))):
+                        if output[i] != shape[i]:
+                            output = output[:i]
+                            break
+            return tuple(output)
+        else:
+            return self._shape_helper(self._data)
+
+    @staticmethod
+    def _shape_helper(data):
+        if type(data) in (torch.tensor, np.ndarray):
+            # Return full shape
+            return data.shape
+        elif type(data) in (list, tuple):
+            # Return 1D shape
+            return (len(data),)
+        else:
+            assert False, "Invalid operation!"
+
+    @property
     def data(self):
         return self._data
