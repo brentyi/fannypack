@@ -20,8 +20,9 @@ help:
 	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 
 github:
+	@rm -rf build/html/*
 	@make html
-	@rm -rf ../docs
+	@rm -rf ../docs/*
 	@cp -a build/html/. ../docs
 	@touch ../docs/.nojekyll
 
