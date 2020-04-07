@@ -50,12 +50,7 @@ class SliceWrapper:
             assert False, "Invalid operation!"
 
     def __len__(self):
-        if self._type == dict:
-            # Compute length of first value in dictionary
-            return len(next(self._data.values()))
-        else:
-            # Compute length of valid iterable
-            return len(self._data)
+        return self.shape[0]
 
     def append(self, other):
         if self._type == dict:

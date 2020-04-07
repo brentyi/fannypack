@@ -19,12 +19,20 @@ def test_fixture(iterator):
     assert type(iterator.data["a"]) == np.ndarray
 
 
+def test_len(iterator):
+    """Check `len()` output.
+    """
+    assert len(iterator) == 4
+    iterator.convert_to_numpy()
+    assert len(iterator) == 4
+
 def test_shape(iterator):
     """Check `shape` property.
     """
-    assert iterator.shape == (4, )
+    assert iterator.shape == (4,)
     iterator.convert_to_numpy()
-    assert iterator.shape == (4, )
+    assert iterator.shape == (4,)
+
 
 def test_read_slice(iterator):
     """Check that we can read slices of iterators.
