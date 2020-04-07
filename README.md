@@ -1,5 +1,4 @@
 # fannypack
-[![Build Status](https://travis-ci.com/brentyi/fannypack.svg?branch=master)](https://travis-ci.com/brentyi/fannypack)
 
 Helpers for PyTorch.
 

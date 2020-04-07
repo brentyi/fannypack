@@ -26,6 +26,7 @@ def test_len(iterator):
     iterator.convert_to_numpy()
     assert len(iterator) == 4
 
+
 def test_shape(iterator):
     """Check `shape` property.
     """
