@@ -23,6 +23,7 @@ class _BuddyOptimizer:
         """
         # Assign our training configuration.
         self._optimizer_config = {
+            "global_steps": 0,
             "optimizer_type": optimizer_type,
             "learning_rate_schedulers": {},
         }
@@ -34,9 +35,6 @@ class _BuddyOptimizer:
         # Autocheckpoint variables
         self._optimizer_checkpoint_interval = optimizer_checkpoint_interval
         self._optimizer_last_checkpoint_time = None
-
-        # Global step count
-        self._optimizer_steps = 0
 
     def minimize(
         self,
@@ -55,7 +53,9 @@ class _BuddyOptimizer:
         schedulers = self._optimizer_config["learning_rate_schedulers"]
         if optimizer_name in schedulers:
             self._set_learning_rate(
-                schedulers[optimizer_name](self._optimizer_steps),
+                schedulers[optimizer_name](
+                    self._optimizer_config["global_steps"]
+                ),
                 optimizer_name,
             )
 
@@ -65,7 +65,7 @@ class _BuddyOptimizer:
         self._optimizer_dict[optimizer_name].step()
 
         # Update global step count
-        self._optimizer_steps += 1
+        self._optimizer_config["global_steps"] += 1
 
         # Autocheckpoint procedure
         if checkpoint_interval == None:
@@ -110,7 +110,7 @@ class _BuddyOptimizer:
     def optimizer_steps(self):
         """Read-only interface for # of steps taken by optimizer.
         """
-        return self._optimizer_steps
+        return self._optimizer_config["global_steps"]
 
     def _set_learning_rate(self, value, optimizer_name):
         """(Private) Sets an optimizer's learning rate.

@@ -37,7 +37,7 @@ class _BuddyCheckpointing:
             path = "{}/{}-{:016d}.ckpt".format(
                 self._checkpoint_dir,
                 self._experiment_name,
-                self._optimizer_steps,
+                self.optimizer_steps,
             )
 
             if (
@@ -69,10 +69,9 @@ class _BuddyCheckpointing:
         for name, optimizer in self._optimizer_dict.items():
             optimizer_states[name] = optimizer.state_dict()
         state = {
-            "config": self._optimizer_config,
+            "optimizer_config": self._optimizer_config,
+            "optimizer_states": optimizer_states,
             "state_dict": self._model.state_dict(),
-            "optimizers": optimizer_states,
-            "steps": self._optimizer_steps,
         }
 
         # Ignore SIGINT (eg ctrl+c) events while we save to disk...
@@ -167,14 +166,14 @@ class _BuddyCheckpointing:
 
         # Sanity check
         assert (
-            source in checkpoint["optimizers"].keys()
+            source in checkpoint["optimizer_states"].keys()
         ), "Nonexistent source optimizer!"
         assert (
             target in self._optimizer_dict.keys()
         ), "Nonexistent target optimizer!"
 
         # Load optimizer state
-        state_dict = checkpoint["optimizers"][source]
+        state_dict = checkpoint["optimizer_states"][source]
         self._optimizer_dict[target].load_state_dict(state_dict)
         self._print(f"Loaded optimizer: {source} => {target}")
 
@@ -217,10 +216,7 @@ class _BuddyCheckpointing:
         assert len(missing) == 0
         assert len(unexpected) == 0
 
-        # Load optimizer steps
-        self._optimizer_steps = checkpoint["steps"]
-
-        self._print("Loaded checkpoint at step:", self._optimizer_steps)
+        self._print("Loaded checkpoint at step:", self.optimizer_steps)
         return True
 
     @property
@@ -253,7 +249,7 @@ class _BuddyCheckpointing:
 
     def _load_checkpoint_optimizers(self, checkpoint):
         # Load Buddy optimizer configuration
-        for key, value in checkpoint["config"].items():
+        for key, value in checkpoint["optimizer_config"].items():
             if key not in self._optimizer_config.keys():
                 warnings.warn(
                     f"Skipping invalid configuration key: {key}={value}"
@@ -261,8 +257,12 @@ class _BuddyCheckpointing:
                 continue
             self._optimizer_config[key] = value
 
+        # Load
+        if "step" in checkpoint.keys():
+            self._print("Loading legacy checkpoint!")
+
         # Instantiate optimizers & load state
-        for name, state_dict in checkpoint["optimizers"].items():
+        for name, state_dict in checkpoint["optimizer_states"].items():
             _BuddyOptimizer._instantiate_optimizer(self, name)
             self._optimizer_dict[name].load_state_dict(state_dict)
 
@@ -307,25 +307,46 @@ class _BuddyCheckpointing:
         else:
             assert False, "invalid arguments!"
 
-        # Load and return checkpoint dict
+        # Load checkpoint dict
         checkpoint = torch.load(
             path, map_location=self._device, pickle_module=dill
         )
 
+        # Backwards-compatibility
+        # This should eventually be removed :)
+        renamed_fields = [
+            ("config", "optimizer_config"),
+            ("optimizers", "optimizer_states"),
+        ]
+        for old_name, new_name in renamed_fields:
+            if old_name in checkpoint.keys():
+                self._print(
+                    f"Legacy checkpoint field: {old_name} => {new_name}"
+                )
+                checkpoint[new_name] = checkpoint[old_name]
+                checkpoint.pop(old_name)
+
+        if "steps" in checkpoint.keys():
+            self._print("Legacy checkpoint field: steps")
+            checkpoint["optimizer_config"]["global_steps"] = checkpoint[
+                "steps"
+            ]
+            checkpoint.pop("steps")
+
         # Sanity check: our checkpoint file is a sensible-looking dict
-        assert set(checkpoint.keys()) == set(
-            ["config", "state_dict", "optimizers", "steps"]
+        valid_keys = set(
+            [
+                "optimizer_config",
+                "optimizer_states",
+                "state_dict",
+            ]
         )
+        for key in checkpoint.keys():
+            assert key in valid_keys
 
-        # Sanity check: something's probably wrong if we're overwriting any
-        # explicitly set, non-default configuration values
-        # for key, value in checkpoint['config'].items():
-        #     assert checkpoint['config'][key] in (
-        #         self._optimizer_config[key], self.DEFAULT_CONFIG[key])
-
-        # Sanity check: optimizer names and type should typically be consistent
+        # Sanity check: optimizer type should typically be consistent
         if (
-            checkpoint["config"]["optimizer_type"]
+            checkpoint["optimizer_config"]["optimizer_type"]
             != self._optimizer_config["optimizer_type"]
         ):
             warnings.warn("Checkpoint loading: overriding optimizer type.")
