@@ -17,23 +17,20 @@ class _BuddyOptimizer:
         "adadelta": 1,
     }
 
-    def __init__(self, optimizer_type, optimizer_names):
+    def __init__(self, optimizer_type):
         """Optimizer-specific setup.
         """
         # Assign our training configuration.
         self._optimizer_config = {
             "optimizer_type": optimizer_type,
-            "optimizer_names": optimizer_names,
             "learning_rate_schedulers": {},
         }
 
-        # Instantiate optimizers, step count -- note that these may be
-        # overriden by a loaded checkpoint
-        self._optimizer_dict = _BuddyOptimizer._instantiate_optimizers(
-            model=self._model,
-            optimizer_type=optimizer_type,
-            optimizer_names=optimizer_names,
-        )
+        # Map from optimizer name to optimizers
+        # These are constructed lazily!
+        self._optimizer_dict = {}
+
+        # Global step count
         self._optimizer_steps = 0
 
     def minimize(
@@ -46,7 +43,7 @@ class _BuddyOptimizer:
         """Compute gradients and use them to minimize a loss function.
         """
 
-        assert optimizer_name in self._optimizer_dict.keys()
+        self._instantiate_optimizer(optimizer_name)
 
         # Update learning rate using scheduler if possible
         schedulers = self._optimizer_config["learning_rate_schedulers"]
@@ -96,34 +93,32 @@ class _BuddyOptimizer:
         """(Private) Sets an optimizer's learning rate.
         """
 
-        assert optimizer_name in self._optimizer_dict.keys()
-
+        self._instantiate_optimizer(optimizer_name)
         optimizer = self._optimizer_dict[optimizer_name]
         for param_group in optimizer.param_groups:
             param_group["lr"] = value
 
-    @classmethod
-    def _instantiate_optimizers(cls, model, optimizer_type, optimizer_names):
-        """(Private) Instantiates optimizer objects and sets default learning
-        rates.
+    def _instantiate_optimizer(self, optimizer_name):
+        """(Private) Instantiates an optimizer. Returns immediately if
+        optimizer already exists.
         """
+        if optimizer_name in self._optimizer_dict.keys():
+            # Optimizer already exists: do nothing!
+            return
+
+        self._print("Instantiating optimizer: ", optimizer_name)
 
         # Make sure we're creating a valid optimizer
-        optimizer_type = optimizer_type
-        assert optimizer_type in cls._OPTIMIZER_TYPES
+        optimizer_type = self._optimizer_config["optimizer_type"]
+        assert optimizer_type in self._OPTIMIZER_TYPES
 
-        # Instantiate an optimizer for each optimizer name
-        #
-        # Note that if we're loading from a checkpoint, the initial learning
-        # rate may be immediately overwritten
-        Optimizer = cls._OPTIMIZER_TYPES[optimizer_type]
-        initial_learning_rate = cls._OPTIMIZER_DEFAULT_LEARNING_RATES[
+        # Parameters
+        Optimizer = self._OPTIMIZER_TYPES[optimizer_type]
+        initial_learning_rate = self._OPTIMIZER_DEFAULT_LEARNING_RATES[
             optimizer_type
         ]
-        optimizer_instances = {}
-        for name in optimizer_names:
-            optimizer_instances[name] = Optimizer(
-                model.parameters(), lr=initial_learning_rate
-            )
 
-        return optimizer_instances
+        # Construct optimizer
+        self._optimizer_dict[optimizer_name] = Optimizer(
+            self._model.parameters(), lr=initial_learning_rate
+        )

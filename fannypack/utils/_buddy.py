@@ -1,5 +1,6 @@
 import torch
 import torch.nn as nn
+import warnings
 
 from ._buddy_interfaces._checkpointing import _BuddyCheckpointing
 from ._buddy_interfaces._optimizer import _BuddyOptimizer
@@ -33,10 +34,6 @@ class Buddy(
             Defaults to `"logs"`.
         optimizer_type (str, optional): Optimizer type to use: `"adam"` or
             `"adadelta"`. Defaults to `"adam"`.
-        optimizer_names (list, optional): List of optimizer names; a separate
-            optimizer is created for each one. Helpful if working with multiple
-            loss functions, which may have different gradient scales. Default
-            to `["primary"]`.
         verbose (bool, optional): Flag for toggling debug messages. Defaults to
             `True`.
     """
@@ -51,7 +48,7 @@ class Buddy(
         metadata_dir="metadata",
         log_dir="logs",
         optimizer_type="adam",
-        optimizer_names=["primary"],
+        optimizer_names=None,  # Deprecated!
         verbose=True,
     ):
         """Constructor
@@ -83,7 +80,15 @@ class Buddy(
         )
         _BuddyMetadata.__init__(self, metadata_dir)
         _BuddyLogging.__init__(self, log_dir)
-        _BuddyOptimizer.__init__(self, optimizer_type, optimizer_names)
+        _BuddyOptimizer.__init__(self, optimizer_type)
+
+        if optimizer_names != None:
+            warnings.warn(
+                "The optimizer_names field is no longer needed, and will be "
+                "removed in a future version!",
+                DeprecationWarning,
+                stacklevel=1,
+            )
 
         # Print available checkpoints
         self._print("Available checkpoint labels:", self.checkpoint_labels)

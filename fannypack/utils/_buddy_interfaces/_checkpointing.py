@@ -261,15 +261,9 @@ class _BuddyCheckpointing:
                 continue
             self._optimizer_config[key] = value
 
-        # Instantiate optimizers
-        self._optimizer_dict = _BuddyOptimizer._instantiate_optimizers(
-            model=self._model,
-            optimizer_type=self._optimizer_config["optimizer_type"],
-            optimizer_names=self._optimizer_config["optimizer_names"],
-        )
-
-        # Load optimizer states
+        # Instantiate optimizers & load state
         for name, state_dict in checkpoint["optimizers"].items():
+            _BuddyOptimizer._instantiate_optimizer(self, name)
             self._optimizer_dict[name].load_state_dict(state_dict)
 
     def _read_checkpoint_file(self, label, path, experiment_name):

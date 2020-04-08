@@ -159,7 +159,7 @@
 <h1>Buddy<a class="headerlink" href="#buddy" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="fannypack.utils.Buddy">
-<em class="property">class </em><code class="sig-prename descclassname">fannypack.utils.</code><code class="sig-name descname">Buddy</code><span class="sig-paren">(</span><em class="sig-param">experiment_name, model, *, checkpoint_dir='checkpoints', checkpoint_max_to_keep=5, metadata_dir='metadata', log_dir='logs', optimizer_type='adam', optimizer_names=['primary'], verbose=True</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils.Buddy" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">fannypack.utils.</code><code class="sig-name descname">Buddy</code><span class="sig-paren">(</span><em class="sig-param">experiment_name</em>, <em class="sig-param">model</em>, <em class="sig-param">*</em>, <em class="sig-param">checkpoint_dir='checkpoints'</em>, <em class="sig-param">checkpoint_max_to_keep=5</em>, <em class="sig-param">metadata_dir='metadata'</em>, <em class="sig-param">log_dir='logs'</em>, <em class="sig-param">optimizer_type='adam'</em>, <em class="sig-param">optimizer_names=None</em>, <em class="sig-param">verbose=True</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils.Buddy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#fannypack.utils._buddy_interfaces._checkpointing._BuddyCheckpointing" title="fannypack.utils._buddy_interfaces._checkpointing._BuddyCheckpointing"><code class="xref py py-class docutils literal notranslate"><span class="pre">fannypack.utils._buddy_interfaces._checkpointing._BuddyCheckpointing</span></code></a>, <a class="reference internal" href="#fannypack.utils._buddy_interfaces._optimizer._BuddyOptimizer" title="fannypack.utils._buddy_interfaces._optimizer._BuddyOptimizer"><code class="xref py py-class docutils literal notranslate"><span class="pre">fannypack.utils._buddy_interfaces._optimizer._BuddyOptimizer</span></code></a>, <a class="reference internal" href="#fannypack.utils._buddy_interfaces._logging._BuddyLogging" title="fannypack.utils._buddy_interfaces._logging._BuddyLogging"><code class="xref py py-class docutils literal notranslate"><span class="pre">fannypack.utils._buddy_interfaces._logging._BuddyLogging</span></code></a>, <a class="reference internal" href="#fannypack.utils._buddy_interfaces._metadata._BuddyMetadata" title="fannypack.utils._buddy_interfaces._metadata._BuddyMetadata"><code class="xref py py-class docutils literal notranslate"><span class="pre">fannypack.utils._buddy_interfaces._metadata._BuddyMetadata</span></code></a></p>
 <p>Buddy is a model manager that abstracts away PyTorch boilerplate.
 Buddy helps with…</p>
@@ -188,10 +188,6 @@ Defaults to <code class="docutils literal notranslate"><span class="pre">&quot;m
 Defaults to <code class="docutils literal notranslate"><span class="pre">&quot;logs&quot;</span></code>.</p></li>
 <li><p><strong>optimizer_type</strong> (<em>str</em><em>, </em><em>optional</em>) – Optimizer type to use: <code class="docutils literal notranslate"><span class="pre">&quot;adam&quot;</span></code> or
 <code class="docutils literal notranslate"><span class="pre">&quot;adadelta&quot;</span></code>. Defaults to <code class="docutils literal notranslate"><span class="pre">&quot;adam&quot;</span></code>.</p></li>
-<li><p><strong>optimizer_names</strong> (<em>list</em><em>, </em><em>optional</em>) – List of optimizer names; a separate
-optimizer is created for each one. Helpful if working with multiple
-loss functions, which may have different gradient scales. Default
-to <code class="docutils literal notranslate"><span class="pre">[&quot;primary&quot;]</span></code>.</p></li>
 <li><p><strong>verbose</strong> (<em>bool</em><em>, </em><em>optional</em>) – Flag for toggling debug messages. Defaults to
 <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p></li>
 </ul>
@@ -207,7 +203,7 @@ to <code class="docutils literal notranslate"><span class="pre">[&quot;primary&q
 
 <dl class="class">
 <dt id="fannypack.utils._buddy_interfaces._optimizer._BuddyOptimizer">
-<em class="property">class </em><code class="sig-prename descclassname">fannypack.utils._buddy_interfaces._optimizer.</code><code class="sig-name descname">_BuddyOptimizer</code><span class="sig-paren">(</span><em class="sig-param">optimizer_type</em>, <em class="sig-param">optimizer_names</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils._buddy_interfaces._optimizer._BuddyOptimizer" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">fannypack.utils._buddy_interfaces._optimizer.</code><code class="sig-name descname">_BuddyOptimizer</code><span class="sig-paren">(</span><em class="sig-param">optimizer_type</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils._buddy_interfaces._optimizer._BuddyOptimizer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Buddy’s optimization interface.</p>
 <dl class="method">
 <dt id="fannypack.utils._buddy_interfaces._optimizer._BuddyOptimizer.minimize">

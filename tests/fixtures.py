@@ -1,4 +1,6 @@
 import pytest
+
+import torch
 import torch.nn as nn
 
 
@@ -10,10 +12,10 @@ class SimpleNet(nn.Module):
         super().__init__()
 
         # Define layers
-        self.layer1 = nn.Linear(1, 32)
-        self.layer2 = nn.Linear(32, 32)
-        self.layer3 = nn.Linear(32, 32)
-        self.layer4 = nn.Linear(32, 1)
+        self.layer1 = nn.Linear(1, 8)
+        self.layer2 = nn.Linear(8, 8)
+        self.layer3 = nn.Linear(8, 8)
+        self.layer4 = nn.Linear(8, 1)
 
         # Compose layers w/ nonlinearities
         self.layers = nn.Sequential(
@@ -34,4 +36,5 @@ class SimpleNet(nn.Module):
 def simple_net():
     """Constructs an MLP implemented in PyTorch.
     """
+    torch.manual_seed(0)
     return SimpleNet()
