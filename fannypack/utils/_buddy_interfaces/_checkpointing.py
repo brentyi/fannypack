@@ -324,10 +324,6 @@ class _BuddyCheckpointing:
         #         self._optimizer_config[key], self.DEFAULT_CONFIG[key])
 
         # Sanity check: optimizer names and type should typically be consistent
-        if checkpoint["optimizers"].keys() != self._optimizer_dict.keys():
-            warnings.warn("Checkpoint loading: overriding optimizer names.")
-            warnings.warn("Before: " + str(self._optimizer_dict.keys()))
-            warnings.warn("After: " + str(checkpoint["optimizers"].keys()))
         if (
             checkpoint["config"]["optimizer_type"]
             != self._optimizer_config["optimizer_type"]

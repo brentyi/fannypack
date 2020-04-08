@@ -1,8 +1,9 @@
 import pytest
+import fannypack
+import numpy as np
+import os
 import torch
 import torch.nn.functional as F
-import numpy as np
-import fannypack
 
 from ..fixtures import simple_net
 
@@ -11,9 +12,7 @@ from ..fixtures import simple_net
 def simple_buddy(simple_net):
     """Fixture for setting up a Buddy, as well as some dummy training data.
     """
-    buddy = fannypack.utils.Buddy(
-        "experiment-name", simple_net, verbose=True
-    )
+    buddy = fannypack.utils.Buddy("experiment-name", simple_net, verbose=True)
 
     # Deterministic tests are nice..
     np.random.seed(0)
@@ -92,3 +91,21 @@ def test_buddy_train_multiloss_stable(simple_buddy):
 
     # Loss should at least have halved
     assert final_loss < initial_loss / 2.0
+
+
+def test_buddy_load_legacy_checkpoint(simple_buddy):
+    """Make sure Buddy has backwards-compatibility with an old checkpoint
+    format.
+    """
+    simple_net, buddy, data, labels = simple_buddy
+    initial_loss = F.mse_loss(simple_net(data), labels)
+
+    buddy.load_checkpoint(
+        path=os.path.join(
+            os.path.dirname(__file__), "checkpoints/simple_net_legacy.ckpt"
+        )
+    )
+    final_loss = F.mse_loss(simple_net(data), labels)
+
+    assert final_loss < initial_loss / 2.0
+    assert buddy.optimizer_steps == 200
