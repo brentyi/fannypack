@@ -34,6 +34,9 @@ class Buddy(
             Defaults to `"logs"`.
         optimizer_type (str, optional): Optimizer type to use: `"adam"` or
             `"adadelta"`. Defaults to `"adam"`.
+        optimizer_checkpoint_interval (float, optional): How often to
+            auto-checkpoint, as an interval in seconds. Time is computed from
+            the first call to minimize(). Set to 0 to disable. Defaults to 300.
         verbose (bool, optional): Flag for toggling debug messages. Defaults to
             `True`.
     """
@@ -48,6 +51,7 @@ class Buddy(
         metadata_dir="metadata",
         log_dir="logs",
         optimizer_type="adam",
+        optimizer_checkpoint_interval=300,
         optimizer_names=None,  # Deprecated!
         verbose=True,
     ):
@@ -80,7 +84,9 @@ class Buddy(
         )
         _BuddyMetadata.__init__(self, metadata_dir)
         _BuddyLogging.__init__(self, log_dir)
-        _BuddyOptimizer.__init__(self, optimizer_type)
+        _BuddyOptimizer.__init__(
+            self, optimizer_type, optimizer_checkpoint_interval
+        )
 
         if optimizer_names != None:
             warnings.warn(

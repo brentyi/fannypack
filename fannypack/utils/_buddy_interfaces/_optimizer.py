@@ -1,4 +1,5 @@
 import torch.optim
+import time
 
 
 class _BuddyOptimizer:
@@ -17,7 +18,7 @@ class _BuddyOptimizer:
         "adadelta": 1,
     }
 
-    def __init__(self, optimizer_type):
+    def __init__(self, optimizer_type, optimizer_checkpoint_interval):
         """Optimizer-specific setup.
         """
         # Assign our training configuration.
@@ -30,6 +31,10 @@ class _BuddyOptimizer:
         # These are constructed lazily!
         self._optimizer_dict = {}
 
+        # Autocheckpoint variables
+        self._optimizer_checkpoint_interval = optimizer_checkpoint_interval
+        self._optimizer_last_checkpoint_time = None
+
         # Global step count
         self._optimizer_steps = 0
 
@@ -37,8 +42,9 @@ class _BuddyOptimizer:
         self,
         loss,
         optimizer_name="primary",
+        *,
         retain_graph=False,
-        checkpoint_interval=1000,
+        checkpoint_interval=None,
     ):
         """Compute gradients and use them to minimize a loss function.
         """
@@ -58,10 +64,27 @@ class _BuddyOptimizer:
         loss.backward(retain_graph=retain_graph)
         self._optimizer_dict[optimizer_name].step()
 
-        # Update step & checkpoint
+        # Update global step count
         self._optimizer_steps += 1
-        if self._optimizer_steps % checkpoint_interval == 0:
+
+        # Autocheckpoint procedure
+        if checkpoint_interval == None:
+            checkpoint_interval = self._optimizer_checkpoint_interval
+
+        if checkpoint_interval == 0:
+            # Disabled if 0
+            return
+
+        if self._optimizer_last_checkpoint_time == None:
+            # First iteration
+            self._optimizer_last_checkpoint_time = time.time()
+        elif (
+            time.time() - self._optimizer_last_checkpoint_time
+            > self._optimizer_checkpoint_interval
+        ):
+            # Checkpoint!
             self.save_checkpoint()
+            self._optimizer_last_checkpoint_time = time.time()
 
     def set_learning_rate(self, value, optimizer_name="primary"):
         """Sets an optimizer learning rate. Accepts either a floating point
