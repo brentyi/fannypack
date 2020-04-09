@@ -3,6 +3,8 @@ import pytest
 import torch
 import torch.nn as nn
 import numpy as np
+import os
+import shutil
 
 import fannypack
 
@@ -54,7 +56,17 @@ def simple_buddy():
 
     # Construct neural net, training buddy
     simple_net = SimpleNet()
-    buddy = fannypack.utils.Buddy("experiment-name", simple_net, verbose=True)
+    buddy = fannypack.utils.Buddy(
+        "simple_net",
+        simple_net,
+        # Use directories relative to this fixture
+        checkpoint_dir=os.path.join(
+            os.path.dirname(__file__), "data/checkpoints/"
+        ),
+        metadata_dir=os.path.join(os.path.dirname(__file__), "data/metadata/"),
+        log_dir=os.path.join(os.path.dirname(__file__), "data/log/"),
+        verbose=True,
+    )
 
     # Batch size
     N = 20
@@ -64,8 +76,46 @@ def simple_buddy():
     labels = torch.FloatTensor(np.random.normal(loc=3, size=(1, 1))).expand(
         (N, 1)
     )
-
-    # Get in training mode
-    simple_net.train()
-
     return simple_net, buddy, data, labels
+
+
+@pytest.fixture()
+def simple_buddy_temporary_data():
+    """Fixture for setting up a Buddy, as well as some dummy training data.
+
+    This is identical to `simple_buddy`, but uses temporary directories for
+    checkpointing, metadata saving, and logging. Saved files are deleted
+    automatically when the test exits.
+    """
+    # Deterministic tests are nice..
+    np.random.seed(0)
+    torch.manual_seed(0)
+
+    # Construct neural net, training buddy
+    simple_net = SimpleNet()
+    buddy = fannypack.utils.Buddy(
+        "simple_net",
+        simple_net,
+        # Use directories relative to this fixture
+        checkpoint_dir=os.path.join(
+            os.path.dirname(__file__), "tmp/data/checkpoints/"
+        ),
+        metadata_dir=os.path.join(
+            os.path.dirname(__file__), "tmp/data/metadata/"
+        ),
+        log_dir=os.path.join(os.path.dirname(__file__), "tmp/data/log/"),
+        verbose=True,
+    )
+
+    # Batch size
+    N = 20
+
+    # Learn to regress a constant
+    data = torch.FloatTensor(np.random.normal(size=(N, 1)))
+    labels = torch.FloatTensor(np.random.normal(loc=3, size=(1, 1))).expand(
+        (N, 1)
+    )
+    yield simple_net, buddy, data, labels
+
+    # Delete temporary files when done
+    shutil.rmtree(os.path.join(os.path.dirname(__file__), "tmp/"))

@@ -222,6 +222,8 @@ class _BuddyCheckpointing:
     @property
     def checkpoint_labels(self):
         """ Accessor for listing available checkpoint labels.
+        These should be saved as: `experiment_name-label.ckpt` in the
+        `checkpoint_dir` directory.
         """
 
         experiment_name = self._experiment_name
@@ -237,7 +239,9 @@ class _BuddyCheckpointing:
         # Pull out labels
         output = []
         for choice in path_choices:
-            prefix_len = len("{}/{}-".format(checkpoint_dir, experiment_name))
+            prefix_len = len(
+                os.path.join(checkpoint_dir, f"{experiment_name}-")
+            )
 
             suffix_len = len(".ckpt")
             string_label = choice[prefix_len:-suffix_len]
@@ -298,8 +302,8 @@ class _BuddyCheckpointing:
             if experiment_name is None:
                 # Use our current experiment name by default
                 experiment_name = self._experiment_name
-            path = "{}/{}-{}.ckpt".format(
-                self._checkpoint_dir, experiment_name, label
+            path = os.path.join(
+                self._checkpoint_dir, f"{experiment_name}-{label}.ckpt"
             )
         elif path is not None:
             # Load a checkpoint by its location

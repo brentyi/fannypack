@@ -12,6 +12,8 @@ def test_buddy_train(simple_buddy):
     """Make sure Buddy losses go down.
     """
     simple_net, buddy, data, labels = simple_buddy
+    simple_net.train()
+
     initial_loss = F.mse_loss(simple_net(data), labels)
     buddy.set_learning_rate(1e-3)
     for _ in range(200):
@@ -28,6 +30,8 @@ def test_buddy_train_multiloss_unstable(simple_buddy):
     switch abruptly between loss functions with very different scales.
     """
     simple_net, buddy, data, labels = simple_buddy
+    simple_net.train()
+
     initial_loss = F.mse_loss(simple_net(data), labels)
     buddy.set_learning_rate(1e-3)
     for _ in range(50):
@@ -50,6 +54,8 @@ def test_buddy_train_multiloss_stable(simple_buddy):
     different loss functions.
     """
     simple_net, buddy, data, labels = simple_buddy
+    simple_net.train()
+
     initial_loss = F.mse_loss(simple_net(data), labels)
     buddy.set_learning_rate(1e-3, "big_loss")
     buddy.set_learning_rate(1e-3, "little_loss")
