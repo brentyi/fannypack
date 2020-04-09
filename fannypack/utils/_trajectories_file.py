@@ -247,7 +247,9 @@ class TrajectoriesFile:
         assert self._file is not None, "Not called in with statement!"
 
         if not self._content_dict:
-            self._print("Empty observation dictionary; skipping trajectory end")
+            self._print(
+                "Empty observation dictionary; skipping trajectory end"
+            )
             return
 
         length = len(list(self._content_dict.values())[0])

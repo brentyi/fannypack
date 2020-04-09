@@ -17,7 +17,9 @@ class _BuddyMetadata:
         except FileNotFoundError:
             self._metadata = {}
 
-    def load_metadata(self, experiment_name=None, metadata_dir=None, path=None):
+    def load_metadata(
+        self, experiment_name=None, metadata_dir=None, path=None
+    ):
         """Read existing metadata file.
         """
         if path is None:

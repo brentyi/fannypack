@@ -335,11 +335,7 @@ class _BuddyCheckpointing:
 
         # Sanity check: our checkpoint file is a sensible-looking dict
         valid_keys = set(
-            [
-                "optimizer_config",
-                "optimizer_states",
-                "state_dict",
-            ]
+            ["optimizer_config", "optimizer_states", "state_dict"]
         )
         for key in checkpoint.keys():
             assert key in valid_keys

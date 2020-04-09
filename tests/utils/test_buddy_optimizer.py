@@ -5,31 +5,7 @@ import os
 import torch
 import torch.nn.functional as F
 
-from ..fixtures import simple_net
-
-
-@pytest.fixture
-def simple_buddy(simple_net):
-    """Fixture for setting up a Buddy, as well as some dummy training data.
-    """
-    buddy = fannypack.utils.Buddy("experiment-name", simple_net, verbose=True)
-
-    # Deterministic tests are nice..
-    np.random.seed(0)
-
-    # Batch size
-    N = 20
-
-    # Learn to regress a constant
-    data = torch.FloatTensor(np.random.normal(size=(N, 1)))
-    labels = torch.FloatTensor(np.random.normal(loc=3, size=(1, 1))).expand(
-        (N, 1)
-    )
-
-    # Get in training mode
-    simple_net.train()
-
-    return simple_net, buddy, data, labels
+from ..fixtures import simple_buddy
 
 
 def test_buddy_train(simple_buddy):
@@ -91,38 +67,3 @@ def test_buddy_train_multiloss_stable(simple_buddy):
 
     # Loss should at least have halved
     assert final_loss < initial_loss / 2.0
-
-
-def test_buddy_load_checkpoint_new_format(simple_buddy):
-    """Make sure Buddy can load checkpoints.
-    """
-    simple_net, buddy, data, labels = simple_buddy
-    initial_loss = F.mse_loss(simple_net(data), labels)
-
-    buddy.load_checkpoint(
-        path=os.path.join(
-            os.path.dirname(__file__), "checkpoints/simple_net_new.ckpt"
-        )
-    )
-    final_loss = F.mse_loss(simple_net(data), labels)
-
-    assert final_loss < initial_loss / 2.0
-    assert buddy.optimizer_steps == 200
-
-
-def test_buddy_load_checkpoint_legacy_format(simple_buddy):
-    """Make sure Buddy is backward-compatible with an old checkpoint
-    format.
-    """
-    simple_net, buddy, data, labels = simple_buddy
-    initial_loss = F.mse_loss(simple_net(data), labels)
-
-    buddy.load_checkpoint(
-        path=os.path.join(
-            os.path.dirname(__file__), "checkpoints/simple_net_legacy.ckpt"
-        )
-    )
-    final_loss = F.mse_loss(simple_net(data), labels)
-
-    assert final_loss < initial_loss / 2.0
-    assert buddy.optimizer_steps == 200

@@ -2,6 +2,9 @@ import pytest
 
 import torch
 import torch.nn as nn
+import numpy as np
+
+import fannypack
 
 
 class SimpleNet(nn.Module):
@@ -36,5 +39,33 @@ class SimpleNet(nn.Module):
 def simple_net():
     """Constructs an MLP implemented in PyTorch.
     """
+    # Deterministic tests are nice..
     torch.manual_seed(0)
     return SimpleNet()
+
+
+@pytest.fixture()
+def simple_buddy():
+    """Fixture for setting up a Buddy, as well as some dummy training data.
+    """
+    # Deterministic tests are nice..
+    np.random.seed(0)
+    torch.manual_seed(0)
+
+    # Construct neural net, training buddy
+    simple_net = SimpleNet()
+    buddy = fannypack.utils.Buddy("experiment-name", simple_net, verbose=True)
+
+    # Batch size
+    N = 20
+
+    # Learn to regress a constant
+    data = torch.FloatTensor(np.random.normal(size=(N, 1)))
+    labels = torch.FloatTensor(np.random.normal(loc=3, size=(1, 1))).expand(
+        (N, 1)
+    )
+
+    # Get in training mode
+    simple_net.train()
+
+    return simple_net, buddy, data, labels
