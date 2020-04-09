@@ -3,7 +3,7 @@ import torch.nn as nn
 
 
 class Base(nn.Module, abc.ABC):
-    def __init__(self, activation="relu", activations_inplace=True):
+    def __init__(self, activation="relu", activations_inplace=False):
         super().__init__()
 
         self.activations_inplace = activations_inplace

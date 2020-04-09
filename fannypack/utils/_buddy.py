@@ -67,7 +67,7 @@ class Buddy(
         self._verbose = True
 
         # Use GPU for training if available.
-        if torch.cuda.is_available():
+        if torch.cuda.is_available():  # pragma: no cover
             self._device = torch.device("cuda")
             model.cuda()
         else:
@@ -88,7 +88,7 @@ class Buddy(
             self, optimizer_type, optimizer_checkpoint_interval
         )
 
-        if optimizer_names != None:
+        if optimizer_names != None:  # pragma: no cover
             warnings.warn(
                 "The optimizer_names field is no longer needed, and will be "
                 "removed in a future version!",
@@ -109,7 +109,7 @@ class Buddy(
         """Private helper for logging.
         """
         # Only print in verbose mode
-        if not self._verbose:
+        if not self._verbose:  # pragma: no cover
             return
 
         args = list(args)

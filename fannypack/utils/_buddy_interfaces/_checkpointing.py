@@ -78,7 +78,7 @@ class _BuddyCheckpointing:
         try:
             orig_handler = signal.getsignal(signal.SIGINT)
             signal.signal(signal.SIGINT, lambda _sig, _frame: None)
-        except ValueError as e:
+        except ValueError as e:  # pragma: no cover
             # signal throws a ValueError if we're not in the main thread
             self._print("Error while attaching SIGINT handler:", e)
             orig_handler = None
@@ -158,6 +158,7 @@ class _BuddyCheckpointing:
 
         if target is None:
             target = source
+        _BuddyOptimizer._instantiate_optimizer(self, target)
 
         # Find and read our checkpoint file
         checkpoint = self._read_checkpoint_file(label, path, experiment_name)
@@ -260,10 +261,6 @@ class _BuddyCheckpointing:
                 )
                 continue
             self._optimizer_config[key] = value
-
-        # Load
-        if "step" in checkpoint.keys():
-            self._print("Loading legacy checkpoint!")
 
         # Instantiate optimizers & load state
         for name, state_dict in checkpoint["optimizer_states"].items():

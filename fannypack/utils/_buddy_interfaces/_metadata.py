@@ -27,7 +27,7 @@ class _BuddyMetadata:
                 experiment_name = self._experiment_name
             if metadata_dir is None:
                 metadata_dir = self._metadata_dir
-            path = "{}/{}.yaml".format(metadata_dir, experiment_name)
+            path = os.path.join(metadata_dir, f"{experiment_name}.yaml")
         else:
             assert experiment_name is None and metadata_dir is None
 
@@ -37,7 +37,7 @@ class _BuddyMetadata:
 
     def add_metadata(self, content):
         """Add human-readable metadata for this experiment. Input should be a
-        dictionary.
+        dictionary that is merged with existing metadata.
         """
         assert type(content) == dict
 
@@ -45,6 +45,22 @@ class _BuddyMetadata:
         for key, value in content.items():
             self._metadata[key] = value
 
+        # Write to disk
+        self._write_metadata()
+
+    def set_metadata(self, content):
+        """Assign human-readable metadata for this experiment. Input should be
+        a dictionary that replaces existing metadata.
+        """
+        assert type(content) == dict
+
+        # Replace input metadata with current metadata
+        self._metadata = content
+
+        # Write to disk
+        self._write_metadata()
+
+    def _write_metadata(self):
         # Create metadata directory if needed
         if not os.path.isdir(self._metadata_dir):
             os.makedirs(self._metadata_dir)
@@ -63,3 +79,11 @@ class _BuddyMetadata:
         """Read-only interface for experiment metadata.
         """
         return self._metadata
+
+    @property
+    def metadata_path(self):
+        """Read-only path to my metadata file.
+        """
+        return os.path.join(
+            self._metadata_dir, f"{self._experiment_name}.yaml"
+        )

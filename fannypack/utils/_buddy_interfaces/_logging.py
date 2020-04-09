@@ -76,5 +76,5 @@ class _BuddyLogging:
 
         # Log scalar
         self._log_writer.add_scalar(
-            name, value, global_step=self._optimizer_steps
+            name, value, global_step=self.optimizer_steps
         )
