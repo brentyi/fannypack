@@ -66,7 +66,7 @@ for line in lines:
         continue
 
     # Get coverage percentage
-    percentage = int(line[line.rindex(" ") : -1])
+    percentage = int(line[line.rindex(" ") + 1 : -1])
     print(f"{source_path}: {percentage}%")
 
     # Check coverage percentage
