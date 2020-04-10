@@ -1,5 +1,5 @@
-import numpy as np
 import torch
+import numpy as np
 
 _mutable_iterables = (list, np.ndarray, torch.tensor)
 _valid_iterables = _mutable_iterables + (tuple,)
@@ -57,7 +57,15 @@ class SliceWrapper:
             assert type(other) == dict
             for key, value in other.items():
                 if key in self._data.keys():
-                    self._data[key].append(value)
+                    # TODO: add support for torch tensors
+                    # Handle numpy arrays (inefficient)
+                    if type(self._data[key]) == np.ndarray:
+                        self._data[key] = np.append(
+                            self._data[key], value
+                        )
+                    # Handle standard Python lists
+                    elif type(self._data[key]) == list:
+                        self._data[key].append(value)
                 else:
                     self._data[key] = [value]
         elif self._type in _mutable_iterables:
@@ -70,14 +78,12 @@ class SliceWrapper:
             assert type(other) == dict
             for key, value in other.items():
                 if key in self._data.keys():
-                    assert type(self._data[key]) == type(value)
-
+                    # TODO: add support for torch tensors
                     # Handle numpy arrays (inefficient)
-                    if type(value) == np.ndarray:
+                    if type(self._data[key]) == np.ndarray:
                         self._data[key] = np.concatenate(
                             (self._data[key], value), axis=0
                         )
-
                     # Handle standard Python lists
                     else:
                         self._data[key].extend(value)

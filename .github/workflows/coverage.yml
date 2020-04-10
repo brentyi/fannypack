@@ -22,4 +22,4 @@ jobs:
       - name: Check coverage
         run: |
           pip install pytest pytest-cov
-          pytest --cov=fannypack | python .github/workflows/scripts/check_coverage.py --percentage-threshold 95
+          pytest --cov=fannypack | python .github/workflows/scripts/check_coverage.py --percentage-threshold 90
