@@ -217,19 +217,45 @@ def test_buddy_checkpoint_modules(resblock_buddy_temporary_data):
 
 
 def test_buddy_checkpoint_optimizers(resblock_buddy_temporary_data):
-    """Make sure Buddy's optimizer loading interface.
+    """Sanity-check for Buddy's optimizer loading interface.
     """
     model, buddy, data, labels = resblock_buddy_temporary_data
 
     # Create some optimizer parameters
     buddy.set_learning_rate(1e-3)
+    assert buddy.get_learning_rate() == 1e-3
 
     # Save a checkpoint
     buddy.save_checkpoint()
 
-    # Load optimizer parameters
+    # Overwrite optimizer parameter
+    buddy.set_learning_rate(1e-5)
+    assert buddy.get_learning_rate() == 1e-5
+    # Restore optimizer parameters
     buddy.load_checkpoint_optimizers()
+    assert buddy.get_learning_rate() == 1e-3
+
+    # Overwrite optimizer parameter
+    buddy.set_learning_rate(1e-5)
+    assert buddy.get_learning_rate() == 1e-5
+    # Restore optimizer parameters
+    buddy.load_checkpoint_optimizer("primary")
+    assert buddy.get_learning_rate() == 1e-3
+
+    # Overwrite optimizer parameter
+    buddy.set_learning_rate(1e-5)
+    assert buddy.get_learning_rate() == 1e-5
+    # Restore optimizer parameters
     buddy.load_checkpoint_optimizer(source="primary", target="primary")
+    assert buddy.get_learning_rate() == 1e-3
+
+    # Load nonexistent optimizer parameter: these should fail
+    with pytest.raises(AssertionError):
+        buddy.load_checkpoint_optimizer(
+            source="this_optimizer_does_not_exist", target="primary"
+        )
+    with pytest.raises(AssertionError):
+        buddy.load_checkpoint_optimizer("this_optimizer_does_not_exist")
 
 
 def test_buddy_checkpointed_train(resblock_buddy_temporary_data):

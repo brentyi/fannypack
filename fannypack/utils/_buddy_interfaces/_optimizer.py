@@ -86,6 +86,22 @@ class _BuddyOptimizer:
             self.save_checkpoint()
             self._optimizer_last_checkpoint_time = time.time()
 
+    def get_learning_rate(self, optimizer_name="primary"):
+        """Gets an optimizer learning rate.
+        """
+        assert optimizer_name in self._optimizer_dict
+
+        # Return scheduled learning rate
+        schedulers = self._optimizer_config["learning_rate_schedulers"]
+        if optimizer_name in schedulers:
+            return schedulers[optimizer_name](self.optimizer_steps)
+
+        # Return raw learning rate
+        # Currently, only one parameter group is supported
+        optimizer = self._optimizer_dict[optimizer_name]
+        assert len(optimizer.param_groups) == 1
+        return optimizer.param_groups[0]["lr"]
+
     def set_learning_rate(self, value, optimizer_name="primary"):
         """Sets an optimizer learning rate. Accepts either a floating point
         learning rate or a schedule function (int steps -> float LR).
@@ -117,9 +133,11 @@ class _BuddyOptimizer:
         """
 
         self._instantiate_optimizer(optimizer_name)
+
+        # Currently, only one parameter group is supported
         optimizer = self._optimizer_dict[optimizer_name]
-        for param_group in optimizer.param_groups:
-            param_group["lr"] = value
+        assert len(optimizer.param_groups) == 1
+        optimizer.param_groups[0]["lr"] = value
 
     def _instantiate_optimizer(self, optimizer_name):
         """(Private) Instantiates an optimizer. Returns immediately if

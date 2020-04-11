@@ -10,7 +10,7 @@ def deprecation_wrapper(message, function_or_class):
         function_or_class (callable): Function or class to wrap.
     """
 
-    def curried(*args, **kwargs):
+    def curried(*args, **kwargs):  # pragma: no cover
         warnings.warn(message, DeprecationWarning, stacklevel=2)
         return function_or_class(*args, **kwargs)
 
