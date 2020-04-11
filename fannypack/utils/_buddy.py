@@ -109,9 +109,7 @@ class Buddy(
         """Private helper for logging.
         """
         # Only print in verbose mode
-        if not self._verbose:  # pragma: no cover
-            return
-
-        args = list(args)
-        args[0] = f"[buddy-{self._experiment_name}] {args[0]}"
-        print(*args, **kwargs)
+        if self._verbose:
+            args = list(args)
+            args[0] = f"[buddy-{self._experiment_name}] {args[0]}"
+            print(*args, **kwargs)

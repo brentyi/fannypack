@@ -12,6 +12,7 @@ def test_buddy_train(simple_buddy_temporary_data):
     """Make sure Buddy losses go down.
     """
     model, buddy, data, labels = simple_buddy_temporary_data
+    assert buddy.optimizer_steps == 0
     model.train()
 
     initial_loss = F.mse_loss(model(data), labels)
@@ -30,6 +31,8 @@ def test_buddy_train(simple_buddy_temporary_data):
         with buddy.log_scope("scope"):
             buddy.log("loss", loss)
 
+    assert buddy.optimizer_steps == 200
+
     # Loss should at least have halved
     final_loss = F.mse_loss(model(data), labels)
     assert final_loss < initial_loss / 2.0
@@ -40,6 +43,7 @@ def test_buddy_train_multiloss_unstable(simple_buddy_temporary_data):
     switch abruptly between loss functions with very different scales.
     """
     model, buddy, data, labels = simple_buddy_temporary_data
+    assert buddy.optimizer_steps == 0
     model.train()
 
     initial_loss = F.mse_loss(model(data), labels)
@@ -54,6 +58,8 @@ def test_buddy_train_multiloss_unstable(simple_buddy_temporary_data):
         loss = F.mse_loss(model(data), labels) * 1000
         buddy.minimize(loss)
 
+    assert buddy.optimizer_steps == 200
+
     # Loss will not have halved
     final_loss = F.mse_loss(model(data), labels)
     assert final_loss > initial_loss / 2.0
@@ -64,6 +70,7 @@ def test_buddy_train_multiloss_stable(simple_buddy_temporary_data):
     different loss functions.
     """
     model, buddy, data, labels = simple_buddy_temporary_data
+    assert buddy.optimizer_steps == 0
     model.train()
 
     initial_loss = F.mse_loss(model(data), labels)
@@ -79,7 +86,8 @@ def test_buddy_train_multiloss_stable(simple_buddy_temporary_data):
         loss = F.mse_loss(model(data), labels) * 1000
         buddy.minimize(loss, optimizer_name="big_loss")
 
-    final_loss = F.mse_loss(model(data), labels)
+    assert buddy.optimizer_steps == 200
 
     # Loss should at least have halved
+    final_loss = F.mse_loss(model(data), labels)
     assert final_loss < initial_loss / 2.0

@@ -48,7 +48,7 @@ class TrajectoriesFile:
         convert_doubles=True,
         read_only=True,
         compress=True,
-        verbose=False,
+        verbose=True,
     ):
         """Constructs an interface for reading from/writing to hdf5 files.
 
@@ -68,8 +68,11 @@ class TrajectoriesFile:
         self._compress = compress
         self._verbose = verbose
 
-        # Maps content key => content list
+        # Maps content key => content
         self._content_dict = {}
+
+        # Number of timesteps in current trajectory
+        self._current_trajectory_timesteps = 0
 
         # Count the number of trajectories that already exist
         self._trajectory_prefix = "trajectory"
@@ -86,6 +89,7 @@ class TrajectoriesFile:
 
         assert type(self._trajectory_count) == int
 
+        # File object
         self._file = None
 
     def __enter__(self):
@@ -117,10 +121,12 @@ class TrajectoriesFile:
         """
         assert self._file is not None, "Not called in with statement!"
 
-        # Check that the index is sane
+        # Index checks
         assert type(index) == int
-
-        if index >= len(self):
+        if index < 0 and index >= -len(self):
+            # Negative indexing
+            index = index % len(self)
+        elif index >= len(self) or index < -len(self):
             # For use as a standard Python iterator
             raise IndexError
 
@@ -130,8 +136,14 @@ class TrajectoriesFile:
         # Copy values to numpy array
         output = {}
         for key, value in self._file[traj_key].items():
-            output[key] = value[:]
+            # Conversion
+            output[key] = np.array(value)
             assert type(output[key]) == np.ndarray
+
+            # Numpy strings => native strings
+            if output[key].dtype.type is np.string_:
+                # Decode
+                output[key] = bytes(output[key]).decode("utf-8")
 
         return output
 
@@ -146,26 +158,47 @@ class TrajectoriesFile:
         """
         assert self._file is not None, "Not called in with statement!"
 
-        # Check that the inputs are sane
-        assert type(index) == int
+        # Check that the input items is sane
         assert type(item) == dict
 
-        if index >= len(self):
+        # Index checks
+        assert type(index) == int
+        if index < 0 and index >= -len(self):
+            # Negative indexing
+            index = index % len(self)
+        elif index >= len(self) or index < -len(self):
+            # For use as a standard Python iterator
             raise IndexError
 
         traj_key = self._trajectory_prefix + str(index)
+        group = self._file[traj_key]
+
+        # Delete anything that's already in this trajectory
+        for key in group:
+            del group[key]
+
+        # Populate the trajectory
         for key, value in item.items():
-            if key not in self._file[traj_key]:
-                if self._compress:
-                    self._file[traj_key].create_dataset(
-                        key, data=value, chunks=True, compression="gzip"
-                    )
-                else:
-                    self._file[traj_key].create_dataset(
-                        key, data=value, chunks=True
-                    )
+            # Convert content to a numpy array
+            if type(value) == str:
+                data = np.string_(value)
             else:
-                self._file[traj_key][key][...] = value
+                data = np.asarray(value)
+
+            # Compress floats
+            if data.dtype == np.float64 and self._convert_doubles:
+                data = data.astype(np.float32)
+
+            # Disable chunking, compression for scalars
+            if len(data.shape) == 0:
+                group.create_dataset(key, data=data)
+            else:
+                group.create_dataset(
+                    key,
+                    data=data,
+                    chunks=True,
+                    compression="gzip" if self._compress else None,
+                )
 
     def __len__(self):
         """Returns the number of recorded trajectories.
@@ -204,8 +237,19 @@ class TrajectoriesFile:
         for index in range(self._trajectory_count):
             traj_key = self._trajectory_prefix + str(index)
             assert traj_key in self._file.keys()
-            output.append(self._file[traj_key][key][:])
+            value = self._file[traj_key][key]
 
+            # Conversion
+            value = np.array(value)
+            assert type(value) == np.ndarray
+
+            # Numpy strings => native strings
+            if value.dtype.type is np.string_:
+                # Decode
+                value = bytes(value).decode("utf-8")
+
+            # Add to output
+            output.append(value)
         return output
 
     def add_timestep(self, content):
@@ -221,6 +265,9 @@ class TrajectoriesFile:
             assert type(self._content_dict[key]) == list
             self._content_dict[key].append(np.copy(value))
 
+        # Increment length
+        self._current_trajectory_timesteps += 1
+
     def add_meta(self, content):
         """Add some metadata to the current trajectory.
 
@@ -229,13 +276,17 @@ class TrajectoriesFile:
         """
         for key, value in content.items():
             assert key not in self._content_dict.keys()
-            self._content_dict[key] = np.copy(value)
+            if type(value) == str:
+                self._content_dict[key] = value
+            else:
+                self._content_dict[key] = np.copy(value)
 
     def abandon_trajectory(self):
         """Abandon the current trajectory.
         """
         self._print("Abandoning trajectory")
         self._content_dict = {}
+        self._current_trajectory_timesteps = 0
 
     def complete_trajectory(self):
         """Write the current trajectory to disk, and mark the start of a new
@@ -246,37 +297,25 @@ class TrajectoriesFile:
         """
         assert self._file is not None, "Not called in with statement!"
 
-        if not self._content_dict:
-            self._print(
-                "Empty observation dictionary; skipping trajectory end"
-            )
+        if self._content_dict == {}:
+            self._print("Empty trajectory; skipping complete_trajectory()")
             return
 
-        length = len(list(self._content_dict.values())[0])
+        # Check length, print debug message
+        self._print(
+            "Completing trajectory!"
+            f"(length={self._current_trajectory_timesteps})"
+        )
 
-        self._print(f"Completing trajectory! (length={length})")
+        # Make space for an extra trajectory
+        self.resize(self._trajectory_count + 1)
 
-        # Put all pushed contents into a new group
-        traj_key = self._trajectory_prefix + str(self._trajectory_count)
-        group = self._file.create_group(traj_key)
-        for key, content_list in self._content_dict.items():
-            # Convert list of contents to a numpy array
-            data = np.array(content_list)
+        # Copy contents in!
+        self[-1] = self._content_dict
 
-            # Compress floats
-            if data.dtype == np.float64 and self._convert_doubles:
-                data = data.astype(np.float32)
-
-            if self._compress:
-                group.create_dataset(
-                    key, data=data, chunks=True, compression="gzip"
-                )
-            else:
-                group.create_dataset(key, data=data, chunks=True)
-
+        # Reset state
         self._content_dict = {}
-        self._trajectory_count += 1
-
+        self._current_trajectory_timesteps = 0
         self._print("Existing trajectory count:", self._trajectory_count)
 
     def clear(self):
@@ -286,33 +325,6 @@ class TrajectoriesFile:
 
         for traj_key in self._file.keys():
             del self._file[traj_key]
-
-    def reencode(self, target_path):
-        """Re-encode contents into a new hdf5 file.
-
-        Mostly used for re-encoding trajectory files generated with older
-        versions of this class.
-
-        Must be called with the TrajectoriesFile object in a `with` statement.
-
-        Args:
-            target_path (str): Destination to write contents to.
-
-        Returns:
-            TrajectoriesFile: New file object.
-        """
-        assert self._file is not None, "Not called in with statement!"
-
-        source = self._file
-        target = TrajectoriesFile(target_path)
-        with target:
-            for name, trajectory in source.items():
-                keys = trajectory.keys()
-                for content_step in zip(*trajectory.values()):
-                    target.add_timestep(dict(zip(keys, content_step)))
-                target.complete_trajectory()
-                self._print("Wrote ", name)
-        return target
 
     def _h5py_file(self, mode=None):
         """Private helper for creating h5py file objects.
@@ -326,9 +338,7 @@ class TrajectoriesFile:
         """Private helper for logging.
         """
         # Only print in verbose mode
-        if not self._verbose:
-            return
-
-        args = list(args)
-        args[0] = f"[TrajectoriesFile-{self._path}] {args[0]}"
-        print(*args, **kwargs)
+        if self._verbose:
+            args = list(args)
+            args[0] = f"[TrajectoriesFile-{self._path}] {args[0]}"
+            print(*args, **kwargs)
