@@ -5,15 +5,15 @@ with open("README.md", "r") as fh:
 
 setup(
     name="fannypack",
-    version="0.0.2-pre",
+    version="0.0.2",
     description="PyTorch utilities",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="http://github.com/brentyi/fannypack",
     author="brentyi",
     author_email="brentyi@berkeley.edu",
-    license="BSD",
-    packages=find_packages(exclude=["examples"]),
+    license="MIT",
+    packages=find_packages(exclude=["examples", "tests"]),
     install_requires=[
         "dill",
         "h5py",
@@ -21,7 +21,6 @@ setup(
         "pyyaml",
         "tensorboard",
         "torch",
-        "pytest",
     ],
     classifiers=[
         "Programming Language :: Python :: 3.6",
