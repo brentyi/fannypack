@@ -1,4 +1,4 @@
-from setuptools import setup, find_packages
+from setuptools import find_packages, setup
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
@@ -16,7 +16,14 @@ setup(
     packages=find_packages(exclude=["examples", "tests"]),
     package_data={"fannypack": ["py.typed"]},
     python_requires=">=3.6",
-    install_requires=["dill", "h5py", "numpy", "pyyaml", "tensorboard", "torch",],
+    install_requires=[
+        "dill",
+        "h5py",
+        "numpy",
+        "pyyaml",
+        "tensorboard",
+        "torch",
+    ],
     classifiers=[
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",

@@ -1,17 +1,20 @@
+from __future__ import annotations
+
+from dataclasses import dataclass
 from typing import List, Optional
 
 import fannypack
 import torch.utils.tensorboard
 
 
+@dataclass
 class _LogNamespace:
-    def __init__(self, buddy: fannypack.utils.Buddy, scope: str):
-        self.buddy = buddy
-        self.scope = scope
+    buddy: _BuddyLogging
+    scope: str
 
     def __enter__(self):
         self.buddy.log_scope_push(self.scope)
-        return unused_self
+        return self
 
     def __exit__(self, *unused):
         self.buddy.log_scope_pop(self.scope)
@@ -43,7 +46,7 @@ class _BuddyLogging:
                 buddy.log("loss", loss_tensor)
         ```
         """
-        return _LogNamespace(self, str)
+        return _LogNamespace(self, scope)
 
     def log_scope_push(self, scope: str) -> None:
         """Push a scope to log tensors into.
