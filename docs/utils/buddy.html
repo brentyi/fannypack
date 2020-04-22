@@ -209,6 +209,12 @@ the first call to minimize(). Set to 0 to disable. Defaults to 300.</p></li>
 <em class="property">class </em><code class="sig-prename descclassname">fannypack.utils._buddy_interfaces._optimizer.</code><code class="sig-name descname">_BuddyOptimizer</code><span class="sig-paren">(</span><em class="sig-param">optimizer_type</em>, <em class="sig-param">optimizer_checkpoint_interval</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils._buddy_interfaces._optimizer._BuddyOptimizer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Buddy’s optimization interface.</p>
 <dl class="method">
+<dt id="fannypack.utils._buddy_interfaces._optimizer._BuddyOptimizer.get_learning_rate">
+<code class="sig-name descname">get_learning_rate</code><span class="sig-paren">(</span><em class="sig-param">optimizer_name='primary'</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils._buddy_interfaces._optimizer._BuddyOptimizer.get_learning_rate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets an optimizer learning rate.</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="fannypack.utils._buddy_interfaces._optimizer._BuddyOptimizer.minimize">
 <code class="sig-name descname">minimize</code><span class="sig-paren">(</span><em class="sig-param">loss</em>, <em class="sig-param">optimizer_name='primary'</em>, <em class="sig-param">*</em>, <em class="sig-param">retain_graph=False</em>, <em class="sig-param">checkpoint_interval=None</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils._buddy_interfaces._optimizer._BuddyOptimizer.minimize" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute gradients and use them to minimize a loss function.</p>
@@ -236,7 +242,9 @@ learning rate or a schedule function (int steps -&gt; float LR).</p>
 <dl class="method">
 <dt id="fannypack.utils._buddy_interfaces._checkpointing._BuddyCheckpointing.checkpoint_labels">
 <em class="property">property </em><code class="sig-name descname">checkpoint_labels</code><a class="headerlink" href="#fannypack.utils._buddy_interfaces._checkpointing._BuddyCheckpointing.checkpoint_labels" title="Permalink to this definition">¶</a></dt>
-<dd><p>Accessor for listing available checkpoint labels.</p>
+<dd><p>Accessor for listing available checkpoint labels.
+These should be saved as: <code class="docutils literal notranslate"><span class="pre">experiment_name-label.ckpt</span></code> in the
+<code class="docutils literal notranslate"><span class="pre">checkpoint_dir</span></code> directory.</p>
 </dd></dl>
 
 <dl class="method">
@@ -335,7 +343,7 @@ supports scalars.</p>
 <dt id="fannypack.utils._buddy_interfaces._metadata._BuddyMetadata.add_metadata">
 <code class="sig-name descname">add_metadata</code><span class="sig-paren">(</span><em class="sig-param">content</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils._buddy_interfaces._metadata._BuddyMetadata.add_metadata" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add human-readable metadata for this experiment. Input should be a
-dictionary.</p>
+dictionary that is merged with existing metadata.</p>
 </dd></dl>
 
 <dl class="method">
@@ -348,6 +356,19 @@ dictionary.</p>
 <dt id="fannypack.utils._buddy_interfaces._metadata._BuddyMetadata.metadata">
 <em class="property">property </em><code class="sig-name descname">metadata</code><a class="headerlink" href="#fannypack.utils._buddy_interfaces._metadata._BuddyMetadata.metadata" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read-only interface for experiment metadata.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fannypack.utils._buddy_interfaces._metadata._BuddyMetadata.metadata_path">
+<em class="property">property </em><code class="sig-name descname">metadata_path</code><a class="headerlink" href="#fannypack.utils._buddy_interfaces._metadata._BuddyMetadata.metadata_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read-only path to my metadata file.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fannypack.utils._buddy_interfaces._metadata._BuddyMetadata.set_metadata">
+<code class="sig-name descname">set_metadata</code><span class="sig-paren">(</span><em class="sig-param">content</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils._buddy_interfaces._metadata._BuddyMetadata.set_metadata" title="Permalink to this definition">¶</a></dt>
+<dd><p>Assign human-readable metadata for this experiment. Input should be
+a dictionary that replaces existing metadata.</p>
 </dd></dl>
 
 </dd></dl>

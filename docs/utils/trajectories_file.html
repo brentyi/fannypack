@@ -159,7 +159,7 @@
 <h1>TrajectoriesFile<a class="headerlink" href="#trajectoriesfile" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="fannypack.utils.TrajectoriesFile">
-<em class="property">class </em><code class="sig-prename descclassname">fannypack.utils.</code><code class="sig-name descname">TrajectoriesFile</code><span class="sig-paren">(</span><em class="sig-param">path</em>, <em class="sig-param">convert_doubles=True</em>, <em class="sig-param">read_only=True</em>, <em class="sig-param">compress=True</em>, <em class="sig-param">verbose=False</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils.TrajectoriesFile" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">fannypack.utils.</code><code class="sig-name descname">TrajectoriesFile</code><span class="sig-paren">(</span><em class="sig-param">path</em>, <em class="sig-param">convert_doubles=True</em>, <em class="sig-param">read_only=True</em>, <em class="sig-param">compress=True</em>, <em class="sig-param">verbose=True</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils.TrajectoriesFile" title="Permalink to this definition">¶</a></dt>
 <dd><p>An interface for reading/writing trajectory files using hdf5 files.</p>
 <p>Each TrajectoriesFile represents an iterable list of trajectories, where
 each trajectory is stored as a dictionary that maps <code class="docutils literal notranslate"><span class="pre">str</span></code> keys to
@@ -245,23 +245,6 @@ Must be called with the TrajectoriesFile object in a <code class="docutils liter
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><em>list</em> – List of contents. First index is trajectory #.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="fannypack.utils.TrajectoriesFile.reencode">
-<code class="sig-name descname">reencode</code><span class="sig-paren">(</span><em class="sig-param">target_path</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils.TrajectoriesFile.reencode" title="Permalink to this definition">¶</a></dt>
-<dd><p>Re-encode contents into a new hdf5 file.</p>
-<p>Mostly used for re-encoding trajectory files generated with older
-versions of this class.</p>
-<p>Must be called with the TrajectoriesFile object in a <code class="docutils literal notranslate"><span class="pre">with</span></code> statement.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>target_path</strong> (<em>str</em>) – Destination to write contents to.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><em>TrajectoriesFile</em> – New file object.</p>
 </dd>
 </dl>
 </dd></dl>

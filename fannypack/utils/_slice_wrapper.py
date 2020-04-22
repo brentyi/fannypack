@@ -1,7 +1,9 @@
-import torch
-import numpy as np
+from typing import List, Tuple, Union
 
-_mutable_iterables = (list, np.ndarray, torch.tensor)
+import numpy as np
+import torch
+
+_mutable_iterables = (list, np.ndarray, torch.Tensor)
 _valid_iterables = _mutable_iterables + (tuple,)
 
 
@@ -14,7 +16,12 @@ class SliceWrapper:
     """
 
     def __init__(self, data):
-        self._data = data
+        self._data: Union[
+            np.ndarray,
+            torch.Tensor,
+            list,
+            Dict[Any, Union[np.ndarray, Torch.Tensor, List]],
+        ] = data
         self._type = type(data)
 
         # Sanity checks
@@ -32,7 +39,7 @@ class SliceWrapper:
             # Non-dictionary inputs
             assert type(data) in _valid_iterables, "Invalid datatype!"
 
-    def __getitem__(self, index):
+    def __getitem__(self, index: Tuple):
         if self._type == dict:
             # Check that the index is sane
             assert type(index) in (int, slice, tuple)
@@ -60,9 +67,7 @@ class SliceWrapper:
                     # TODO: add support for torch tensors
                     # Handle numpy arrays (inefficient)
                     if type(self._data[key]) == np.ndarray:
-                        self._data[key] = np.append(
-                            self._data[key], value
-                        )
+                        self._data[key] = np.append(self._data[key], value)
                     # Handle standard Python lists
                     elif type(self._data[key]) == list:
                         self._data[key].append(value)
@@ -122,7 +127,7 @@ class SliceWrapper:
 
     @staticmethod
     def _shape_helper(data):
-        if type(data) in (torch.tensor, np.ndarray):
+        if type(data) in (torch.Tensor, np.ndarray):
             # Return full shape
             return data.shape
         elif type(data) in (list, tuple):
