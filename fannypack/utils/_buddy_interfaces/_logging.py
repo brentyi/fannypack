@@ -1,6 +1,21 @@
 from typing import List, Optional
 
+import fannypack
 import torch.utils.tensorboard
+
+
+class _LogNamespace:
+    def __init__(self, buddy: fannypack.utils.Buddy, scope: str):
+        self.buddy = buddy
+        self.scope = scope
+
+    def __enter__(self):
+        self.buddy.log_scope_push(self.scope)
+        return unused_self
+
+    def __exit__(self, *unused):
+        self.buddy.log_scope_pop(self.scope)
+        return
 
 
 class _BuddyLogging:
@@ -17,7 +32,7 @@ class _BuddyLogging:
         self._log_writer: Optional[torch.utils.tensorboard.SummaryWriter] = None
         self._log_scopes: List[str] = []
 
-    def log_scope(self, scope: str) -> object:
+    def log_scope(self, scope: str) -> _LogNamespace:
         """Returns a scope to log tensors in.
 
         Example usage:
@@ -28,17 +43,7 @@ class _BuddyLogging:
                 buddy.log("loss", loss_tensor)
         ```
         """
-
-        class _Namespace:
-            def __enter__(unused_self):
-                self.log_scope_push(scope)
-                return unused_self
-
-            def __exit__(*unused):
-                self.log_scope_pop(scope)
-                return
-
-        return _Namespace()
+        return _LogNamespace(self, str)
 
     def log_scope_push(self, scope: str) -> None:
         """Push a scope to log tensors into.
