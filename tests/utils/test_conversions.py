@@ -1,8 +1,7 @@
-import pytest
-
-import torch
-import numpy as np
 import fannypack
+import numpy as np
+import pytest
+import torch
 
 
 def test_conversion_nested():
@@ -23,8 +22,6 @@ def test_to_device():
     X = {"data": [np.zeros((10, 1, 5, 1, 10))]}
     X_torch = fannypack.utils.to_torch(X)
 
-    X_new = fannypack.utils.to_device(
-        X_torch, torch.device("cpu"), detach=True
-    )
+    X_new = fannypack.utils.to_device(X_torch, torch.device("cpu"), detach=True)
     assert X_torch["data"][0].shape == X_new["data"][0].shape
     assert type(X_new["data"][0]) == torch.Tensor

@@ -1,5 +1,6 @@
-import yaml
 import os
+
+import yaml
 
 
 class _BuddyMetadata:
@@ -11,14 +12,13 @@ class _BuddyMetadata:
         """
 
         # Attempt to read existing metadata
-        self._metadata_dir = metadata_dir
+        self._metadata_dir: str = metadata_dir
         try:
             self.load_metadata()
         except FileNotFoundError:
-            self._metadata = {}
+            self._metadata: dict = {}
 
-    def load_metadata(
-        self, experiment_name=None, metadata_dir=None, path=None
+    def load_metadata( self, experiment_name: str = None, metadata_dir: str = None, path: str = None
     ):
         """Read existing metadata file.
         """
@@ -35,7 +35,7 @@ class _BuddyMetadata:
             self._metadata = yaml.load(file, Loader=yaml.SafeLoader)
             self._print("Loaded metadata:", self._metadata)
 
-    def add_metadata(self, content):
+    def add_metadata(self, content: dict):
         """Add human-readable metadata for this experiment. Input should be a
         dictionary that is merged with existing metadata.
         """
@@ -48,7 +48,7 @@ class _BuddyMetadata:
         # Write to disk
         self._write_metadata()
 
-    def set_metadata(self, content):
+    def set_metadata(self, content: dict):
         """Assign human-readable metadata for this experiment. Input should be
         a dictionary that replaces existing metadata.
         """
@@ -67,9 +67,7 @@ class _BuddyMetadata:
             self._print("Created directory:", self._metadata_dir)
 
         # Write metadata to file
-        metadata_path = "{}/{}.yaml".format(
-            self._metadata_dir, self._experiment_name,
-        )
+        metadata_path = "{}/{}.yaml".format(self._metadata_dir, self._experiment_name,)
         with open(metadata_path, "w") as file:
             yaml.dump(self._metadata, file, default_flow_style=False)
             self._print("Wrote metadata to:", metadata_path)
@@ -84,6 +82,4 @@ class _BuddyMetadata:
     def metadata_path(self):
         """Read-only path to my metadata file.
         """
-        return os.path.join(
-            self._metadata_dir, f"{self._experiment_name}.yaml"
-        )
+        return os.path.join(self._metadata_dir, f"{self._experiment_name}.yaml")

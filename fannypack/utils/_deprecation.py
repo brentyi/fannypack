@@ -1,7 +1,8 @@
 import warnings
+from typing import Callable
 
 
-def deprecation_wrapper(message, function_or_class):
+def deprecation_wrapper(message: str, function_or_class: Callable):
     """Creates a wrapper for a deprecated function or class. Prints a warning
     when the function or class is called.
 
@@ -17,7 +18,7 @@ def deprecation_wrapper(message, function_or_class):
     return curried
 
 
-def new_name_wrapper(old_name, new_name, function_or_class):
+def new_name_wrapper(old_name: str, new_name: str, function_or_class: Callable):
     """Creates a wrapper for a renamed function or class. Prints a warning when
     the function or class is called with the old name.
 

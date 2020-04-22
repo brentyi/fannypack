@@ -1,5 +1,7 @@
-import numpy as np
+from typing import Any, Dict, Optional, Union, cast
+
 import h5py
+import numpy as np
 
 
 class TrajectoriesFile:
@@ -44,11 +46,11 @@ class TrajectoriesFile:
 
     def __init__(
         self,
-        path,
-        convert_doubles=True,
-        read_only=True,
-        compress=True,
-        verbose=True,
+        path: str,
+        convert_doubles: bool = True,
+        read_only: bool = True,
+        compress: bool = True,
+        verbose: bool = True,
     ):
         """Constructs an interface for reading from/writing to hdf5 files.
 
@@ -62,20 +64,20 @@ class TrajectoriesFile:
         assert path[-5:] == ".hdf5", "Missing file extension!"
 
         # Meta
-        self._path = path
-        self._convert_doubles = convert_doubles
-        self._read_only = read_only
-        self._compress = compress
-        self._verbose = verbose
+        self._path: str = path
+        self._convert_doubles: bool = convert_doubles
+        self._read_only: bool = read_only
+        self._compress: bool = compress
+        self._verbose: bool = verbose
 
         # Maps content key => content
-        self._content_dict = {}
+        self._content_dict: Dict[str, Any] = {}
 
         # Number of timesteps in current trajectory
-        self._current_trajectory_timesteps = 0
+        self._current_trajectory_timesteps: int = 0
 
         # Count the number of trajectories that already exist
-        self._trajectory_prefix = "trajectory"
+        self._trajectory_prefix: str = "trajectory"
         with self._h5py_file() as f:
             self._print("Loading trajectory from file:", f)
             if len(f.keys()) > 0:
@@ -90,7 +92,7 @@ class TrajectoriesFile:
         assert type(self._trajectory_count) == int
 
         # File object
-        self._file = None
+        self._file: Optional[h5py.File] = None
 
     def __enter__(self):
         """Automatic file opening, for use in `with` statements.
@@ -108,7 +110,7 @@ class TrajectoriesFile:
             self._file.close()
             self._file = None
 
-    def __getitem__(self, index):
+    def __getitem__(self, index: int) -> Dict[str, Union[np.ndarray, str]]:
         """Accessor for individual trajectories held by this file.
         Must be called with the TrajectoriesFile object in a `with` statement.
 
@@ -116,8 +118,8 @@ class TrajectoriesFile:
             index (int): Trajectory #.
 
         Returns:
-            dict: A (str->np.ndarray) map containing data collected at each
-                timestep of our trajectory.
+            dict: A (str->value) map containing data collected at each timestep of our
+            trajectory.
         """
         assert self._file is not None, "Not called in with statement!"
 
@@ -147,14 +149,13 @@ class TrajectoriesFile:
 
         return output
 
-    def __setitem__(self, index, item):
+    def __setitem__(self, index: int, item: Dict[str, Union[np.ndarray, str]]):
         """Assignment operation for modifying or mutating trajectories.
         Must be called with the TrajectoriesFile object in a `with` statement.
 
         Args:
             index (int): Trajectory #.
-            item (dict): A (str->np.ndarray) map, as would be returned by
-                __getitem__().
+            item (dict): A (str->value) map, as would be returned by __getitem__().
         """
         assert self._file is not None, "Not called in with statement!"
 
@@ -200,14 +201,16 @@ class TrajectoriesFile:
                     compression="gzip" if self._compress else None,
                 )
 
-    def __len__(self):
+    def __len__(self) -> int:
         """Returns the number of recorded trajectories.
         """
         return self._trajectory_count
 
-    def resize(self, count):
+    def resize(self, count: int):
         """Expand or contract our TrajectoriesFile.
         """
+        assert self._file is not None, "Not called in with statement!"
+
         if self._trajectory_count <= count:
             # Expand
             for index in range(self._trajectory_count, count):
@@ -222,7 +225,7 @@ class TrajectoriesFile:
 
         self._trajectory_count = count
 
-    def get_all(self, key):
+    def get_all(self, key: str) -> list:
         """Get contents associated with a key from all trajectories.
 
         Args:
@@ -252,7 +255,7 @@ class TrajectoriesFile:
             output.append(value)
         return output
 
-    def add_timestep(self, content):
+    def add_timestep(self, content: Dict[str, np.ndarray]) -> None:
         """Add a timestep to the current trajectory.
 
         Args:
@@ -268,7 +271,7 @@ class TrajectoriesFile:
         # Increment length
         self._current_trajectory_timesteps += 1
 
-    def add_meta(self, content):
+    def add_meta(self, content: Dict[str, np.ndarray]) -> None:
         """Add some metadata to the current trajectory.
 
         Args:
@@ -281,14 +284,14 @@ class TrajectoriesFile:
             else:
                 self._content_dict[key] = np.copy(value)
 
-    def abandon_trajectory(self):
+    def abandon_trajectory(self) -> None:
         """Abandon the current trajectory.
         """
         self._print("Abandoning trajectory")
         self._content_dict = {}
         self._current_trajectory_timesteps = 0
 
-    def complete_trajectory(self):
+    def complete_trajectory(self) -> None:
         """Write the current trajectory to disk, and mark the start of a new
         trajectory.
         Must be called with the TrajectoriesFile object in a `with` statement.
@@ -303,8 +306,7 @@ class TrajectoriesFile:
 
         # Check length, print debug message
         self._print(
-            "Completing trajectory!"
-            f"(length={self._current_trajectory_timesteps})"
+            "Completing trajectory!" f"(length={self._current_trajectory_timesteps})"
         )
 
         # Make space for an extra trajectory
@@ -318,7 +320,7 @@ class TrajectoriesFile:
         self._current_trajectory_timesteps = 0
         self._print("Existing trajectory count:", self._trajectory_count)
 
-    def clear(self):
+    def clear(self) -> None:
         """Clear the contents of the TrajectoriesFile.
         """
         assert self._file is not None, "Not called in with statement!"
@@ -326,7 +328,7 @@ class TrajectoriesFile:
         for traj_key in self._file.keys():
             del self._file[traj_key]
 
-    def _h5py_file(self, mode=None):
+    def _h5py_file(self, mode: str = None) -> h5py.File:
         """Private helper for creating h5py file objects.
         """
         if mode is None:

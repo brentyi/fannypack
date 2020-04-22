@@ -1,11 +1,12 @@
-import pytest
+import os
+
 import fannypack
 import numpy as np
-import os
+import pytest
 import torch
 import torch.nn.functional as F
 
-from ..fixtures import simple_buddy, resblock_buddy_temporary_data
+from ..fixtures import resblock_buddy_temporary_data, simple_buddy
 
 
 def test_buddy_device(simple_buddy):
@@ -22,7 +23,7 @@ def test_buddy_checkpoint_labels(simple_buddy):
     assert set(buddy.checkpoint_labels) == set(["new", "legacy"])
 
 
-def test_buddy_load_checkpoint_new_format_path(simple_buddy):
+def test_buddy_load_checkpoint_new_format_label(simple_buddy):
     """Make sure Buddy can load checkpoints via a label specifier.
     """
     model, buddy, data, labels = simple_buddy
@@ -96,8 +97,7 @@ def test_buddy_load_missing_checkpoint_path(simple_buddy):
     with pytest.raises(FileNotFoundError):
         buddy.load_checkpoint(
             path=os.path.join(
-                os.path.dirname(__file__),
-                "checkpoints/this_file_doesnt_exist.ckpt",
+                os.path.dirname(__file__), "checkpoints/this_file_doesnt_exist.ckpt",
             )
         )
 
@@ -196,9 +196,7 @@ def test_buddy_checkpoint_modules(resblock_buddy_temporary_data):
     for key in layer2_params.keys():
         if "bias" in key:
             continue
-        assert not torch.allclose(
-            layer2_params[key].data, layer4_params[key].data
-        )
+        assert not torch.allclose(layer2_params[key].data, layer4_params[key].data)
 
     # Save a checkpoint
     buddy.save_checkpoint()

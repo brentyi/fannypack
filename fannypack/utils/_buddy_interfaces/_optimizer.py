@@ -53,9 +53,7 @@ class _BuddyOptimizer:
         schedulers = self._optimizer_config["learning_rate_schedulers"]
         if optimizer_name in schedulers:
             self._set_learning_rate(
-                schedulers[optimizer_name](
-                    self._optimizer_config["global_steps"]
-                ),
+                schedulers[optimizer_name](self._optimizer_config["global_steps"]),
                 optimizer_name,
             )
 
@@ -155,9 +153,7 @@ class _BuddyOptimizer:
 
         # Parameters
         Optimizer = self._OPTIMIZER_TYPES[optimizer_type]
-        initial_learning_rate = self._OPTIMIZER_DEFAULT_LEARNING_RATES[
-            optimizer_type
-        ]
+        initial_learning_rate = self._OPTIMIZER_DEFAULT_LEARNING_RATES[optimizer_type]
 
         # Construct optimizer
         self._optimizer_dict[optimizer_name] = Optimizer(

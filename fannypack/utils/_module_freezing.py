@@ -1,7 +1,9 @@
+import torch.nn as nn
+
 _freeze_restore_values = {}
 
 
-def freeze_module(module, recurse=True):
+def freeze_module(module: nn.Module, recurse: bool = True):
     """Freeze the weights of a PyTorch module.
 
     Args:
@@ -29,7 +31,7 @@ def freeze_module(module, recurse=True):
     _freeze_restore_values[module] = restore_values
 
 
-def unfreeze_module(module, recurse=True):
+def unfreeze_module(module: nn.Module, recurse: bool = True):
     """Unfreeze the weights of a PyTorch module, which needs to have been
     frozen with :func:`fannypack.utils.freeze_module`.
 

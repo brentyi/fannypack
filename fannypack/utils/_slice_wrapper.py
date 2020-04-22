@@ -1,4 +1,4 @@
-from typing import List, Tuple, Union
+from typing import Any, Dict, List, Tuple, Union, cast
 
 import numpy as np
 import torch
@@ -20,9 +20,9 @@ class SliceWrapper:
             np.ndarray,
             torch.Tensor,
             list,
-            Dict[Any, Union[np.ndarray, Torch.Tensor, List]],
+            Dict[Any, Union[np.ndarray, torch.Tensor, List]],
         ] = data
-        self._type = type(data)
+        self._type: type = type(data)
 
         # Sanity checks
         if type(data) == dict:
@@ -39,11 +39,11 @@ class SliceWrapper:
             # Non-dictionary inputs
             assert type(data) in _valid_iterables, "Invalid datatype!"
 
-    def __getitem__(self, index: Tuple):
+    def __getitem__(self, index):
         if self._type == dict:
             # Check that the index is sane
             assert type(index) in (int, slice, tuple)
-            if type(index) == int and index >= len(self):
+            if type(index) == int and cast(int, index) >= len(self):
                 # For use as a standard Python iterator
                 raise IndexError
 
@@ -61,6 +61,7 @@ class SliceWrapper:
 
     def append(self, other):
         if self._type == dict:
+            self._data = cast(dict, self._data)
             assert type(other) == dict
             for key, value in other.items():
                 if key in self._data.keys():

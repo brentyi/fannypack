@@ -1,11 +1,13 @@
-import torch
-import torch.nn as nn
+from typing import Any, List, Dict
 import warnings
 
+import torch
+import torch.nn as nn
+
 from ._buddy_interfaces._checkpointing import _BuddyCheckpointing
-from ._buddy_interfaces._optimizer import _BuddyOptimizer
 from ._buddy_interfaces._logging import _BuddyLogging
 from ._buddy_interfaces._metadata import _BuddyMetadata
+from ._buddy_interfaces._optimizer import _BuddyOptimizer
 
 
 class Buddy(
@@ -43,18 +45,18 @@ class Buddy(
 
     def __init__(
         self,
-        experiment_name,
-        model,
+        experiment_name: str,
+        model: nn.Module,
         *,
-        checkpoint_dir="checkpoints",
-        checkpoint_max_to_keep=5,
-        metadata_dir="metadata",
-        log_dir="logs",
-        optimizer_type="adam",
-        optimizer_checkpoint_interval=300,
-        optimizer_names=None,  # Deprecated!
-        verbose=True,
-    ):
+        checkpoint_dir: str = "checkpoints",
+        checkpoint_max_to_keep: int = 5,
+        metadata_dir: str = "metadata",
+        log_dir: str = "logs",
+        optimizer_type: str = "adam",
+        optimizer_checkpoint_interval: float = 300,
+        optimizer_names: Any = None,  # Deprecated!
+        verbose: bool = True,
+    ) -> None:
         """Constructor
         """
         # Validate and assign core parameters.
@@ -79,14 +81,10 @@ class Buddy(
         #
         # State within each interface should be encapsulated. (exception:
         # checkpointing automatically saves optimizer state)
-        _BuddyCheckpointing.__init__(
-            self, checkpoint_dir, checkpoint_max_to_keep
-        )
+        _BuddyCheckpointing.__init__(self, checkpoint_dir, checkpoint_max_to_keep)
         _BuddyMetadata.__init__(self, metadata_dir)
         _BuddyLogging.__init__(self, log_dir)
-        _BuddyOptimizer.__init__(
-            self, optimizer_type, optimizer_checkpoint_interval
-        )
+        _BuddyOptimizer.__init__(self, optimizer_type, optimizer_checkpoint_interval)
 
         if optimizer_names != None:  # pragma: no cover
             warnings.warn(
@@ -100,7 +98,7 @@ class Buddy(
         self._print("Available checkpoint labels:", self.checkpoint_labels)
 
     @property
-    def device(self):
+    def device(self) -> torch.device:
         """Read-only interface for the active torch device.
         """
         return self._device
