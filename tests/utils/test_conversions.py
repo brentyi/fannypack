@@ -4,16 +4,45 @@ import pytest
 import torch
 
 
-def test_conversion_nested():
-    """Check numpy <=> torch conversions.
-    """
-    X = {"data": [np.zeros((10, 1, 5, 1, 10))]}
+@pytest.fixture
+def nested_conversion():
+    X = {"data": ([np.zeros((10, 1, 5, 1, 10))], np.eye(3))}
     X_torch = fannypack.utils.to_torch(X)
     X_numpy = fannypack.utils.to_numpy(X_torch)
+    return X, X_torch, X_numpy
 
-    assert X_torch["data"][0].shape == X_numpy["data"][0].shape
-    assert type(X_numpy["data"][0]) == np.ndarray
-    assert type(X_torch["data"][0]) == torch.Tensor
+
+def test_conversion_shapes(nested_conversion):
+    """Check numpy <=> torch conversions.
+    """
+    X, X_torch, X_numpy = nested_conversion
+    assert X_torch["data"][0][0].shape == X_numpy["data"][0][0].shape
+    assert X_torch["data"][1].shape == X_numpy["data"][1].shape
+
+
+def test_conversion_types(nested_conversion):
+    """Check numpy <=> torch conversions.
+    """
+    X, X_torch, X_numpy = nested_conversion
+    assert type(X_numpy["data"][0][0]) == np.ndarray
+    assert type(X_torch["data"][0][0]) == torch.Tensor
+    assert type(X_numpy["data"][1]) == np.ndarray
+    assert type(X_torch["data"][1]) == torch.Tensor
+
+
+def test_conversion_values(nested_conversion):
+    """Check numpy <=> torch conversions.
+    """
+    X, X_torch, X_numpy = nested_conversion
+    assert np.allclose(X["data"][0][0], X_numpy["data"][0][0])
+    assert np.allclose(X["data"][1], X_numpy["data"][1])
+
+
+def test_conversion_failure():
+    """Sanity check for invalid input.
+    """
+    with pytest.raises(AssertionError):
+        fannypack.utils.to_torch(None)
 
 
 def test_to_device():

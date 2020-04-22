@@ -46,31 +46,37 @@ def _convert(x, convert):
     elif type(x) == tuple:
         # Convert tuples of values
         x = cast(tuple, x)
-        output = (convert(value, convert) for value in x)
+        output = tuple(_convert(value, convert) for value in x)
     else:
         assert False, f"Invalid datatype {type(x)}!"
     return output
 
 
 @overload
-def to_device(x: tuple, device: torch.device, detach: bool = False,) -> tuple:
+def to_device(
+    x: tuple, device: torch.device, detach: bool = False,
+) -> tuple:  # pragma: no cover
     ...
 
 
 @overload
-def to_device(x: list, device: torch.device, detach: bool = False,) -> list:
+def to_device(
+    x: list, device: torch.device, detach: bool = False,
+) -> list:  # pragma: no cover
     ...
 
 
 @overload
-def to_device(x: dict, device: torch.device, detach: bool = False,) -> dict:
+def to_device(
+    x: dict, device: torch.device, detach: bool = False,
+) -> dict:  # pragma: no cover
     ...
 
 
 @overload
 def to_device(
     x: torch.Tensor, device: torch.device, detach: bool = False,
-) -> torch.Tensor:
+) -> torch.Tensor:  # pragma: no cover
     ...
 
 
