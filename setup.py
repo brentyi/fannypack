@@ -15,7 +15,7 @@ setup(
     license="MIT",
     packages=find_packages(exclude=["examples", "tests"]),
     package_data={"fannypack": ["py.typed"]},
-    python_requires=">=3.6",
+    python_requires=">=3.7",
     install_requires=[
         "dill",
         "h5py",
@@ -25,7 +25,6 @@ setup(
         "torch",
     ],
     classifiers=[
-        "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
         "License :: OSI Approved :: MIT License",
