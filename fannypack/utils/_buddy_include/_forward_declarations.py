@@ -25,10 +25,10 @@ class _BuddyForwardDeclarations(abc.ABC):
     def device(self) -> torch.device:
         """Read-only interface for the active torch device.
         """
-        pass
+        raise NotImplementedError()
 
     @abc.abstractmethod
     def _print(self, *args, **kwargs) -> None:
         """Private helper for logging.
         """
-        pass
+        raise NotImplementedError()

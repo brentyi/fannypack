@@ -1,5 +1,6 @@
-import torch.optim
 import time
+
+import torch
 
 from .._forward_declarations import _BuddyForwardDeclarations
 
@@ -9,9 +10,10 @@ class _BuddyOptimizer(_BuddyForwardDeclarations):
     """
 
     # Supported optimizer types
+    # Note that torch (as of 1.5) has a stub issue with optim.Adadelta
     _OPTIMIZER_TYPES = {
         "adam": torch.optim.Adam,
-        "adadelta": torch.optim.Adadelta,
+        "adadelta": torch.optim.Adadelta,  # type: ignore
     }
 
     # Default learning rates
