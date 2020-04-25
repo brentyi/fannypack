@@ -60,9 +60,7 @@ buddy.load_checkpoint_module("layer2", label="memorable_name")
 # Helpful if a module's been renamed!
 #
 # Note that this takes the same optional label, path args as `load_checkpoint`
-buddy.load_checkpoint_module(
-    source="layer3", target="layer2", label="memorable_name"
-)
+buddy.load_checkpoint_module(source="layer3", target="layer2", label="memorable_name")
 
 # Similar API for loading just optimizer state!
 buddy.load_checkpoint_optimizer("primary", label="memorable_name")

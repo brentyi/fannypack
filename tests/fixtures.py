@@ -83,9 +83,7 @@ def simple_buddy():
         "simple_net",
         simple_net,
         # Use directories relative to this fixture
-        checkpoint_dir=os.path.join(
-            os.path.dirname(__file__), "data/checkpoints/"
-        ),
+        checkpoint_dir=os.path.join(os.path.dirname(__file__), "data/checkpoints/"),
         metadata_dir=os.path.join(os.path.dirname(__file__), "data/metadata/"),
         log_dir=os.path.join(os.path.dirname(__file__), "data/log/"),
         verbose=True,
@@ -96,9 +94,7 @@ def simple_buddy():
 
     # Learn to regress a constant
     data = torch.FloatTensor(np.random.normal(size=(N, 1)))
-    labels = torch.FloatTensor(np.random.normal(loc=3, size=(1, 1))).expand(
-        (N, 1)
-    )
+    labels = torch.FloatTensor(np.random.normal(loc=3, size=(1, 1))).expand((N, 1))
     return simple_net, buddy, data, labels
 
 
@@ -116,12 +112,8 @@ def simple_buddy_temporary_data():
         "simple_net",
         simple_net,
         # Use directories relative to this fixture
-        checkpoint_dir=os.path.join(
-            os.path.dirname(__file__), "tmp/data/checkpoints/"
-        ),
-        metadata_dir=os.path.join(
-            os.path.dirname(__file__), "tmp/data/metadata/"
-        ),
+        checkpoint_dir=os.path.join(os.path.dirname(__file__), "tmp/data/checkpoints/"),
+        metadata_dir=os.path.join(os.path.dirname(__file__), "tmp/data/metadata/"),
         log_dir=os.path.join(os.path.dirname(__file__), "tmp/data/log/"),
         verbose=True,
     )
@@ -131,9 +123,7 @@ def simple_buddy_temporary_data():
 
     # Learn to regress a constant
     data = torch.FloatTensor(np.random.normal(size=(N, 1)))
-    labels = torch.FloatTensor(np.random.normal(loc=3, size=(1, 1))).expand(
-        (N, 1)
-    )
+    labels = torch.FloatTensor(np.random.normal(loc=3, size=(1, 1))).expand((N, 1))
     yield simple_net, buddy, data, labels
 
     # Delete temporary files when done
@@ -160,12 +150,8 @@ def resblock_buddy_temporary_data():
         "resblock_net",
         resblock_net,
         # Use directories relative to this fixture
-        checkpoint_dir=os.path.join(
-            os.path.dirname(__file__), "tmp/data/checkpoints/"
-        ),
-        metadata_dir=os.path.join(
-            os.path.dirname(__file__), "tmp/data/metadata/"
-        ),
+        checkpoint_dir=os.path.join(os.path.dirname(__file__), "tmp/data/checkpoints/"),
+        metadata_dir=os.path.join(os.path.dirname(__file__), "tmp/data/metadata/"),
         log_dir=os.path.join(os.path.dirname(__file__), "tmp/data/log/"),
         verbose=True,
     )
@@ -175,9 +161,7 @@ def resblock_buddy_temporary_data():
 
     # Learn to regress a constant
     data = torch.FloatTensor(np.random.normal(size=(N, 1)))
-    labels = torch.FloatTensor(np.random.normal(loc=3, size=(1, 1))).expand(
-        (N, 1)
-    )
+    labels = torch.FloatTensor(np.random.normal(loc=3, size=(1, 1))).expand((N, 1))
     yield resblock_net, buddy, data, labels
 
     # Delete temporary files when done

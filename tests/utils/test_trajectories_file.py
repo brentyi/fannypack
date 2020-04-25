@@ -27,9 +27,7 @@ def trajectories_file_read():
     """Fixture for reading from an existing trajectories file.
     """
 
-    path = os.path.join(
-        os.path.dirname(__file__), "../data/trajectories/test.hdf5"
-    )
+    path = os.path.join(os.path.dirname(__file__), "../data/trajectories/test.hdf5")
     trajectories_file = fannypack.utils.TrajectoriesFile(path, read_only=True)
     return trajectories_file
 
