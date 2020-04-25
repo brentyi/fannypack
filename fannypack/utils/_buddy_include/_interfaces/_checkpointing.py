@@ -9,10 +9,11 @@ import dill
 import numpy as np
 import torch
 
+from .._forward_declarations import _BuddyForwardDeclarations
 from ._optimizer import _BuddyOptimizer
 
 
-class _BuddyCheckpointing:
+class _BuddyCheckpointing(_BuddyForwardDeclarations):
     """Buddy's model checkpointing interface.
     """
 
@@ -160,7 +161,7 @@ class _BuddyCheckpointing:
 
         if target is None:
             target = source
-        _BuddyOptimizer._instantiate_optimizer(self, target)
+        _BuddyOptimizer._instantiate_optimizer(cast(_BuddyOptimizer, self), target)
 
         # Find and read our checkpoint file
         checkpoint = self._read_checkpoint_file(label, path, experiment_name)
@@ -258,7 +259,7 @@ class _BuddyCheckpointing:
 
         # Instantiate optimizers & load state
         for name, state_dict in checkpoint["optimizer_states"].items():
-            _BuddyOptimizer._instantiate_optimizer(self, name)
+            _BuddyOptimizer._instantiate_optimizer(cast(_BuddyOptimizer, self), name)
             self._optimizer_dict[name].load_state_dict(state_dict)
 
     def _read_checkpoint_file(

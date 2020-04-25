@@ -18,5 +18,4 @@ def squeeze(x, axis: Union[int, Tuple[int]] = None):
         else:
             slices.append(slice(None))
 
-    slices = tuple(slices)
-    return x[slices]
+    return x[tuple(slices)]

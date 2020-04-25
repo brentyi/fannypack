@@ -6,6 +6,8 @@ from typing import List, Optional
 import fannypack
 import torch.utils.tensorboard
 
+from .._forward_declarations import _BuddyForwardDeclarations
+
 
 @dataclass
 class _LogNamespace:
@@ -21,7 +23,7 @@ class _LogNamespace:
         return
 
 
-class _BuddyLogging:
+class _BuddyLogging(_BuddyForwardDeclarations):
     """Buddy's TensorBoard logging interface.
     """
 

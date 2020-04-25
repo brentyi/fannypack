@@ -1,8 +1,10 @@
 import torch.optim
 import time
 
+from .._forward_declarations import _BuddyForwardDeclarations
 
-class _BuddyOptimizer:
+
+class _BuddyOptimizer(_BuddyForwardDeclarations):
     """Buddy's optimization interface.
     """
 

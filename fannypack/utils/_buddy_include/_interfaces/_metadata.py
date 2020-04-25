@@ -1,9 +1,10 @@
 import os
-
 import yaml
 
+from .._forward_declarations import _BuddyForwardDeclarations
 
-class _BuddyMetadata:
+
+class _BuddyMetadata(_BuddyForwardDeclarations):
     """Buddy's experiment metadata management interface.
     """
 
@@ -18,7 +19,8 @@ class _BuddyMetadata:
         except FileNotFoundError:
             self._metadata: dict = {}
 
-    def load_metadata( self, experiment_name: str = None, metadata_dir: str = None, path: str = None
+    def load_metadata(
+        self, experiment_name: str = None, metadata_dir: str = None, path: str = None
     ):
         """Read existing metadata file.
         """

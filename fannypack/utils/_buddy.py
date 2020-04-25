@@ -1,13 +1,13 @@
-from typing import Any, List, Dict
 import warnings
+from typing import Any, Dict, List
 
 import torch
 import torch.nn as nn
 
-from ._buddy_interfaces._checkpointing import _BuddyCheckpointing
-from ._buddy_interfaces._logging import _BuddyLogging
-from ._buddy_interfaces._metadata import _BuddyMetadata
-from ._buddy_interfaces._optimizer import _BuddyOptimizer
+from ._buddy_include._interfaces._checkpointing import _BuddyCheckpointing
+from ._buddy_include._interfaces._logging import _BuddyLogging
+from ._buddy_include._interfaces._metadata import _BuddyMetadata
+from ._buddy_include._interfaces._optimizer import _BuddyOptimizer
 
 
 class Buddy(
@@ -97,17 +97,18 @@ class Buddy(
         # Print available checkpoints
         self._print("Available checkpoint labels:", self.checkpoint_labels)
 
+    # Shared functions
     @property
     def device(self) -> torch.device:
         """Read-only interface for the active torch device.
         """
         return self._device
 
-    def _print(self, *args, **kwargs):
+    def _print(self, *args, **kwargs) -> None:
         """Private helper for logging.
         """
         # Only print in verbose mode
         if self._verbose:
-            args = list(args)
-            args[0] = f"[buddy-{self._experiment_name}] {args[0]}"
-            print(*args, **kwargs)
+            arglist = list(args)
+            arglist[0] = f"[buddy-{self._experiment_name}] {args[0]}"
+            print(*arglist, **kwargs)
