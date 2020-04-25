@@ -159,8 +159,8 @@
 <h1>Buddy<a class="headerlink" href="#buddy" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="fannypack.utils.Buddy">
-<em class="property">class </em><code class="sig-prename descclassname">fannypack.utils.</code><code class="sig-name descname">Buddy</code><span class="sig-paren">(</span><em class="sig-param">experiment_name</em>, <em class="sig-param">model</em>, <em class="sig-param">*</em>, <em class="sig-param">checkpoint_dir='checkpoints'</em>, <em class="sig-param">checkpoint_max_to_keep=5</em>, <em class="sig-param">metadata_dir='metadata'</em>, <em class="sig-param">log_dir='logs'</em>, <em class="sig-param">optimizer_type='adam'</em>, <em class="sig-param">optimizer_checkpoint_interval=300</em>, <em class="sig-param">optimizer_names=None</em>, <em class="sig-param">verbose=True</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils.Buddy" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#fannypack.utils._buddy_interfaces._checkpointing._BuddyCheckpointing" title="fannypack.utils._buddy_interfaces._checkpointing._BuddyCheckpointing"><code class="xref py py-class docutils literal notranslate"><span class="pre">fannypack.utils._buddy_interfaces._checkpointing._BuddyCheckpointing</span></code></a>, <a class="reference internal" href="#fannypack.utils._buddy_interfaces._optimizer._BuddyOptimizer" title="fannypack.utils._buddy_interfaces._optimizer._BuddyOptimizer"><code class="xref py py-class docutils literal notranslate"><span class="pre">fannypack.utils._buddy_interfaces._optimizer._BuddyOptimizer</span></code></a>, <a class="reference internal" href="#fannypack.utils._buddy_interfaces._logging._BuddyLogging" title="fannypack.utils._buddy_interfaces._logging._BuddyLogging"><code class="xref py py-class docutils literal notranslate"><span class="pre">fannypack.utils._buddy_interfaces._logging._BuddyLogging</span></code></a>, <a class="reference internal" href="#fannypack.utils._buddy_interfaces._metadata._BuddyMetadata" title="fannypack.utils._buddy_interfaces._metadata._BuddyMetadata"><code class="xref py py-class docutils literal notranslate"><span class="pre">fannypack.utils._buddy_interfaces._metadata._BuddyMetadata</span></code></a></p>
+<em class="property">class </em><code class="sig-prename descclassname">fannypack.utils.</code><code class="sig-name descname">Buddy</code><span class="sig-paren">(</span><em class="sig-param">experiment_name: str</em>, <em class="sig-param">model: torch.nn.modules.module.Module</em>, <em class="sig-param">*</em>, <em class="sig-param">checkpoint_dir: str = 'checkpoints'</em>, <em class="sig-param">checkpoint_max_to_keep: int = 5</em>, <em class="sig-param">metadata_dir: str = 'metadata'</em>, <em class="sig-param">log_dir: str = 'logs'</em>, <em class="sig-param">optimizer_type: str = 'adam'</em>, <em class="sig-param">optimizer_checkpoint_interval: float = 300</em>, <em class="sig-param">optimizer_names: Any = None</em>, <em class="sig-param">verbose: bool = True</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils.Buddy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#fannypack.utils._buddy_include._interfaces._checkpointing._BuddyCheckpointing" title="fannypack.utils._buddy_include._interfaces._checkpointing._BuddyCheckpointing"><code class="xref py py-class docutils literal notranslate"><span class="pre">fannypack.utils._buddy_include._interfaces._checkpointing._BuddyCheckpointing</span></code></a>, <a class="reference internal" href="#fannypack.utils._buddy_include._interfaces._optimizer._BuddyOptimizer" title="fannypack.utils._buddy_include._interfaces._optimizer._BuddyOptimizer"><code class="xref py py-class docutils literal notranslate"><span class="pre">fannypack.utils._buddy_include._interfaces._optimizer._BuddyOptimizer</span></code></a>, <a class="reference internal" href="#fannypack.utils._buddy_include._interfaces._logging._BuddyLogging" title="fannypack.utils._buddy_include._interfaces._logging._BuddyLogging"><code class="xref py py-class docutils literal notranslate"><span class="pre">fannypack.utils._buddy_include._interfaces._logging._BuddyLogging</span></code></a>, <a class="reference internal" href="#fannypack.utils._buddy_include._interfaces._metadata._BuddyMetadata" title="fannypack.utils._buddy_include._interfaces._metadata._BuddyMetadata"><code class="xref py py-class docutils literal notranslate"><span class="pre">fannypack.utils._buddy_include._interfaces._metadata._BuddyMetadata</span></code></a></p>
 <p>Buddy is a model manager that abstracts away PyTorch boilerplate.
 Buddy helps with…</p>
 <ul class="simple">
@@ -205,30 +205,30 @@ the first call to minimize(). Set to 0 to disable. Defaults to 300.</p></li>
 </dd></dl>
 
 <dl class="class">
-<dt id="fannypack.utils._buddy_interfaces._optimizer._BuddyOptimizer">
-<em class="property">class </em><code class="sig-prename descclassname">fannypack.utils._buddy_interfaces._optimizer.</code><code class="sig-name descname">_BuddyOptimizer</code><span class="sig-paren">(</span><em class="sig-param">optimizer_type</em>, <em class="sig-param">optimizer_checkpoint_interval</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils._buddy_interfaces._optimizer._BuddyOptimizer" title="Permalink to this definition">¶</a></dt>
+<dt id="fannypack.utils._buddy_include._interfaces._optimizer._BuddyOptimizer">
+<em class="property">class </em><code class="sig-prename descclassname">fannypack.utils._buddy_include._interfaces._optimizer.</code><code class="sig-name descname">_BuddyOptimizer</code><span class="sig-paren">(</span><em class="sig-param">optimizer_type</em>, <em class="sig-param">optimizer_checkpoint_interval</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils._buddy_include._interfaces._optimizer._BuddyOptimizer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Buddy’s optimization interface.</p>
 <dl class="method">
-<dt id="fannypack.utils._buddy_interfaces._optimizer._BuddyOptimizer.get_learning_rate">
-<code class="sig-name descname">get_learning_rate</code><span class="sig-paren">(</span><em class="sig-param">optimizer_name='primary'</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils._buddy_interfaces._optimizer._BuddyOptimizer.get_learning_rate" title="Permalink to this definition">¶</a></dt>
+<dt id="fannypack.utils._buddy_include._interfaces._optimizer._BuddyOptimizer.get_learning_rate">
+<code class="sig-name descname">get_learning_rate</code><span class="sig-paren">(</span><em class="sig-param">optimizer_name='primary'</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils._buddy_include._interfaces._optimizer._BuddyOptimizer.get_learning_rate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets an optimizer learning rate.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="fannypack.utils._buddy_interfaces._optimizer._BuddyOptimizer.minimize">
-<code class="sig-name descname">minimize</code><span class="sig-paren">(</span><em class="sig-param">loss</em>, <em class="sig-param">optimizer_name='primary'</em>, <em class="sig-param">*</em>, <em class="sig-param">retain_graph=False</em>, <em class="sig-param">checkpoint_interval=None</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils._buddy_interfaces._optimizer._BuddyOptimizer.minimize" title="Permalink to this definition">¶</a></dt>
+<dt id="fannypack.utils._buddy_include._interfaces._optimizer._BuddyOptimizer.minimize">
+<code class="sig-name descname">minimize</code><span class="sig-paren">(</span><em class="sig-param">loss</em>, <em class="sig-param">optimizer_name='primary'</em>, <em class="sig-param">*</em>, <em class="sig-param">retain_graph=False</em>, <em class="sig-param">checkpoint_interval=None</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils._buddy_include._interfaces._optimizer._BuddyOptimizer.minimize" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute gradients and use them to minimize a loss function.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="fannypack.utils._buddy_interfaces._optimizer._BuddyOptimizer.optimizer_steps">
-<em class="property">property </em><code class="sig-name descname">optimizer_steps</code><a class="headerlink" href="#fannypack.utils._buddy_interfaces._optimizer._BuddyOptimizer.optimizer_steps" title="Permalink to this definition">¶</a></dt>
+<dt id="fannypack.utils._buddy_include._interfaces._optimizer._BuddyOptimizer.optimizer_steps">
+<em class="property">property </em><code class="sig-name descname">optimizer_steps</code><a class="headerlink" href="#fannypack.utils._buddy_include._interfaces._optimizer._BuddyOptimizer.optimizer_steps" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read-only interface for # of steps taken by optimizer.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="fannypack.utils._buddy_interfaces._optimizer._BuddyOptimizer.set_learning_rate">
-<code class="sig-name descname">set_learning_rate</code><span class="sig-paren">(</span><em class="sig-param">value</em>, <em class="sig-param">optimizer_name='primary'</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils._buddy_interfaces._optimizer._BuddyOptimizer.set_learning_rate" title="Permalink to this definition">¶</a></dt>
+<dt id="fannypack.utils._buddy_include._interfaces._optimizer._BuddyOptimizer.set_learning_rate">
+<code class="sig-name descname">set_learning_rate</code><span class="sig-paren">(</span><em class="sig-param">value</em>, <em class="sig-param">optimizer_name='primary'</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils._buddy_include._interfaces._optimizer._BuddyOptimizer.set_learning_rate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets an optimizer learning rate. Accepts either a floating point
 learning rate or a schedule function (int steps -&gt; float LR).</p>
 </dd></dl>
@@ -236,28 +236,28 @@ learning rate or a schedule function (int steps -&gt; float LR).</p>
 </dd></dl>
 
 <dl class="class">
-<dt id="fannypack.utils._buddy_interfaces._checkpointing._BuddyCheckpointing">
-<em class="property">class </em><code class="sig-prename descclassname">fannypack.utils._buddy_interfaces._checkpointing.</code><code class="sig-name descname">_BuddyCheckpointing</code><span class="sig-paren">(</span><em class="sig-param">checkpoint_dir</em>, <em class="sig-param">checkpoint_max_to_keep</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils._buddy_interfaces._checkpointing._BuddyCheckpointing" title="Permalink to this definition">¶</a></dt>
+<dt id="fannypack.utils._buddy_include._interfaces._checkpointing._BuddyCheckpointing">
+<em class="property">class </em><code class="sig-prename descclassname">fannypack.utils._buddy_include._interfaces._checkpointing.</code><code class="sig-name descname">_BuddyCheckpointing</code><span class="sig-paren">(</span><em class="sig-param">checkpoint_dir: str</em>, <em class="sig-param">checkpoint_max_to_keep: int</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils._buddy_include._interfaces._checkpointing._BuddyCheckpointing" title="Permalink to this definition">¶</a></dt>
 <dd><p>Buddy’s model checkpointing interface.</p>
 <dl class="method">
-<dt id="fannypack.utils._buddy_interfaces._checkpointing._BuddyCheckpointing.checkpoint_labels">
-<em class="property">property </em><code class="sig-name descname">checkpoint_labels</code><a class="headerlink" href="#fannypack.utils._buddy_interfaces._checkpointing._BuddyCheckpointing.checkpoint_labels" title="Permalink to this definition">¶</a></dt>
+<dt id="fannypack.utils._buddy_include._interfaces._checkpointing._BuddyCheckpointing.checkpoint_labels">
+<em class="property">property </em><code class="sig-name descname">checkpoint_labels</code><a class="headerlink" href="#fannypack.utils._buddy_include._interfaces._checkpointing._BuddyCheckpointing.checkpoint_labels" title="Permalink to this definition">¶</a></dt>
 <dd><p>Accessor for listing available checkpoint labels.
 These should be saved as: <code class="docutils literal notranslate"><span class="pre">experiment_name-label.ckpt</span></code> in the
 <code class="docutils literal notranslate"><span class="pre">checkpoint_dir</span></code> directory.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="fannypack.utils._buddy_interfaces._checkpointing._BuddyCheckpointing.load_checkpoint">
-<code class="sig-name descname">load_checkpoint</code><span class="sig-paren">(</span><em class="sig-param">label=None</em>, <em class="sig-param">path=None</em>, <em class="sig-param">experiment_name=None</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils._buddy_interfaces._checkpointing._BuddyCheckpointing.load_checkpoint" title="Permalink to this definition">¶</a></dt>
+<dt id="fannypack.utils._buddy_include._interfaces._checkpointing._BuddyCheckpointing.load_checkpoint">
+<code class="sig-name descname">load_checkpoint</code><span class="sig-paren">(</span><em class="sig-param">label: str = None</em>, <em class="sig-param">path: str = None</em>, <em class="sig-param">experiment_name: str = None</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#fannypack.utils._buddy_include._interfaces._checkpointing._BuddyCheckpointing.load_checkpoint" title="Permalink to this definition">¶</a></dt>
 <dd><p>Loads a checkpoint. By default, loads the one with the highest
 number of training iterations.</p>
 <p>Can also be specified via a label or file path.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="fannypack.utils._buddy_interfaces._checkpointing._BuddyCheckpointing.load_checkpoint_module">
-<code class="sig-name descname">load_checkpoint_module</code><span class="sig-paren">(</span><em class="sig-param">source</em>, <em class="sig-param">target=None</em>, <em class="sig-param">label=None</em>, <em class="sig-param">path=None</em>, <em class="sig-param">experiment_name=None</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils._buddy_interfaces._checkpointing._BuddyCheckpointing.load_checkpoint_module" title="Permalink to this definition">¶</a></dt>
+<dt id="fannypack.utils._buddy_include._interfaces._checkpointing._BuddyCheckpointing.load_checkpoint_module">
+<code class="sig-name descname">load_checkpoint_module</code><span class="sig-paren">(</span><em class="sig-param">source: str</em>, <em class="sig-param">target: str = None</em>, <em class="sig-param">label: str = None</em>, <em class="sig-param">path: str = None</em>, <em class="sig-param">experiment_name: str = None</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#fannypack.utils._buddy_include._interfaces._checkpointing._BuddyCheckpointing.load_checkpoint_module" title="Permalink to this definition">¶</a></dt>
 <dd><p>Loads parameters from a specific child module within a checkpoint.
 By default, loads the checkpoint with the highest number of training
 iterations.</p>
@@ -265,8 +265,8 @@ iterations.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="fannypack.utils._buddy_interfaces._checkpointing._BuddyCheckpointing.load_checkpoint_optimizer">
-<code class="sig-name descname">load_checkpoint_optimizer</code><span class="sig-paren">(</span><em class="sig-param">source</em>, <em class="sig-param">target=None</em>, <em class="sig-param">label=None</em>, <em class="sig-param">path=None</em>, <em class="sig-param">experiment_name=None</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils._buddy_interfaces._checkpointing._BuddyCheckpointing.load_checkpoint_optimizer" title="Permalink to this definition">¶</a></dt>
+<dt id="fannypack.utils._buddy_include._interfaces._checkpointing._BuddyCheckpointing.load_checkpoint_optimizer">
+<code class="sig-name descname">load_checkpoint_optimizer</code><span class="sig-paren">(</span><em class="sig-param">source: str</em>, <em class="sig-param">target: str = None</em>, <em class="sig-param">label: str = None</em>, <em class="sig-param">path: str = None</em>, <em class="sig-param">experiment_name: str = None</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#fannypack.utils._buddy_include._interfaces._checkpointing._BuddyCheckpointing.load_checkpoint_optimizer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Loads state associated with a specific optimizer from a checkpoint.
 By default, loads the checkpoint with the highest number of training
 iterations.</p>
@@ -274,35 +274,40 @@ iterations.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="fannypack.utils._buddy_interfaces._checkpointing._BuddyCheckpointing.load_checkpoint_optimizers">
-<code class="sig-name descname">load_checkpoint_optimizers</code><span class="sig-paren">(</span><em class="sig-param">label=None</em>, <em class="sig-param">path=None</em>, <em class="sig-param">experiment_name=None</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils._buddy_interfaces._checkpointing._BuddyCheckpointing.load_checkpoint_optimizers" title="Permalink to this definition">¶</a></dt>
+<dt id="fannypack.utils._buddy_include._interfaces._checkpointing._BuddyCheckpointing.load_checkpoint_optimizers">
+<code class="sig-name descname">load_checkpoint_optimizers</code><span class="sig-paren">(</span><em class="sig-param">label=None</em>, <em class="sig-param">path=None</em>, <em class="sig-param">experiment_name=None</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#fannypack.utils._buddy_include._interfaces._checkpointing._BuddyCheckpointing.load_checkpoint_optimizers" title="Permalink to this definition">¶</a></dt>
 <dd><p>Loads all optimizer settings from a checkpoint. By default, loads
 the checkpoint with the highest number of training iterations.</p>
 <p>Can also be specified via a label or file path.</p>
 </dd></dl>
 
+<dl class="attribute">
+<dt id="fannypack.utils._buddy_include._interfaces._checkpointing._BuddyCheckpointing.optimizer_steps">
+<code class="sig-name descname">optimizer_steps</code><em class="property"> = None</em><a class="headerlink" href="#fannypack.utils._buddy_include._interfaces._checkpointing._BuddyCheckpointing.optimizer_steps" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="method">
-<dt id="fannypack.utils._buddy_interfaces._checkpointing._BuddyCheckpointing.save_checkpoint">
-<code class="sig-name descname">save_checkpoint</code><span class="sig-paren">(</span><em class="sig-param">label=None</em>, <em class="sig-param">path=None</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils._buddy_interfaces._checkpointing._BuddyCheckpointing.save_checkpoint" title="Permalink to this definition">¶</a></dt>
+<dt id="fannypack.utils._buddy_include._interfaces._checkpointing._BuddyCheckpointing.save_checkpoint">
+<code class="sig-name descname">save_checkpoint</code><span class="sig-paren">(</span><em class="sig-param">label: str = None</em>, <em class="sig-param">path: str = None</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#fannypack.utils._buddy_include._interfaces._checkpointing._BuddyCheckpointing.save_checkpoint" title="Permalink to this definition">¶</a></dt>
 <dd><p>Saves a checkpoint, which can optionally be labeled.</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="class">
-<dt id="fannypack.utils._buddy_interfaces._logging._BuddyLogging">
-<em class="property">class </em><code class="sig-prename descclassname">fannypack.utils._buddy_interfaces._logging.</code><code class="sig-name descname">_BuddyLogging</code><span class="sig-paren">(</span><em class="sig-param">log_dir</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils._buddy_interfaces._logging._BuddyLogging" title="Permalink to this definition">¶</a></dt>
+<dt id="fannypack.utils._buddy_include._interfaces._logging._BuddyLogging">
+<em class="property">class </em><code class="sig-prename descclassname">fannypack.utils._buddy_include._interfaces._logging.</code><code class="sig-name descname">_BuddyLogging</code><span class="sig-paren">(</span><em class="sig-param">log_dir: str</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils._buddy_include._interfaces._logging._BuddyLogging" title="Permalink to this definition">¶</a></dt>
 <dd><p>Buddy’s TensorBoard logging interface.</p>
 <dl class="method">
-<dt id="fannypack.utils._buddy_interfaces._logging._BuddyLogging.log">
-<code class="sig-name descname">log</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">value</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils._buddy_interfaces._logging._BuddyLogging.log" title="Permalink to this definition">¶</a></dt>
+<dt id="fannypack.utils._buddy_include._interfaces._logging._BuddyLogging.log">
+<code class="sig-name descname">log</code><span class="sig-paren">(</span><em class="sig-param">name: str</em>, <em class="sig-param">value</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#fannypack.utils._buddy_include._interfaces._logging._BuddyLogging.log" title="Permalink to this definition">¶</a></dt>
 <dd><p>Log a tensor for visualization in TensorBoard. Currently only
 supports scalars.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="fannypack.utils._buddy_interfaces._logging._BuddyLogging.log_scope">
-<code class="sig-name descname">log_scope</code><span class="sig-paren">(</span><em class="sig-param">scope</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils._buddy_interfaces._logging._BuddyLogging.log_scope" title="Permalink to this definition">¶</a></dt>
+<dt id="fannypack.utils._buddy_include._interfaces._logging._BuddyLogging.log_scope">
+<code class="sig-name descname">log_scope</code><span class="sig-paren">(</span><em class="sig-param">scope: str</em><span class="sig-paren">)</span> &#x2192; fannypack.utils._buddy_include._interfaces._logging._LogNamespace<a class="headerlink" href="#fannypack.utils._buddy_include._interfaces._logging._BuddyLogging.log_scope" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a scope to log tensors in.</p>
 <p>Example usage:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">buddy</span><span class="o">.</span><span class="n">log_scope</span><span class="p">(</span><span class="s2">&quot;scope&quot;</span><span class="p">):</span>
@@ -313,14 +318,14 @@ supports scalars.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="fannypack.utils._buddy_interfaces._logging._BuddyLogging.log_scope_pop">
-<code class="sig-name descname">log_scope_pop</code><span class="sig-paren">(</span><em class="sig-param">scope=None</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils._buddy_interfaces._logging._BuddyLogging.log_scope_pop" title="Permalink to this definition">¶</a></dt>
+<dt id="fannypack.utils._buddy_include._interfaces._logging._BuddyLogging.log_scope_pop">
+<code class="sig-name descname">log_scope_pop</code><span class="sig-paren">(</span><em class="sig-param">scope: Optional[str] = None</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#fannypack.utils._buddy_include._interfaces._logging._BuddyLogging.log_scope_pop" title="Permalink to this definition">¶</a></dt>
 <dd><p>Pop a scope we logged tensors into. See <code class="docutils literal notranslate"><span class="pre">log_scope_push()</span></code>.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="fannypack.utils._buddy_interfaces._logging._BuddyLogging.log_scope_push">
-<code class="sig-name descname">log_scope_push</code><span class="sig-paren">(</span><em class="sig-param">scope</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils._buddy_interfaces._logging._BuddyLogging.log_scope_push" title="Permalink to this definition">¶</a></dt>
+<dt id="fannypack.utils._buddy_include._interfaces._logging._BuddyLogging.log_scope_push">
+<code class="sig-name descname">log_scope_push</code><span class="sig-paren">(</span><em class="sig-param">scope: str</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#fannypack.utils._buddy_include._interfaces._logging._BuddyLogging.log_scope_push" title="Permalink to this definition">¶</a></dt>
 <dd><p>Push a scope to log tensors into.</p>
 <p>Example usage:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">buddy</span><span class="o">.</span><span class="n">log_scope_push</span><span class="p">(</span><span class="s2">&quot;scope&quot;</span><span class="p">)</span>
@@ -333,40 +338,50 @@ supports scalars.</p>
 </div>
 </dd></dl>
 
+<dl class="attribute">
+<dt id="fannypack.utils._buddy_include._interfaces._logging._BuddyLogging.optimizer_steps">
+<code class="sig-name descname">optimizer_steps</code><em class="property"> = None</em><a class="headerlink" href="#fannypack.utils._buddy_include._interfaces._logging._BuddyLogging.optimizer_steps" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 <dl class="class">
-<dt id="fannypack.utils._buddy_interfaces._metadata._BuddyMetadata">
-<em class="property">class </em><code class="sig-prename descclassname">fannypack.utils._buddy_interfaces._metadata.</code><code class="sig-name descname">_BuddyMetadata</code><span class="sig-paren">(</span><em class="sig-param">metadata_dir</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils._buddy_interfaces._metadata._BuddyMetadata" title="Permalink to this definition">¶</a></dt>
+<dt id="fannypack.utils._buddy_include._interfaces._metadata._BuddyMetadata">
+<em class="property">class </em><code class="sig-prename descclassname">fannypack.utils._buddy_include._interfaces._metadata.</code><code class="sig-name descname">_BuddyMetadata</code><span class="sig-paren">(</span><em class="sig-param">metadata_dir</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils._buddy_include._interfaces._metadata._BuddyMetadata" title="Permalink to this definition">¶</a></dt>
 <dd><p>Buddy’s experiment metadata management interface.</p>
 <dl class="method">
-<dt id="fannypack.utils._buddy_interfaces._metadata._BuddyMetadata.add_metadata">
-<code class="sig-name descname">add_metadata</code><span class="sig-paren">(</span><em class="sig-param">content</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils._buddy_interfaces._metadata._BuddyMetadata.add_metadata" title="Permalink to this definition">¶</a></dt>
+<dt id="fannypack.utils._buddy_include._interfaces._metadata._BuddyMetadata.add_metadata">
+<code class="sig-name descname">add_metadata</code><span class="sig-paren">(</span><em class="sig-param">content: dict</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils._buddy_include._interfaces._metadata._BuddyMetadata.add_metadata" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add human-readable metadata for this experiment. Input should be a
 dictionary that is merged with existing metadata.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="fannypack.utils._buddy_interfaces._metadata._BuddyMetadata.load_metadata">
-<code class="sig-name descname">load_metadata</code><span class="sig-paren">(</span><em class="sig-param">experiment_name=None</em>, <em class="sig-param">metadata_dir=None</em>, <em class="sig-param">path=None</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils._buddy_interfaces._metadata._BuddyMetadata.load_metadata" title="Permalink to this definition">¶</a></dt>
+<dt id="fannypack.utils._buddy_include._interfaces._metadata._BuddyMetadata.load_metadata">
+<code class="sig-name descname">load_metadata</code><span class="sig-paren">(</span><em class="sig-param">experiment_name: str = None</em>, <em class="sig-param">metadata_dir: str = None</em>, <em class="sig-param">path: str = None</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils._buddy_include._interfaces._metadata._BuddyMetadata.load_metadata" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read existing metadata file.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="fannypack.utils._buddy_interfaces._metadata._BuddyMetadata.metadata">
-<em class="property">property </em><code class="sig-name descname">metadata</code><a class="headerlink" href="#fannypack.utils._buddy_interfaces._metadata._BuddyMetadata.metadata" title="Permalink to this definition">¶</a></dt>
+<dt id="fannypack.utils._buddy_include._interfaces._metadata._BuddyMetadata.metadata">
+<em class="property">property </em><code class="sig-name descname">metadata</code><a class="headerlink" href="#fannypack.utils._buddy_include._interfaces._metadata._BuddyMetadata.metadata" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read-only interface for experiment metadata.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="fannypack.utils._buddy_interfaces._metadata._BuddyMetadata.metadata_path">
-<em class="property">property </em><code class="sig-name descname">metadata_path</code><a class="headerlink" href="#fannypack.utils._buddy_interfaces._metadata._BuddyMetadata.metadata_path" title="Permalink to this definition">¶</a></dt>
+<dt id="fannypack.utils._buddy_include._interfaces._metadata._BuddyMetadata.metadata_path">
+<em class="property">property </em><code class="sig-name descname">metadata_path</code><a class="headerlink" href="#fannypack.utils._buddy_include._interfaces._metadata._BuddyMetadata.metadata_path" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read-only path to my metadata file.</p>
 </dd></dl>
 
+<dl class="attribute">
+<dt id="fannypack.utils._buddy_include._interfaces._metadata._BuddyMetadata.optimizer_steps">
+<code class="sig-name descname">optimizer_steps</code><em class="property"> = None</em><a class="headerlink" href="#fannypack.utils._buddy_include._interfaces._metadata._BuddyMetadata.optimizer_steps" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="method">
-<dt id="fannypack.utils._buddy_interfaces._metadata._BuddyMetadata.set_metadata">
-<code class="sig-name descname">set_metadata</code><span class="sig-paren">(</span><em class="sig-param">content</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils._buddy_interfaces._metadata._BuddyMetadata.set_metadata" title="Permalink to this definition">¶</a></dt>
+<dt id="fannypack.utils._buddy_include._interfaces._metadata._BuddyMetadata.set_metadata">
+<code class="sig-name descname">set_metadata</code><span class="sig-paren">(</span><em class="sig-param">content: dict</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils._buddy_include._interfaces._metadata._BuddyMetadata.set_metadata" title="Permalink to this definition">¶</a></dt>
 <dd><p>Assign human-readable metadata for this experiment. Input should be
 a dictionary that replaces existing metadata.</p>
 </dd></dl>

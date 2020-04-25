@@ -150,11 +150,11 @@
 <span id="fannypack-nn"></span><h1>fannypack.nn<a class="headerlink" href="#module-fannypack.nn.resblocks" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="fannypack.nn.resblocks.Base">
-<em class="property">class </em><code class="sig-prename descclassname">fannypack.nn.resblocks.</code><code class="sig-name descname">Base</code><span class="sig-paren">(</span><em class="sig-param">activation='relu'</em>, <em class="sig-param">activations_inplace=False</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.nn.resblocks.Base" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">fannypack.nn.resblocks.</code><code class="sig-name descname">Base</code><span class="sig-paren">(</span><em class="sig-param">activation: str = 'relu'</em>, <em class="sig-param">activations_inplace: bool = False</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.nn.resblocks.Base" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
 <dl class="method">
 <dt id="fannypack.nn.resblocks.Base.forward">
-<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">x</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.nn.resblocks.Base.forward" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">x: torch.Tensor</em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="headerlink" href="#fannypack.nn.resblocks.Base.forward" title="Permalink to this definition">¶</a></dt>
 <dd><p>ResBlock forward pass.</p>
 </dd></dl>
 
@@ -162,13 +162,13 @@
 
 <dl class="class">
 <dt id="fannypack.nn.resblocks.Conv2d">
-<em class="property">class </em><code class="sig-prename descclassname">fannypack.nn.resblocks.</code><code class="sig-name descname">Conv2d</code><span class="sig-paren">(</span><em class="sig-param">channels</em>, <em class="sig-param">bottleneck_channels=None</em>, <em class="sig-param">kernel_size=3</em>, <em class="sig-param">**resblock_base_args</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.nn.resblocks.Conv2d" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">fannypack.nn.resblocks.</code><code class="sig-name descname">Conv2d</code><span class="sig-paren">(</span><em class="sig-param">channels: int</em>, <em class="sig-param">bottleneck_channels: int = None</em>, <em class="sig-param">kernel_size: int = 3</em>, <em class="sig-param">**resblock_base_args</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.nn.resblocks.Conv2d" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">fannypack.nn._resblocks.Base</span></code></p>
 </dd></dl>
 
 <dl class="class">
 <dt id="fannypack.nn.resblocks.Linear">
-<em class="property">class </em><code class="sig-prename descclassname">fannypack.nn.resblocks.</code><code class="sig-name descname">Linear</code><span class="sig-paren">(</span><em class="sig-param">units</em>, <em class="sig-param">bottleneck_units=None</em>, <em class="sig-param">**resblock_base_args</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.nn.resblocks.Linear" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">fannypack.nn.resblocks.</code><code class="sig-name descname">Linear</code><span class="sig-paren">(</span><em class="sig-param">units: int</em>, <em class="sig-param">bottleneck_units: int = None</em>, <em class="sig-param">**resblock_base_args</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.nn.resblocks.Linear" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">fannypack.nn._resblocks.Base</span></code></p>
 </dd></dl>
 

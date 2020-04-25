@@ -159,7 +159,7 @@
 <h1>TrajectoriesFile<a class="headerlink" href="#trajectoriesfile" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="fannypack.utils.TrajectoriesFile">
-<em class="property">class </em><code class="sig-prename descclassname">fannypack.utils.</code><code class="sig-name descname">TrajectoriesFile</code><span class="sig-paren">(</span><em class="sig-param">path</em>, <em class="sig-param">convert_doubles=True</em>, <em class="sig-param">read_only=True</em>, <em class="sig-param">compress=True</em>, <em class="sig-param">verbose=True</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils.TrajectoriesFile" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">fannypack.utils.</code><code class="sig-name descname">TrajectoriesFile</code><span class="sig-paren">(</span><em class="sig-param">path: str</em>, <em class="sig-param">convert_doubles: bool = True</em>, <em class="sig-param">read_only: bool = True</em>, <em class="sig-param">compress: bool = True</em>, <em class="sig-param">verbose: bool = True</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils.TrajectoriesFile" title="Permalink to this definition">¶</a></dt>
 <dd><p>An interface for reading/writing trajectory files using hdf5 files.</p>
 <p>Each TrajectoriesFile represents an iterable list of trajectories, where
 each trajectory is stored as a dictionary that maps <code class="docutils literal notranslate"><span class="pre">str</span></code> keys to
@@ -194,13 +194,13 @@ each trajectory is stored as a dictionary that maps <code class="docutils litera
 filesytem – need to be called within a <code class="docutils literal notranslate"><span class="pre">with</span></code> statement.</p>
 <dl class="method">
 <dt id="fannypack.utils.TrajectoriesFile.abandon_trajectory">
-<code class="sig-name descname">abandon_trajectory</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils.TrajectoriesFile.abandon_trajectory" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">abandon_trajectory</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#fannypack.utils.TrajectoriesFile.abandon_trajectory" title="Permalink to this definition">¶</a></dt>
 <dd><p>Abandon the current trajectory.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="fannypack.utils.TrajectoriesFile.add_meta">
-<code class="sig-name descname">add_meta</code><span class="sig-paren">(</span><em class="sig-param">content</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils.TrajectoriesFile.add_meta" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">add_meta</code><span class="sig-paren">(</span><em class="sig-param">content: Dict[str, numpy.ndarray]</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#fannypack.utils.TrajectoriesFile.add_meta" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add some metadata to the current trajectory.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -211,7 +211,7 @@ filesytem – need to be called within a <code class="docutils literal notransla
 
 <dl class="method">
 <dt id="fannypack.utils.TrajectoriesFile.add_timestep">
-<code class="sig-name descname">add_timestep</code><span class="sig-paren">(</span><em class="sig-param">content</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils.TrajectoriesFile.add_timestep" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">add_timestep</code><span class="sig-paren">(</span><em class="sig-param">content: Dict[str, numpy.ndarray]</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#fannypack.utils.TrajectoriesFile.add_timestep" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add a timestep to the current trajectory.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -222,13 +222,13 @@ filesytem – need to be called within a <code class="docutils literal notransla
 
 <dl class="method">
 <dt id="fannypack.utils.TrajectoriesFile.clear">
-<code class="sig-name descname">clear</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils.TrajectoriesFile.clear" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">clear</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#fannypack.utils.TrajectoriesFile.clear" title="Permalink to this definition">¶</a></dt>
 <dd><p>Clear the contents of the TrajectoriesFile.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="fannypack.utils.TrajectoriesFile.complete_trajectory">
-<code class="sig-name descname">complete_trajectory</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils.TrajectoriesFile.complete_trajectory" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">complete_trajectory</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#fannypack.utils.TrajectoriesFile.complete_trajectory" title="Permalink to this definition">¶</a></dt>
 <dd><p>Write the current trajectory to disk, and mark the start of a new
 trajectory.
 Must be called with the TrajectoriesFile object in a <code class="docutils literal notranslate"><span class="pre">with</span></code> statement.</p>
@@ -237,7 +237,7 @@ Must be called with the TrajectoriesFile object in a <code class="docutils liter
 
 <dl class="method">
 <dt id="fannypack.utils.TrajectoriesFile.get_all">
-<code class="sig-name descname">get_all</code><span class="sig-paren">(</span><em class="sig-param">key</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils.TrajectoriesFile.get_all" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_all</code><span class="sig-paren">(</span><em class="sig-param">key: str</em><span class="sig-paren">)</span> &#x2192; list<a class="headerlink" href="#fannypack.utils.TrajectoriesFile.get_all" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get contents associated with a key from all trajectories.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -251,7 +251,7 @@ Must be called with the TrajectoriesFile object in a <code class="docutils liter
 
 <dl class="method">
 <dt id="fannypack.utils.TrajectoriesFile.resize">
-<code class="sig-name descname">resize</code><span class="sig-paren">(</span><em class="sig-param">count</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils.TrajectoriesFile.resize" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">resize</code><span class="sig-paren">(</span><em class="sig-param">count: int</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils.TrajectoriesFile.resize" title="Permalink to this definition">¶</a></dt>
 <dd><p>Expand or contract our TrajectoriesFile.</p>
 </dd></dl>
 
