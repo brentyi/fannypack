@@ -5,28 +5,28 @@ import torch
 
 
 @overload
-def _convert(x: list, convert: Callable) -> list:  # pragma: no cover
-    ...
+def _convert(x: list, convert: Callable) -> list:
+    pass
 
 
 @overload
-def _convert(x: tuple, convert: Callable) -> tuple:  # pragma: no cover
-    ...
+def _convert(x: tuple, convert: Callable) -> tuple:
+    pass
 
 
 @overload
-def _convert(x: dict, convert: Callable) -> dict:  # pragma: no cover
-    ...
+def _convert(x: dict, convert: Callable) -> dict:
+    pass
 
 
 @overload
-def _convert(x: torch.Tensor, convert: Callable) -> torch.Tensor:  # pragma: no cover
-    ...
+def _convert(x: torch.Tensor, convert: Callable) -> torch.Tensor:
+    pass
 
 
 @overload
-def _convert(x: np.ndarray, convert: Callable) -> np.ndarray:  # pragma: no cover
-    ...
+def _convert(x: np.ndarray, convert: Callable) -> np.ndarray:
+    pass
 
 
 def _convert(x, convert):
@@ -53,31 +53,25 @@ def _convert(x, convert):
 
 
 @overload
-def to_device(
-    x: tuple, device: torch.device, detach: bool = False,
-) -> tuple:  # pragma: no cover
-    ...
+def to_device(x: tuple, device: torch.device, detach: bool = False,) -> tuple:
+    pass
 
 
 @overload
-def to_device(
-    x: list, device: torch.device, detach: bool = False,
-) -> list:  # pragma: no cover
-    ...
+def to_device(x: list, device: torch.device, detach: bool = False,) -> list:
+    pass
 
 
 @overload
-def to_device(
-    x: dict, device: torch.device, detach: bool = False,
-) -> dict:  # pragma: no cover
-    ...
+def to_device(x: dict, device: torch.device, detach: bool = False,) -> dict:
+    pass
 
 
 @overload
 def to_device(
     x: torch.Tensor, device: torch.device, detach: bool = False,
-) -> torch.Tensor:  # pragma: no cover
-    ...
+) -> torch.Tensor:
+    pass
 
 
 def to_device(
@@ -96,23 +90,23 @@ def to_device(
 
 
 @overload
-def to_torch(x: tuple, device: str = "cpu") -> tuple:  # pragma: no cover
-    ...
+def to_torch(x: tuple, device: str = "cpu") -> tuple:
+    pass
 
 
 @overload
-def to_torch(x: list, device: str = "cpu") -> list:  # pragma: no cover
-    ...
+def to_torch(x: list, device: str = "cpu") -> list:
+    pass
 
 
 @overload
-def to_torch(x: dict, device: str = "cpu") -> dict:  # pragma: no cover
-    ...
+def to_torch(x: dict, device: str = "cpu") -> dict:
+    pass
 
 
 @overload
-def to_torch(x: np.ndarray, device: str = "cpu") -> np.ndarray:  # pragma: no cover
-    ...
+def to_torch(x: np.ndarray, device: str = "cpu") -> np.ndarray:
+    pass
 
 
 def to_torch(x, device="cpu"):
@@ -132,23 +126,23 @@ def to_torch(x, device="cpu"):
 
 
 @overload
-def to_numpy(x: tuple) -> tuple:  # pragma: no cover
-    ...
+def to_numpy(x: tuple) -> tuple:
+    pass
 
 
 @overload
-def to_numpy(x: list) -> list:  # pragma: no cover
-    ...
+def to_numpy(x: list) -> list:
+    pass
 
 
 @overload
-def to_numpy(x: dict) -> dict:  # pragma: no cover
-    ...
+def to_numpy(x: dict) -> dict:
+    pass
 
 
 @overload
-def to_numpy(x: np.ndarray) -> np.ndarray:  # pragma: no cover
-    ...
+def to_numpy(x: np.ndarray) -> np.ndarray:
+    pass
 
 
 def to_numpy(x):

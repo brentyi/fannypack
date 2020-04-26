@@ -69,7 +69,7 @@ class Buddy(
         self._verbose = True
 
         # Use GPU for training if available.
-        if torch.cuda.is_available():  # pragma: no cover
+        if torch.cuda.is_available():
             self._device = torch.device("cuda")
             model.cuda()
         else:
@@ -86,7 +86,7 @@ class Buddy(
         _BuddyLogging.__init__(self, log_dir)
         _BuddyOptimizer.__init__(self, optimizer_type, optimizer_checkpoint_interval)
 
-        if optimizer_names != None:  # pragma: no cover
+        if optimizer_names != None:
             warnings.warn(
                 "The optimizer_names field is no longer needed, and will be "
                 "removed in a future version!",
