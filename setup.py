@@ -16,7 +16,15 @@ setup(
     packages=find_packages(exclude=["examples", "tests"]),
     package_data={"fannypack": ["py.typed"]},
     python_requires=">=3.7",
-    install_requires=["dill", "h5py", "numpy", "pyyaml", "tensorboard", "torch",],
+    install_requires=[
+        "dill",
+        "h5py",
+        "numpy",
+        "pyyaml",
+        "tensorboard",
+        "torch",
+        "pillow",  # Needed for logging images in Tensorboard
+    ],
     classifiers=[
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
