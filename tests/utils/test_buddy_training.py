@@ -19,8 +19,6 @@ def test_buddy_train(simple_buddy_temporary_data):
 
     # Try using LR scheduler interface
     buddy.set_learning_rate(lambda steps: 1e-3)
-    buddy.set_learning_rate(1e-3)
-    buddy.set_learning_rate(lambda steps: 1e-3)
 
     for _ in range(200):
         # Optimize
