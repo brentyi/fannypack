@@ -10,6 +10,18 @@ import fannypack
 from ..fixtures import simple_buddy_temporary_data
 
 
+def test_buddy_log_scopes(simple_buddy_temporary_data):
+    """Check that log scope function as expected.
+    """
+    model, buddy, data, labels = simple_buddy_temporary_data
+
+    with buddy.log_scope("scope0"):
+        buddy.log_scope_push("scope1")
+        with buddy.log_scope("scope2"):
+            assert buddy.log_scope_prefix("name") == "scope0/scope1/scope2/name"
+            buddy.log_image("garbage_image", np.zeros((3, 32, 32), dtype=np.float32))
+        buddy.log_scope_pop("scope1")
+
 def test_buddy_train(simple_buddy_temporary_data):
     """Make sure Buddy losses go down.
     """
@@ -29,8 +41,7 @@ def test_buddy_train(simple_buddy_temporary_data):
 
         # Log for tensorboard
         with buddy.log_scope("scope"):
-            buddy.log("loss", loss)
-            buddy.log_image("garbage_image", np.zeros((3, 32, 32), dtype=np.float32))
+            buddy.log_scalar("loss", loss)
 
     assert buddy.optimizer_steps == 200
 

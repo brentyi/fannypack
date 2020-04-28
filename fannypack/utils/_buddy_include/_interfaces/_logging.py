@@ -99,7 +99,18 @@ class _BuddyLogging(_BuddyForwardDeclarations):
         image: Union[torch.Tensor, np.ndarray],
         dataformats: str = "CHW",
     ) -> None:
-        """Log an image tensor for visualization in TensorBoard.
+        """Convenience function for logging an image tensor for visualization in
+        TensorBoard.
+
+        Equivalent to:
+        ```
+        buddy.log_writer.add_image(
+            buddy.log_scope_prefix(name),
+            image,
+            buddy.optimizer_steps,
+            dataformats
+        )
+        ```
 
         Args:
             name (str): Identifier for Tensorboard.
@@ -107,33 +118,65 @@ class _BuddyLogging(_BuddyForwardDeclarations):
             dataformats (str, optional): Dimension ordering. Defaults to "CHW".
         """
         # Add scope prefixes
-        if len(self._log_scopes) > 0:
-            name = "{}/{}".format("/".join(self._log_scopes), name)
+        name = self.log_scope_prefix(name)
 
         # Log scalar
-        self._lazy_log_writer.add_image(
+        self.log_writer.add_image(
             name, image, global_step=self.optimizer_steps, dataformats=dataformats
         )
 
     def log_scalar(
         self, name: str, value: Union[torch.Tensor, np.ndarray, float]
     ) -> None:
-        """Log a scalar for visualization in TensorBoard.
+        """Convenience function for logging a scalar for visualization in TensorBoard.
+
+        Equivalent to:
+        ```
+        buddy.log_writer.add_scalar(
+            buddy.log_scope_prefix(name),
+            value,
+            buddy.optimizer_steps
+        )
+        ```
 
         Args:
             name (str): Identifier for Tensorboard.
             value (torch.Tensor, np.ndarray, or float): Value to log.
         """
         # Add scope prefixes
-        if len(self._log_scopes) > 0:
-            name = "{}/{}".format("/".join(self._log_scopes), name)
+        name = self.log_scope_prefix(name)
 
         # Log scalar
-        self._lazy_log_writer.add_scalar(name, value, global_step=self.optimizer_steps)
+        self.log_writer.add_scalar(name, value, global_step=self.optimizer_steps)
+
+    def log_scope_prefix(self, name: str = "") -> str:
+        """Get or apply the current log scope prefix.
+
+        Example usage:
+        ```
+        print(buddy.log_scope_prefix()) # ""
+
+        with buddy.log_scope("scope0"):
+            print(buddy.log_scope_prefix("loss")) # "scope0/loss"
+
+            with buddy.log_scope("scope1"):
+                print(buddy.log_scope_prefix()) # "scope0/scope1/"
+        ```
+
+        Args:
+            name (str, optional): Name to prepend a prefix to. Defaults to an empty string.
+
+        Returns:
+            str: Scoped log name, or scope prefix if input is empty.
+        """
+        if len(self._log_scopes) == 0:
+            return name
+        else:
+            return "{}/{}".format("/".join(self._log_scopes), name)
 
     @property
-    def _lazy_log_writer(self):
-        """ Lazy instantiation for Tensorboard writer.
+    def log_writer(self) -> torch.utils.tensorboard.SummaryWriter:
+        """Accessor for standard Tensorboard SummaryWriter. Instantiated lazily.
         """
         if self._log_writer is None:
             self._log_writer = torch.utils.tensorboard.SummaryWriter(
