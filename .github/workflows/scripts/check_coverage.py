@@ -40,9 +40,9 @@ TOTAL                                                   658    311    53%
 
 """
 
-import sys
-import os
 import argparse
+import os
+import sys
 
 # Accept argument for required coverage percentage
 parser = argparse.ArgumentParser()

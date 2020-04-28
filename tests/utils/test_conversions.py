@@ -1,7 +1,8 @@
-import fannypack
 import numpy as np
 import pytest
 import torch
+
+import fannypack
 
 
 @pytest.fixture

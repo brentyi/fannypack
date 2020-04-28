@@ -1,11 +1,13 @@
-import pytest
-import fannypack
-import numpy as np
 import os
+
+import numpy as np
+import pytest
 import torch
 import torch.nn.functional as F
 
-from ..fixtures import simple_buddy, resblock_buddy_temporary_data
+import fannypack
+
+from ..fixtures import resblock_buddy_temporary_data, simple_buddy
 
 
 def test_buddy_metadata(resblock_buddy_temporary_data):

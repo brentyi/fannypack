@@ -1,7 +1,7 @@
 import pytest
+import torch
 
 import fannypack
-import torch
 
 from ..fixtures import simple_net
 

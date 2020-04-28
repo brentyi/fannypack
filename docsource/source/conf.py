@@ -15,6 +15,8 @@
 import os
 import sys
 
+import m2r
+
 # -- Project information -----------------------------------------------------
 
 project = "fannypack"
@@ -177,8 +179,6 @@ texinfo_documents = [
 todo_include_todos = True
 
 # -- Enable Markdown -> RST conversion ----------------------------------------
-
-import m2r
 
 
 def docstring(app, what, name, obj, options, lines):

@@ -1,5 +1,6 @@
-import fannypack
 import torch.nn as nn
+
+import fannypack
 
 
 class SimpleNet(nn.Module):

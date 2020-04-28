@@ -1,8 +1,9 @@
+import os
+
+import numpy as np
 import pytest
 
 import fannypack
-import os
-import numpy as np
 
 
 @pytest.fixture()
