@@ -4,15 +4,20 @@ from typing import Callable
 
 def deprecation_wrapper(message: str, function_or_class: Callable) -> Callable:
     """Creates a wrapper for a deprecated function or class. Prints a warning
-    when the function or class is called.
+    the first time a function or class is called.
 
     Args:
         message (str): Warning message.
         function_or_class (callable): Function or class to wrap.
     """
 
+    warned = False
+
     def curried(*args, **kwargs):  # pragma: no cover
-        warnings.warn(message, DeprecationWarning, stacklevel=2)
+        nonlocal warned
+        if not warned:
+            warnings.warn(message, DeprecationWarning, stacklevel=2)
+            warned = True
         return function_or_class(*args, **kwargs)
 
     return curried
@@ -21,8 +26,8 @@ def deprecation_wrapper(message: str, function_or_class: Callable) -> Callable:
 def new_name_wrapper(
     old_name: str, new_name: str, function_or_class: Callable
 ) -> Callable:
-    """Creates a wrapper for a renamed function or class. Prints a warning when
-    the function or class is called with the old name.
+    """Creates a wrapper for a renamed function or class. Prints a warning the first
+    time a function or class is called with the old name.
 
     Args:
         old_name (str): Old name of function or class. Printed in warning.

@@ -29,7 +29,7 @@ def test_buddy_train(simple_buddy_temporary_data):
 
         # Log for tensorboard
         with buddy.log_scope("scope"):
-            buddy.log_scalar("loss", loss)
+            buddy.log("loss", loss)
             buddy.log_image("garbage_image", np.zeros((3, 32, 32), dtype=np.float32))
 
     assert buddy.optimizer_steps == 200
