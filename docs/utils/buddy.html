@@ -299,10 +299,32 @@ the checkpoint with the highest number of training iterations.</p>
 <em class="property">class </em><code class="sig-prename descclassname">fannypack.utils._buddy_include._interfaces._logging.</code><code class="sig-name descname">_BuddyLogging</code><span class="sig-paren">(</span><em class="sig-param">log_dir: str</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils._buddy_include._interfaces._logging._BuddyLogging" title="Permalink to this definition">¶</a></dt>
 <dd><p>Buddy’s TensorBoard logging interface.</p>
 <dl class="method">
-<dt id="fannypack.utils._buddy_include._interfaces._logging._BuddyLogging.log">
-<code class="sig-name descname">log</code><span class="sig-paren">(</span><em class="sig-param">name: str</em>, <em class="sig-param">value</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#fannypack.utils._buddy_include._interfaces._logging._BuddyLogging.log" title="Permalink to this definition">¶</a></dt>
-<dd><p>Log a tensor for visualization in TensorBoard. Currently only
-supports scalars.</p>
+<dt id="fannypack.utils._buddy_include._interfaces._logging._BuddyLogging.log_image">
+<code class="sig-name descname">log_image</code><span class="sig-paren">(</span><em class="sig-param">name: str, image: Union[torch.Tensor, np.ndarray], dataformats: str = 'CHW'</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#fannypack.utils._buddy_include._interfaces._logging._BuddyLogging.log_image" title="Permalink to this definition">¶</a></dt>
+<dd><p>Log an image tensor for visualization in TensorBoard.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – Identifier for Tensorboard.</p></li>
+<li><p><strong>image</strong> (<em>torch.Tensor</em><em> or </em><em>np.ndarray</em>) – Image to log.</p></li>
+<li><p><strong>dataformats</strong> (<em>str</em><em>, </em><em>optional</em>) – Dimension ordering. Defaults to “CHW”.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="fannypack.utils._buddy_include._interfaces._logging._BuddyLogging.log_scalar">
+<code class="sig-name descname">log_scalar</code><span class="sig-paren">(</span><em class="sig-param">name: str, value: Union[torch.Tensor, np.ndarray, float]</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#fannypack.utils._buddy_include._interfaces._logging._BuddyLogging.log_scalar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Log a scalar for visualization in TensorBoard.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – Identifier for Tensorboard.</p></li>
+<li><p><strong>value</strong> (<em>torch.Tensor</em><em>, </em><em>np.ndarray</em><em>, or </em><em>float</em>) – Value to log.</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
@@ -315,12 +337,25 @@ supports scalars.</p>
     <span class="n">buddy</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s2">&quot;loss&quot;</span><span class="p">,</span> <span class="n">loss_tensor</span><span class="p">)</span>
 </pre></div>
 </div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>scope</strong> (<em>str</em>) – Name of scope.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>_LogNamespace</em> – Object for automatically pushing/popping scope.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="fannypack.utils._buddy_include._interfaces._logging._BuddyLogging.log_scope_pop">
 <code class="sig-name descname">log_scope_pop</code><span class="sig-paren">(</span><em class="sig-param">scope: Optional[str] = None</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#fannypack.utils._buddy_include._interfaces._logging._BuddyLogging.log_scope_pop" title="Permalink to this definition">¶</a></dt>
 <dd><p>Pop a scope we logged tensors into. See <code class="docutils literal notranslate"><span class="pre">log_scope_push()</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>scope</strong> (<em>str</em><em>, </em><em>optional</em>) – Name of scope. Needs to be the top one in the stack.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
@@ -328,12 +363,15 @@ supports scalars.</p>
 <code class="sig-name descname">log_scope_push</code><span class="sig-paren">(</span><em class="sig-param">scope: str</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#fannypack.utils._buddy_include._interfaces._logging._BuddyLogging.log_scope_push" title="Permalink to this definition">¶</a></dt>
 <dd><p>Push a scope to log tensors into.</p>
 <p>Example usage:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">buddy</span><span class="o">.</span><span class="n">log_scope_push</span><span class="p">(</span><span class="s2">&quot;scope&quot;</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>    <span class="n">buddy</span><span class="o">.</span><span class="n">log_scope_push</span><span class="p">(</span><span class="s2">&quot;scope&quot;</span><span class="p">)</span>
 
-<span class="c1"># Logs to scope/loss</span>
-<span class="n">buddy</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s2">&quot;loss&quot;</span><span class="p">,</span> <span class="n">loss_tensor</span><span class="p">)</span>
+    <span class="c1"># Logs to scope/loss</span>
+    <span class="n">buddy</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s2">&quot;loss&quot;</span><span class="p">,</span> <span class="n">loss_tensor</span><span class="p">)</span>
 
-<span class="n">buddy</span><span class="o">.</span><span class="n">log_scope_pop</span><span class="p">(</span><span class="s2">&quot;scope&quot;</span><span class="p">)</span> <span class="c1"># name parameter is optional</span>
+    <span class="n">buddy</span><span class="o">.</span><span class="n">log_scope_pop</span><span class="p">(</span><span class="s2">&quot;scope&quot;</span><span class="p">)</span> <span class="c1"># name parameter is optional</span>
+
+<span class="p">:</span><span class="n">param</span> <span class="n">scope</span><span class="p">:</span> <span class="n">Name</span> <span class="n">of</span> <span class="n">scope</span><span class="o">.</span>
+<span class="p">:</span><span class="nb">type</span> <span class="n">scope</span><span class="p">:</span> <span class="nb">str</span>
 </pre></div>
 </div>
 </dd></dl>
