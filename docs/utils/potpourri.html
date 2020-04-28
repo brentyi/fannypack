@@ -218,7 +218,7 @@ Otherwise, only unfreezes immediate parameters.</p></li>
 <dt id="fannypack.utils.deprecation_wrapper">
 <code class="sig-prename descclassname">fannypack.utils.</code><code class="sig-name descname">deprecation_wrapper</code><span class="sig-paren">(</span><em class="sig-param">message: str</em>, <em class="sig-param">function_or_class: Callable</em><span class="sig-paren">)</span> &#x2192; Callable<a class="headerlink" href="#fannypack.utils.deprecation_wrapper" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates a wrapper for a deprecated function or class. Prints a warning
-when the function or class is called.</p>
+the first time a function or class is called.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -232,8 +232,8 @@ when the function or class is called.</p>
 <dl class="function">
 <dt id="fannypack.utils.new_name_wrapper">
 <code class="sig-prename descclassname">fannypack.utils.</code><code class="sig-name descname">new_name_wrapper</code><span class="sig-paren">(</span><em class="sig-param">old_name: str</em>, <em class="sig-param">new_name: str</em>, <em class="sig-param">function_or_class: Callable</em><span class="sig-paren">)</span> &#x2192; Callable<a class="headerlink" href="#fannypack.utils.new_name_wrapper" title="Permalink to this definition">¶</a></dt>
-<dd><p>Creates a wrapper for a renamed function or class. Prints a warning when
-the function or class is called with the old name.</p>
+<dd><p>Creates a wrapper for a renamed function or class. Prints a warning the first
+time a function or class is called with the old name.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
