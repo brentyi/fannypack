@@ -3,10 +3,10 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import List, Optional, Union
 
+import numpy as np
 import torch.utils.tensorboard
 
-import fannypack
-
+from ... import _deprecation
 from .._forward_declarations import _BuddyForwardDeclarations
 
 
@@ -37,7 +37,7 @@ class _BuddyLogging(_BuddyForwardDeclarations):
         self._log_dir = log_dir
 
         # Backwards-compatibility for deprecated API
-        self.log = fannypack.utils.new_name_wrapper(
+        self.log = _deprecation.new_name_wrapper(
             "Buddy.log()", "Buddy.log_scalar()", self.log_scalar
         )
 
