@@ -300,7 +300,7 @@ the checkpoint with the highest number of training iterations.</p>
 <dd><p>Buddy’s TensorBoard logging interface.</p>
 <dl class="method">
 <dt id="fannypack.utils._buddy_include._interfaces._logging._BuddyLogging.log_image">
-<code class="sig-name descname">log_image</code><span class="sig-paren">(</span><em class="sig-param">name: str, image: Union[torch.Tensor, np.ndarray], dataformats: str = 'CHW'</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#fannypack.utils._buddy_include._interfaces._logging._BuddyLogging.log_image" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">log_image</code><span class="sig-paren">(</span><em class="sig-param">name: str, image: Union[torch.Tensor, numpy.ndarray], dataformats: str = 'CHW'</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#fannypack.utils._buddy_include._interfaces._logging._BuddyLogging.log_image" title="Permalink to this definition">¶</a></dt>
 <dd><p>Log an image tensor for visualization in TensorBoard.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -315,7 +315,7 @@ the checkpoint with the highest number of training iterations.</p>
 
 <dl class="method">
 <dt id="fannypack.utils._buddy_include._interfaces._logging._BuddyLogging.log_scalar">
-<code class="sig-name descname">log_scalar</code><span class="sig-paren">(</span><em class="sig-param">name: str, value: Union[torch.Tensor, np.ndarray, float]</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#fannypack.utils._buddy_include._interfaces._logging._BuddyLogging.log_scalar" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">log_scalar</code><span class="sig-paren">(</span><em class="sig-param">name: str, value: Union[torch.Tensor, numpy.ndarray, float]</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#fannypack.utils._buddy_include._interfaces._logging._BuddyLogging.log_scalar" title="Permalink to this definition">¶</a></dt>
 <dd><p>Log a scalar for visualization in TensorBoard.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -334,7 +334,7 @@ the checkpoint with the highest number of training iterations.</p>
 <p>Example usage:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">buddy</span><span class="o">.</span><span class="n">log_scope</span><span class="p">(</span><span class="s2">&quot;scope&quot;</span><span class="p">):</span>
     <span class="c1"># Logs to scope/loss</span>
-    <span class="n">buddy</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s2">&quot;loss&quot;</span><span class="p">,</span> <span class="n">loss_tensor</span><span class="p">)</span>
+    <span class="n">buddy</span><span class="o">.</span><span class="n">log_scalar</span><span class="p">(</span><span class="s2">&quot;loss&quot;</span><span class="p">,</span> <span class="n">loss_tensor</span><span class="p">)</span>
 </pre></div>
 </div>
 <dl class="field-list simple">
@@ -366,7 +366,7 @@ the checkpoint with the highest number of training iterations.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>    <span class="n">buddy</span><span class="o">.</span><span class="n">log_scope_push</span><span class="p">(</span><span class="s2">&quot;scope&quot;</span><span class="p">)</span>
 
     <span class="c1"># Logs to scope/loss</span>
-    <span class="n">buddy</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s2">&quot;loss&quot;</span><span class="p">,</span> <span class="n">loss_tensor</span><span class="p">)</span>
+    <span class="n">buddy</span><span class="o">.</span><span class="n">log_scalar</span><span class="p">(</span><span class="s2">&quot;loss&quot;</span><span class="p">,</span> <span class="n">loss_tensor</span><span class="p">)</span>
 
     <span class="n">buddy</span><span class="o">.</span><span class="n">log_scope_pop</span><span class="p">(</span><span class="s2">&quot;scope&quot;</span><span class="p">)</span> <span class="c1"># name parameter is optional</span>
 

@@ -42,7 +42,7 @@ class _BuddyLogging(_BuddyForwardDeclarations):
         )
 
         # State variables for TensorBoard
-        # Note that the writer is lazily instantiated in TrainingBuddy.log()
+        # Note that the writer is lazily instantiated; see below
         self._log_writer: Optional[torch.utils.tensorboard.SummaryWriter] = None
         self._log_scopes: List[str] = []
 
@@ -54,7 +54,7 @@ class _BuddyLogging(_BuddyForwardDeclarations):
         ```
             with buddy.log_scope("scope"):
                 # Logs to scope/loss
-                buddy.log("loss", loss_tensor)
+                buddy.log_scalar("loss", loss_tensor)
         ```
 
         Args:
@@ -73,7 +73,7 @@ class _BuddyLogging(_BuddyForwardDeclarations):
             buddy.log_scope_push("scope")
 
             # Logs to scope/loss
-            buddy.log("loss", loss_tensor)
+            buddy.log_scalar("loss", loss_tensor)
 
             buddy.log_scope_pop("scope") # name parameter is optional
 
