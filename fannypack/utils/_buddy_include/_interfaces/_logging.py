@@ -1,13 +1,15 @@
 from __future__ import annotations
 
+import abc
 from dataclasses import dataclass
-from typing import List, Optional, Union
+from typing import List, Optional, Union, cast
 
 import numpy as np
 import torch.utils.tensorboard
 
 from ... import _deprecation
 from .._forward_declarations import _BuddyForwardDeclarations
+from ._optimizer import _BuddyOptimizer
 
 
 @dataclass
@@ -24,7 +26,7 @@ class _LogNamespace:
         return
 
 
-class _BuddyLogging(_BuddyForwardDeclarations):
+class _BuddyLogging(_BuddyForwardDeclarations, abc.ABC):
     """Buddy's TensorBoard logging interface.
     """
 
@@ -121,8 +123,9 @@ class _BuddyLogging(_BuddyForwardDeclarations):
         name = self.log_scope_prefix(name)
 
         # Log scalar
+        optimizer_steps = cast(_BuddyOptimizer, self).optimizer_steps
         self.log_writer.add_image(
-            name, image, global_step=self.optimizer_steps, dataformats=dataformats
+            name, image, global_step=optimizer_steps, dataformats=dataformats
         )
 
     def log_scalar(
@@ -147,7 +150,8 @@ class _BuddyLogging(_BuddyForwardDeclarations):
         name = self.log_scope_prefix(name)
 
         # Log scalar
-        self.log_writer.add_scalar(name, value, global_step=self.optimizer_steps)
+        optimizer_steps = cast(_BuddyOptimizer, self).optimizer_steps
+        self.log_writer.add_scalar(name, value, global_step=optimizer_steps)
 
     def log_scope_prefix(self, name: str = "") -> str:
         """Get or apply the current log scope prefix.

@@ -1,19 +1,24 @@
+from __future__ import annotations
+
+import abc
 import glob
 import os
 import pathlib
 import signal
 import warnings
-from typing import Any, Dict, List, Union, cast
+from typing import TYPE_CHECKING, Any, Dict, List, Union, cast
 
 import dill
 import numpy as np
 import torch
 
 from .._forward_declarations import _BuddyForwardDeclarations
-from ._optimizer import _BuddyOptimizer
+
+if TYPE_CHECKING:
+    from ._optimizer import _BuddyOptimizer
 
 
-class _BuddyCheckpointing(_BuddyForwardDeclarations):
+class _BuddyCheckpointing(_BuddyForwardDeclarations, abc.ABC):
     """Buddy's model checkpointing interface.
     """
 
@@ -35,8 +40,9 @@ class _BuddyCheckpointing(_BuddyForwardDeclarations):
         # Determine path to checkpoint file
         unlabeled = False
         if path is None and label is None:
+            optimizer_steps = cast("_BuddyOptimizer", self).optimizer_steps
             path = "{}/{}-{:016d}.ckpt".format(
-                self._checkpoint_dir, self._experiment_name, self.optimizer_steps,
+                self._checkpoint_dir, self._experiment_name, optimizer_steps,
             )
 
             if (
@@ -66,10 +72,12 @@ class _BuddyCheckpointing(_BuddyForwardDeclarations):
         # > Training steps
         # > Buddy configuration
         optimizer_states = {}
-        for name, optimizer in self._optimizer_dict.items():
+
+        for name, optimizer in cast("_BuddyOptimizer", self)._optimizer_dict.items():
             optimizer_states[name] = optimizer.state_dict()
+
         state = {
-            "optimizer_config": self._optimizer_config,
+            "optimizer_config": cast("_BuddyOptimizer", self)._optimizer_config,
             "optimizer_states": optimizer_states,
             "state_dict": self._model.state_dict(),
         }
@@ -161,7 +169,7 @@ class _BuddyCheckpointing(_BuddyForwardDeclarations):
 
         if target is None:
             target = source
-        _BuddyOptimizer._instantiate_optimizer(cast(_BuddyOptimizer, self), target)
+        cast("_BuddyOptimizer", self)._instantiate_optimizer(target)
 
         # Find and read our checkpoint file
         checkpoint = self._read_checkpoint_file(label, path, experiment_name)
@@ -172,11 +180,15 @@ class _BuddyCheckpointing(_BuddyForwardDeclarations):
         assert (
             source in checkpoint["optimizer_states"].keys()
         ), "Nonexistent source optimizer!"
-        assert target in self._optimizer_dict.keys(), "Nonexistent target optimizer!"
+        assert (
+            target in cast("_BuddyOptimizer", self)._optimizer_dict.keys()
+        ), "Nonexistent target optimizer!"
 
         # Load optimizer state
         state_dict = checkpoint["optimizer_states"][source]
-        self._optimizer_dict[target].load_state_dict(state_dict)
+        cast("_BuddyOptimizer", self)._optimizer_dict[target].load_state_dict(
+            state_dict
+        )
         self._print(f"Loaded optimizer: {source} => {target}")
 
     def load_checkpoint_optimizers(
@@ -218,7 +230,8 @@ class _BuddyCheckpointing(_BuddyForwardDeclarations):
         assert len(missing) == 0
         assert len(unexpected) == 0
 
-        self._print("Loaded checkpoint at step:", self.optimizer_steps)
+        optimizer_steps = cast("_BuddyOptimizer", self).optimizer_steps
+        self._print("Loaded checkpoint at step:", optimizer_steps)
         return
 
     @property
@@ -251,16 +264,19 @@ class _BuddyCheckpointing(_BuddyForwardDeclarations):
 
     def _load_checkpoint_optimizers(self, checkpoint: Dict[str, Any]) -> None:
         # Load Buddy optimizer configuration
+        optimizer_config = cast("_BuddyOptimizer", self)._optimizer_config
         for key, value in checkpoint["optimizer_config"].items():
-            if key not in self._optimizer_config.keys():
+            if key not in optimizer_config.keys():
                 warnings.warn(f"Skipping invalid configuration key: {key}={value}")
                 continue
-            self._optimizer_config[key] = value
+            optimizer_config[key] = value
 
         # Instantiate optimizers & load state
         for name, state_dict in checkpoint["optimizer_states"].items():
-            _BuddyOptimizer._instantiate_optimizer(cast(_BuddyOptimizer, self), name)
-            self._optimizer_dict[name].load_state_dict(state_dict)
+            cast("_BuddyOptimizer", self)._instantiate_optimizer(name)
+            cast("_BuddyOptimizer", self)._optimizer_dict[name].load_state_dict(
+                state_dict
+            )
 
     def _read_checkpoint_file(
         self, label: str = None, path: str = None, experiment_name: str = None
@@ -331,7 +347,7 @@ class _BuddyCheckpointing(_BuddyForwardDeclarations):
         # Sanity check: optimizer type should typically be consistent
         if (
             checkpoint["optimizer_config"]["optimizer_type"]
-            != self._optimizer_config["optimizer_type"]
+            != cast("_BuddyOptimizer", self)._optimizer_config["optimizer_type"]
         ):
             warnings.warn("Checkpoint loading: overriding optimizer type.")
 

@@ -54,7 +54,7 @@ class Buddy(
         log_dir: str = "logs",
         optimizer_type: str = "adam",
         optimizer_checkpoint_interval: float = 300,
-        optimizer_names: Any = None,  # Deprecated!
+        optimizer_names: List[str] = None,  # Deprecated!
         verbose: bool = True,
     ) -> None:
         """Constructor
