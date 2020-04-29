@@ -159,19 +159,19 @@
 <h1>SliceWrapper<a class="headerlink" href="#slicewrapper" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="fannypack.utils.SliceWrapper">
-<em class="property">class </em><code class="sig-prename descclassname">fannypack.utils.</code><code class="sig-name descname">SliceWrapper</code><span class="sig-paren">(</span><em class="sig-param">data</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils.SliceWrapper" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">fannypack.utils.</code><code class="sig-name descname">SliceWrapper</code><span class="sig-paren">(</span><em class="sig-param">data: Union[numpy.ndarray, torch.Tensor, Iterable, Dict[Any, Union[numpy.ndarray, torch.Tensor, Iterable]]]</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils.SliceWrapper" title="Permalink to this definition">¶</a></dt>
 <dd><p>Wrapper for manipulating the contents of dictionaries that contain
 same-length iterables.</p>
 <p>Nice for slicing/indexing into/appending to groups of Python lists, numpy
 arrays, torch tensors, etc.</p>
 <dl class="method">
 <dt id="fannypack.utils.SliceWrapper.append">
-<code class="sig-name descname">append</code><span class="sig-paren">(</span><em class="sig-param">other</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils.SliceWrapper.append" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">append</code><span class="sig-paren">(</span><em class="sig-param">other: Any</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#fannypack.utils.SliceWrapper.append" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="fannypack.utils.SliceWrapper.convert_to_numpy">
-<code class="sig-name descname">convert_to_numpy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils.SliceWrapper.convert_to_numpy" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">convert_to_numpy</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#fannypack.utils.SliceWrapper.convert_to_numpy" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -181,7 +181,7 @@ arrays, torch tensors, etc.</p>
 
 <dl class="method">
 <dt id="fannypack.utils.SliceWrapper.extend">
-<code class="sig-name descname">extend</code><span class="sig-paren">(</span><em class="sig-param">other</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils.SliceWrapper.extend" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">extend</code><span class="sig-paren">(</span><em class="sig-param">other: Union[numpy.ndarray, torch.Tensor, Iterable, Dict[Any, Union[numpy.ndarray, torch.Tensor, Iterable]]]</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils.SliceWrapper.extend" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">

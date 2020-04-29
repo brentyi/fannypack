@@ -1,4 +1,4 @@
-# TODO: this class has grown somewhat organially and is pretty messy; could use a more
+# TODO: this class has grown somewhat organically and is pretty messy; could use a more
 # intentional rewrite
 
 from typing import Any, Dict, Iterable, List, Tuple, Union, cast
