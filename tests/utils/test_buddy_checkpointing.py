@@ -21,7 +21,7 @@ def test_buddy_checkpoint_labels(simple_buddy):
     """Make sure Buddy can list the existing checkpoint labels.
     """
     model, buddy, data, labels = simple_buddy
-    assert set(buddy.checkpoint_labels) == set(["new", "legacy"])
+    assert set(buddy.checkpoint_labels) == set(["0000000000000200", "new", "legacy"])
 
 
 def test_buddy_load_checkpoint_new_format_label(simple_buddy):
@@ -118,7 +118,16 @@ def test_buddy_load_missing_checkpoint(simple_buddy):
     model, buddy, data, labels = simple_buddy
 
     with pytest.raises(FileNotFoundError):
-        buddy.load_checkpoint()
+        buddy.load_checkpoint(experiment_name="invalid_experiment")
+
+
+def test_buddy_load_checkpoint_experiment_name(simple_buddy):
+    """Make sure Buddy can save/load a checkpoint.
+    """
+    model, buddy, data, labels = simple_buddy
+
+    buddy.load_checkpoint(experiment_name="simple_net")
+    assert buddy.optimizer_steps == 200
 
 
 def test_buddy_save_checkpoint(resblock_buddy_temporary_data):
@@ -204,6 +213,11 @@ def test_buddy_checkpoint_modules(resblock_buddy_temporary_data):
 
     # Load module parameters from our checkpoint file
     buddy.load_checkpoint_module(source="layer2", target="layer4")
+
+    # If we pass in just a single argument, we should be able to infer the target module
+    # Note that this is loading from a checkpoint we just saved, so this operation won't
+    # actually modify any parameters
+    buddy.load_checkpoint_module("layer2")
 
     # Check that layer parameters are now identical
     layer2_params = dict(model.layer2.named_parameters())

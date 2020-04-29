@@ -61,6 +61,30 @@ def test_append(wrapper):
     assert wrapper[-1] == new
 
 
+def test_extend_new():
+    """Checks extend interface
+    """
+    wrapper = fannypack.utils.SliceWrapper({})
+    new = {
+        "a": [5],
+        "b": [3],
+    }
+    wrapper.extend(new)
+    assert wrapper[-1:] == new
+
+
+def test_append_new():
+    """Checks append interface
+    """
+    wrapper = fannypack.utils.SliceWrapper({})
+    new = {
+        "a": 5,
+        "b": 3,
+    }
+    wrapper.append(new)
+    assert wrapper[-1] == new
+
+
 def test_extend(wrapper):
     """Checks extend interface
     """

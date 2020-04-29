@@ -31,6 +31,3 @@ jobs:
           flags: unittests
           name: codecov-umbrella
           fail_ci_if_error: true
-      - name: Run threshold script
-        run: |
-          pytest --cov=fannypack | python .github/workflows/scripts/check_coverage.py --percentage-threshold 90

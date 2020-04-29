@@ -93,7 +93,7 @@ class _BuddyOptimizer(_BuddyForwardDeclarations, abc.ABC):
         elif (
             time.time() - cast(float, self._optimizer_last_checkpoint_time)
             > self._optimizer_checkpoint_interval
-        ):
+        ):  # pragma: no cover
             # Checkpoint!
             cast("_BuddyCheckpointing", self).save_checkpoint()
             self._optimizer_last_checkpoint_time = time.time()

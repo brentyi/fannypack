@@ -15,12 +15,27 @@ def test_buddy_log_scopes(simple_buddy_temporary_data):
     """
     model, buddy, data, labels = simple_buddy_temporary_data
 
+    assert buddy.log_scope_prefix() == ""
     with buddy.log_scope("scope0"):
         buddy.log_scope_push("scope1")
         with buddy.log_scope("scope2"):
             assert buddy.log_scope_prefix("name") == "scope0/scope1/scope2/name"
             buddy.log_image("garbage_image", np.zeros((3, 32, 32), dtype=np.float32))
         buddy.log_scope_pop("scope1")
+
+def test_buddy_learning_rates(simple_buddy_temporary_data):
+    """Check that log scope function as expected.
+    """
+    model, buddy, data, labels = simple_buddy_temporary_data
+
+    buddy.set_learning_rate(1e-5)
+    assert buddy.get_learning_rate() == 1e-5
+
+    buddy.set_learning_rate(lambda steps: 1e-3)
+    assert buddy.get_learning_rate() == 1e-3
+
+    buddy.set_learning_rate(1e-5)
+    assert buddy.get_learning_rate() == 1e-5
 
 
 def test_buddy_train(simple_buddy_temporary_data):
@@ -49,6 +64,7 @@ def test_buddy_train(simple_buddy_temporary_data):
     # Loss should at least have halved
     final_loss = F.mse_loss(model(data), labels)
     assert final_loss < initial_loss / 2.0
+    buddy.save_checkpoint()
 
 
 def test_buddy_train_multiloss_unstable(simple_buddy_temporary_data):

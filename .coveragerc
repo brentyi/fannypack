@@ -15,3 +15,9 @@ exclude_lines =
 
     # or cuda stuff
     cuda
+
+    # or typing imports
+    TYPE_CHECKING
+
+    # or assert statements
+    assert

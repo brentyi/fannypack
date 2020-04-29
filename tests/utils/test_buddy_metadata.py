@@ -18,7 +18,7 @@ def test_buddy_metadata(resblock_buddy_temporary_data):
     # Check initial metadata state
     assert buddy.metadata == {}
 
-    buddy.add_metadata({"number": 5})
+    buddy.set_metadata({"number": 5})
     buddy.add_metadata({"string": "words words"})
 
     # Load from file that was saved

@@ -129,8 +129,6 @@ class _BuddyCheckpointing(_BuddyForwardDeclarations, abc.ABC):
 
         # Find and read our checkpoint file
         checkpoint = self._read_checkpoint_file(label, path, experiment_name)
-        if checkpoint is None:
-            return
 
         # Get possible target modules
         module_dict = dict(self._model.named_modules())
@@ -173,8 +171,6 @@ class _BuddyCheckpointing(_BuddyForwardDeclarations, abc.ABC):
 
         # Find and read our checkpoint file
         checkpoint = self._read_checkpoint_file(label, path, experiment_name)
-        if checkpoint is None:
-            return
 
         # Sanity check
         assert (
@@ -202,8 +198,6 @@ class _BuddyCheckpointing(_BuddyForwardDeclarations, abc.ABC):
 
         # Find and read our checkpoint file
         checkpoint = self._read_checkpoint_file(label, path, experiment_name)
-        if checkpoint is None:
-            return
 
         # Load optimizer state
         self._load_checkpoint_optimizers(checkpoint)
@@ -219,8 +213,6 @@ class _BuddyCheckpointing(_BuddyForwardDeclarations, abc.ABC):
 
         # Find and read our checkpoint file
         checkpoint = self._read_checkpoint_file(label, path, experiment_name)
-        if checkpoint is None:
-            return
 
         # Load optimizer state
         self._load_checkpoint_optimizers(checkpoint)
@@ -266,10 +258,10 @@ class _BuddyCheckpointing(_BuddyForwardDeclarations, abc.ABC):
         # Load Buddy optimizer configuration
         optimizer_config = cast("_BuddyOptimizer", self)._optimizer_config
         for key, value in checkpoint["optimizer_config"].items():
-            if key not in optimizer_config.keys():
+            if key in optimizer_config.keys():
+                optimizer_config[key] = value
+            else:
                 warnings.warn(f"Skipping invalid configuration key: {key}={value}")
-                continue
-            optimizer_config[key] = value
 
         # Instantiate optimizers & load state
         for name, state_dict in checkpoint["optimizer_states"].items():

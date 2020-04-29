@@ -109,13 +109,15 @@ def simple_buddy_temporary_data():
     # Construct neural net, training buddy
     simple_net = SimpleNet()
     buddy = fannypack.utils.Buddy(
-        "simple_net",
+        "temporary_net",
         simple_net,
         # Use directories relative to this fixture
         checkpoint_dir=os.path.join(os.path.dirname(__file__), "tmp/data/checkpoints/"),
         metadata_dir=os.path.join(os.path.dirname(__file__), "tmp/data/metadata/"),
         log_dir=os.path.join(os.path.dirname(__file__), "tmp/data/log/"),
         verbose=True,
+        # Disable auto-checkpointing
+        optimizer_checkpoint_interval=0,
     )
 
     # Batch size
