@@ -1,31 +1,23 @@
-from typing import Callable, Union, cast, overload
+from typing import Callable, Dict, List, Tuple, TypeVar, Union, cast, overload
 
 import numpy as np
 import torch
 
+# General Container template; used by all conversion functions
+Container = TypeVar("Container", List, Tuple, Dict)
 
+
+# Private conversion helper: recursively calls a conversion function on all inputs
+# within any nested set of containers
 @overload
-def _convert(x: list, convert: Callable) -> list:
+def _convert(x: Container, convert: Callable) -> Container:
     pass
 
 
 @overload
-def _convert(x: tuple, convert: Callable) -> tuple:
-    pass
-
-
-@overload
-def _convert(x: dict, convert: Callable) -> dict:
-    pass
-
-
-@overload
-def _convert(x: torch.Tensor, convert: Callable) -> torch.Tensor:
-    pass
-
-
-@overload
-def _convert(x: np.ndarray, convert: Callable) -> np.ndarray:
+def _convert(
+    x: Union[torch.Tensor, np.ndarray], convert: Callable
+) -> Union[torch.Tensor, np.ndarray]:
     pass
 
 
@@ -53,30 +45,18 @@ def _convert(x, convert):
 
 
 @overload
-def to_device(x: tuple, device: torch.device, detach: bool = False,) -> tuple:
-    pass
-
-
-@overload
-def to_device(x: list, device: torch.device, detach: bool = False,) -> list:
-    pass
-
-
-@overload
-def to_device(x: dict, device: torch.device, detach: bool = False,) -> dict:
-    pass
+def to_device(x: Container, device: torch.device, detach: bool = False,) -> Container:
+    ...
 
 
 @overload
 def to_device(
     x: torch.Tensor, device: torch.device, detach: bool = False,
 ) -> torch.Tensor:
-    pass
+    ...
 
 
-def to_device(
-    x, device, detach=False,
-):
+def to_device(x, device, detach=False):
     """Copies a tensor, list of tensors, or dict of tensors to a different
     device.
     """
@@ -90,22 +70,12 @@ def to_device(
 
 
 @overload
-def to_torch(x: tuple, device: str = "cpu") -> tuple:
+def to_torch(x: Container, device: str = "cpu") -> Container:
     pass
 
 
 @overload
-def to_torch(x: list, device: str = "cpu") -> list:
-    pass
-
-
-@overload
-def to_torch(x: dict, device: str = "cpu") -> dict:
-    pass
-
-
-@overload
-def to_torch(x: np.ndarray, device: str = "cpu") -> np.ndarray:
+def to_torch(x: np.ndarray, device: str = "cpu") -> torch.Tensor:
     pass
 
 
@@ -126,22 +96,12 @@ def to_torch(x, device="cpu"):
 
 
 @overload
-def to_numpy(x: tuple) -> tuple:
+def to_numpy(x: Container) -> Container:
     pass
 
 
 @overload
-def to_numpy(x: list) -> list:
-    pass
-
-
-@overload
-def to_numpy(x: dict) -> dict:
-    pass
-
-
-@overload
-def to_numpy(x: np.ndarray) -> np.ndarray:
+def to_numpy(x: torch.Tensor) -> np.ndarray:
     pass
 
 

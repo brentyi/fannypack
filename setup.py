@@ -20,10 +20,12 @@ setup(
         "dill",
         "h5py",
         "numpy",
+        "numpy-stubs @ https://github.com/numpy/numpy-stubs/tarball/master",
         "pyyaml",
         "tensorboard",
         "torch",
         "pillow",  # Needed for logging images in Tensorboard
+        "pip>=20.1",
     ],
     classifiers=[
         "Programming Language :: Python :: 3.7",

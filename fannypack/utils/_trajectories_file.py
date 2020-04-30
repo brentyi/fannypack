@@ -136,16 +136,17 @@ class TrajectoriesFile:
         assert traj_key in self._file.keys()
 
         # Copy values to numpy array
-        output = {}
+        output: Dict[str, Union[np.ndarray, str]] = {}
         for key, value in self._file[traj_key].items():
             # Conversion
-            output[key] = np.array(value)
-            assert type(output[key]) == np.ndarray
+            converted_value = np.array(value)
 
             # Numpy strings => native strings
-            if output[key].dtype.type is np.string_:
+            if converted_value.dtype.type is np.string_:
                 # Decode
-                output[key] = bytes(output[key]).decode("utf-8")
+                output[key] = bytes(converted_value).decode("utf-8")
+            else:
+                output[key] = converted_value
 
         return output
 
