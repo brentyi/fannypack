@@ -46,14 +46,14 @@ def _convert(x, convert):
 
 @overload
 def to_device(x: Container, device: torch.device, detach: bool = False,) -> Container:
-    ...
+    pass
 
 
 @overload
 def to_device(
     x: torch.Tensor, device: torch.device, detach: bool = False,
 ) -> torch.Tensor:
-    ...
+    pass
 
 
 def to_device(x, device, detach=False):
