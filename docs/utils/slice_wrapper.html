@@ -159,35 +159,125 @@
 <h1>SliceWrapper<a class="headerlink" href="#slicewrapper" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="fannypack.utils.SliceWrapper">
-<em class="property">class </em><code class="sig-prename descclassname">fannypack.utils.</code><code class="sig-name descname">SliceWrapper</code><span class="sig-paren">(</span><em class="sig-param">data: Union[numpy.ndarray, torch.Tensor, Iterable, Dict[Any, Union[numpy.ndarray, torch.Tensor, Iterable]]]</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils.SliceWrapper" title="Permalink to this definition">¶</a></dt>
-<dd><p>Wrapper for manipulating the contents of dictionaries that contain
-same-length iterables.</p>
-<p>Nice for slicing/indexing into/appending to groups of Python lists, numpy
-arrays, torch tensors, etc.</p>
+<em class="property">class </em><code class="sig-prename descclassname">fannypack.utils.</code><code class="sig-name descname">SliceWrapper</code><span class="sig-paren">(</span><em class="sig-param">data: T</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils.SliceWrapper" title="Permalink to this definition">¶</a></dt>
+<dd><p>A thin wrapper class for creating a unified interface for…</p>
+<ul class="simple">
+<li><p>Lists</p></li>
+<li><p>Tuples</p></li>
+<li><p>Torch tensors</p></li>
+<li><p>Numpy arrays</p></li>
+<li><p>Dictionaries containing a same-length group of any of the above</p></li>
+</ul>
+<p>This is primarily to make it easier to read, slice, and index into aligned blocks of
+time-series data organized as dictionaries, but we also expose an interface for
+calling <code class="docutils literal notranslate"><span class="pre">append</span></code> and <code class="docutils literal notranslate"><span class="pre">extend</span></code> on wrapped lists.</p>
 <dl class="method">
 <dt id="fannypack.utils.SliceWrapper.append">
 <code class="sig-name descname">append</code><span class="sig-paren">(</span><em class="sig-param">other: Any</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#fannypack.utils.SliceWrapper.append" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Append to the end of our data object.</p>
+<p>Only supported for wrapped lists and dictionaries containing lists.</p>
+<p>For wrapped lists, this is equivalent to <code class="docutils literal notranslate"><span class="pre">data.append(other)</span></code>.</p>
+<p>For dictionaries, <code class="docutils literal notranslate"><span class="pre">other</span></code> should be a dictionary.
+Behavior example…</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Data before append</span>
+<span class="p">{</span><span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span> <span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">]}</span>
 
-<dl class="method">
-<dt id="fannypack.utils.SliceWrapper.convert_to_numpy">
-<code class="sig-name descname">convert_to_numpy</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#fannypack.utils.SliceWrapper.convert_to_numpy" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<span class="c1"># Value of other</span>
+<span class="p">{</span><span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">}</span>
 
-<dl class="method">
+<span class="c1"># Data after append</span>
+<span class="p">{</span><span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span> <span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">3</span><span class="p">]}</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>other</strong> (<em>Any</em>) – Object to append.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
 <dt id="fannypack.utils.SliceWrapper.data">
-<em class="property">property </em><code class="sig-name descname">data</code><a class="headerlink" href="#fannypack.utils.SliceWrapper.data" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<code class="sig-name descname">data</code><em class="property">: T</em><em class="property"> = None</em><a class="headerlink" href="#fannypack.utils.SliceWrapper.data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrapped data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>list, tuple, torch.Tensor, np.ndarray, or dict</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="fannypack.utils.SliceWrapper.extend">
-<code class="sig-name descname">extend</code><span class="sig-paren">(</span><em class="sig-param">other: Union[numpy.ndarray, torch.Tensor, Iterable, Dict[Any, Union[numpy.ndarray, torch.Tensor, Iterable]]]</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils.SliceWrapper.extend" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<code class="sig-name descname">extend</code><span class="sig-paren">(</span><em class="sig-param">other: T</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#fannypack.utils.SliceWrapper.extend" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extend to the end of our data object.</p>
+<p>Only supported for wrapped lists and dictionaries containing lists.</p>
+<p>For wrapped lists, this is equivalent to <code class="docutils literal notranslate"><span class="pre">data.extend(other)</span></code>.</p>
+<p>For dictionaries, <code class="docutils literal notranslate"><span class="pre">other</span></code> should be a dictionary.
+Behavior example…</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Data before extend</span>
+<span class="p">{</span><span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span> <span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">]}</span>
+
+<span class="c1"># Value of other</span>
+<span class="p">{</span><span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">5</span><span class="p">],</span> <span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">3</span><span class="p">]}</span>
+
+<span class="c1"># Data after extend</span>
+<span class="p">{</span><span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span> <span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">3</span><span class="p">]}</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>other</strong> (<em>dict</em><em> or </em><em>list</em>) – Object to append.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="fannypack.utils.SliceWrapper.map">
+<code class="sig-name descname">map</code><span class="sig-paren">(</span><em class="sig-param">function</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils.SliceWrapper.map" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute a new SliceWrapper, with a function applied to all values within
+our wrapped data object.</p>
+<p>For iterables that are directly wrapped, this is equivalent to evaluating:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SliceWrapper</span><span class="p">(</span><span class="n">function</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>For dictionaries, <code class="docutils literal notranslate"><span class="pre">function</span></code> is applied value-wise.
+Thus, an input of…</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SliceWrapper</span><span class="p">({</span>
+    <span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="n">a</span><span class="p">,</span>
+    <span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="n">b</span><span class="p">,</span>
+<span class="p">})</span>
+</pre></div>
+</div>
+<p>would return…</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SliceWrapper</span><span class="p">({</span>
+    <span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="n">function</span><span class="p">(</span><span class="n">a</span><span class="p">),</span>
+    <span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="n">function</span><span class="p">(</span><span class="n">b</span><span class="p">),</span>
+<span class="p">})</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>function</strong> (<em>Callable</em>) – Function to map.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="fannypack.utils.SliceWrapper.shape">
 <em class="property">property </em><code class="sig-name descname">shape</code><a class="headerlink" href="#fannypack.utils.SliceWrapper.shape" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Unified interface for polling the shape of our wrapped object.</p>
+<p>For lists and tuples, this simply evaluates to <code class="docutils literal notranslate"><span class="pre">(len(data),)</span></code>.</p>
+<p>For Numpy arrays and torch tensors, we get <code class="docutils literal notranslate"><span class="pre">data.shape</span></code>.</p>
+<p>For dictionaries, we return a tuple containing all shared dimensions between
+our wrapped values, starting from the leftmost dimension.</p>
+<p>Args:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><em>Tuple[int, …]</em></p>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
