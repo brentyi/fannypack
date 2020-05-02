@@ -16,6 +16,8 @@ from typing import (
 import numpy as np
 import torch
 
+import fannypack
+
 _RawTypes = Union[List, Tuple, torch.Tensor, np.ndarray]
 DictType = Dict[Any, _RawTypes]
 
@@ -58,6 +60,16 @@ class SliceWrapper(Generic[T]):
         else:
             # Non-dictionary inputs
             assert type(data) in _raw_types, "Invalid datatype!"
+
+        # Backwards-compatibility
+        def convert_to_numpy():  # pragma: no cover
+            self.data = self.map(np.asarray).data
+
+        self.convert_to_numpy = fannypack.utils.deprecation_wrapper(
+            "SliceWrapper.convert_to_numpy() is deprecated -- please use "
+            "the functional SliceWrapper.map() interface instead!",
+            convert_to_numpy,
+        )
 
     def __getitem__(self, index: Any) -> Any:
         """Unified interface for indexing into our wrapped object.
