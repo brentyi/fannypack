@@ -38,7 +38,7 @@ def test_fixture(wrapper):
     """Fixture sanity check.
     """
     assert type(wrapper.data["a"]) == list
-    wrapper.convert_to_numpy()
+    wrapper = wrapper.map(np.asarray)
     assert type(wrapper.data["a"]) == np.ndarray
 
 
@@ -46,7 +46,7 @@ def test_fixture_thin(wrapper_thin):
     """Fixture sanity check.
     """
     assert type(wrapper_thin.data) == list
-    wrapper_thin.convert_to_numpy()
+    wrapper_thin = wrapper_thin.map(np.asarray)
     assert type(wrapper_thin.data) == np.ndarray
 
 
@@ -112,30 +112,6 @@ def test_extend_thin(wrapper_thin):
     assert wrapper_thin[-1:] == new
 
 
-def test_append_numpy(wrapper):
-    """Checks append interface (numpy)
-    """
-    new = {
-        "a": 5,
-        "b": 3,
-    }
-    wrapper.convert_to_numpy()
-    wrapper.append(new)
-    assert wrapper[-1] == new
-
-
-def test_extend_numpy(wrapper):
-    """Checks extend interface (numpy)
-    """
-    new = {
-        "a": [5],
-        "b": [3],
-    }
-    wrapper.convert_to_numpy()
-    wrapper.extend(new)
-    assert wrapper[-1:] == new
-
-
 def test_iterator(wrapper):
     """Check iterator interface.
     """
@@ -150,7 +126,7 @@ def test_iterator(wrapper):
 def test_iterator_numpy(wrapper):
     """Check iterator interface. (numpy)
     """
-    wrapper.convert_to_numpy()
+    wrapper = wrapper.map(np.asarray)
     counter = 0
     for x in wrapper:
         assert type(x) == dict
@@ -172,7 +148,7 @@ def test_iterator_thin(wrapper_thin):
 def test_iterator_numpy_thin(wrapper_thin):
     """Check iterator interface. (numpy)
     """
-    wrapper_thin.convert_to_numpy()
+    wrapper_thin = wrapper_thin.map(np.asarray)
     counter = 0
     for x in wrapper_thin:
         assert type(x) == np.int64
@@ -184,7 +160,7 @@ def test_len(wrapper):
     """Check `len()` output.
     """
     assert len(wrapper) == 4
-    wrapper.convert_to_numpy()
+    wrapper = wrapper.map(np.asarray)
     assert len(wrapper) == 4
 
 
@@ -192,7 +168,7 @@ def test_shape(wrapper):
     """Check `shape` property.
     """
     assert wrapper.shape == (4,)
-    wrapper.convert_to_numpy()
+    wrapper = wrapper.map(np.asarray)
     assert wrapper.shape == (4,)
 
 
@@ -218,7 +194,7 @@ def test_read_slice(wrapper):
 def test_read_slice_numpy(wrapper):
     """Check that we can read slices of our wrappers (numpy).
     """
-    wrapper.convert_to_numpy()
+    wrapper = wrapper.map(np.asarray)
 
     assert np.allclose(wrapper[::1]["a"], [1, 2, 3, 4])
     assert np.allclose(wrapper[::1]["b"], [5, 6, 7, 8])
@@ -240,7 +216,7 @@ def test_write_slice(wrapper):
 def test_write_slice_numpy(wrapper):
     """Check that we can write to slices for wrappers containing numpy arrays.
     """
-    wrapper.convert_to_numpy()
+    wrapper = wrapper.map(np.asarray)
 
     wrapper[::1]["a"][::2] = 0
 
