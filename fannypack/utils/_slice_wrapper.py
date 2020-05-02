@@ -18,11 +18,10 @@ import torch
 
 import fannypack
 
-_RawTypes = Union[List, Tuple, torch.Tensor, np.ndarray]
-DictType = Dict[Any, _RawTypes]
-
 _raw_types = set([list, tuple, np.ndarray, torch.Tensor])
 
+
+DictType = Dict[Any, Union[List, Tuple, torch.Tensor, np.ndarray]]
 T = TypeVar("T", List, Tuple, torch.Tensor, np.ndarray, DictType)
 
 

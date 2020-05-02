@@ -1,13 +1,13 @@
 from typing import Iterable, List, Tuple, Union, cast
 
 
-def squeeze(x, axis: Union[int, Tuple[int]] = None):
+def squeeze(x, axis: Union[int, Tuple[int, ...]] = None):
     """Generic squeeze function.
     """
     if type(axis) == int:
-        axis = cast(Tuple[int], (axis,))
+        axis = cast(Tuple[int, ...], (axis,))
     else:
-        axis = cast(Tuple[int], axis)
+        axis = cast(Tuple[int, ...], axis)
 
     slices: List[Union[int, slice]] = []
     for i, dim in enumerate(x.shape):
