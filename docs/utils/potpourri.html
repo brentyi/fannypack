@@ -159,28 +159,77 @@
 <span id="potpourri"></span><h1>Potpourri<a class="headerlink" href="#module-fannypack.utils" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="fannypack.utils.squeeze">
-<code class="sig-prename descclassname">fannypack.utils.</code><code class="sig-name descname">squeeze</code><span class="sig-paren">(</span><em class="sig-param">x</em>, <em class="sig-param">axis: Union[int</em>, <em class="sig-param">Tuple[int</em>, <em class="sig-param">...]] = None</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils.squeeze" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">fannypack.utils.</code><code class="sig-name descname">squeeze</code><span class="sig-paren">(</span><em class="sig-param">x: Any</em>, <em class="sig-param">axis: Union[int</em>, <em class="sig-param">Tuple[int</em>, <em class="sig-param">...]] = None</em><span class="sig-paren">)</span> &#x2192; Any<a class="headerlink" href="#fannypack.utils.squeeze" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generic squeeze function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>Any</em>) – Object to squeeze. Must have a <code class="docutils literal notranslate"><span class="pre">shape</span></code> attribute and be indexable with
+slices.</p></li>
+<li><p><strong>axis</strong> (<em>Union</em><em>[</em><em>int</em><em>, </em><em>Tuple</em><em>[</em><em>int</em><em>, </em><em>..</em><em>]</em><em>]</em><em>, </em><em>optional</em>) – Axis or axes to squeeze along.
+If None (default), squeezes all dimensions with value <code class="docutils literal notranslate"><span class="pre">1</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>Any</em> – Squeeze object.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
 <dt id="fannypack.utils.to_device">
 <code class="sig-prename descclassname">fannypack.utils.</code><code class="sig-name descname">to_device</code><span class="sig-paren">(</span><em class="sig-param">x</em>, <em class="sig-param">device</em>, <em class="sig-param">detach=False</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils.to_device" title="Permalink to this definition">¶</a></dt>
-<dd><p>Copies a tensor, list of tensors, or dict of tensors to a different
-device.</p>
+<dd><p>Move a torch tensor, list of tensors, or dict of tensors to a different device.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> – (torch.Tensor, list, tuple, or dict) Tensor or container of tensors to move.</p></li>
+<li><p><strong>device</strong> (<em>torch.device</em>) – Target device.</p></li>
+<li><p><strong>detach</strong> (<em>bool</em><em>, </em><em>optional</em>) – If set, detaches tensors after moving. Defaults to
+False.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>torch.Tensor, list, tuple, or dict</em> – Output, type will mirror input.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
 <dt id="fannypack.utils.to_numpy">
 <code class="sig-prename descclassname">fannypack.utils.</code><code class="sig-name descname">to_numpy</code><span class="sig-paren">(</span><em class="sig-param">x</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils.to_numpy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Converts a tensor, list of tensors, or dict of tensors for use in Numpy.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>x</strong> – (torch.Tensor, list, tuple, or dict) Tensor or container of tensors to
+convert to numpy.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>np.ndarray, list, tuple, or dict</em> – Output, type will mirror input.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
 <dt id="fannypack.utils.to_torch">
-<code class="sig-prename descclassname">fannypack.utils.</code><code class="sig-name descname">to_torch</code><span class="sig-paren">(</span><em class="sig-param">x</em>, <em class="sig-param">device='cpu'</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils.to_torch" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">fannypack.utils.</code><code class="sig-name descname">to_torch</code><span class="sig-paren">(</span><em class="sig-param">x</em>, <em class="sig-param">device='cpu'</em>, <em class="sig-param">convert_doubles_to_floats=True</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils.to_torch" title="Permalink to this definition">¶</a></dt>
 <dd><p>Converts a numpy array, list of numpy arrays, or dict of numpy arrays
 for use in PyTorch.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> – (np.ndarray, list, tuple, or dict) Array or container of arrays to convert to
+torch tensors.</p></li>
+<li><p><strong>device</strong> (<em>torch.device</em><em>, </em><em>optional</em>) – Torch device to create tensors on. Defaults to
+<code class="docutils literal notranslate"><span class="pre">&quot;cpu&quot;</span></code>.</p></li>
+<li><p><strong>convert_doubles_to_floats</strong> (<em>bool</em><em>, </em><em>optional</em>) – If set, converts 64-bit floats to
+32-bit. Defaults to True.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>torch.Tensor, list, tuple, or dict</em> – Output, type will mirror input.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
@@ -223,8 +272,11 @@ the first time a function or class is called.</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>message</strong> (<em>str</em>) – Warning message.</p></li>
-<li><p><strong>function_or_class</strong> (<em>callable</em>) – Function or class to wrap.</p></li>
+<li><p><strong>function_or_class</strong> (<em>Callable</em>) – Function or class to wrap.</p></li>
 </ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>Callable</em> – Wrapped function/class.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -239,8 +291,11 @@ time a function or class is called with the old name.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>old_name</strong> (<em>str</em>) – Old name of function or class. Printed in warning.</p></li>
 <li><p><strong>new_name</strong> (<em>str</em>) – New name of function or class. Printed in warning.</p></li>
-<li><p><strong>function_or_class</strong> (<em>callable</em>) – Function or class to wrap.</p></li>
+<li><p><strong>function_or_class</strong> (<em>Callable</em>) – Function or class to wrap.</p></li>
 </ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>Callable</em> – Wrapped function/class.</p>
 </dd>
 </dl>
 </dd></dl>
