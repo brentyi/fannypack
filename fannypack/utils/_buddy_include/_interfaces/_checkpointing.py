@@ -6,7 +6,7 @@ import os
 import pathlib
 import signal
 import warnings
-from typing import TYPE_CHECKING, Any, Dict, List, Union, cast
+from typing import TYPE_CHECKING, Any, Dict, List, cast
 
 import dill
 import numpy as np
@@ -141,7 +141,8 @@ class _BuddyCheckpointing(_BuddyForwardDeclarations, abc.ABC):
             key_prefix = f"{source}."
         for key, value in checkpoint["state_dict"].items():
             if key.startswith(key_prefix):
-                source_state_dict[key[len(key_prefix) :]] = value
+                prefix_length = len(key_prefix)
+                source_state_dict[key[prefix_length:]] = value
 
         # Load state dict
         missing, unexpected = module_dict[target].load_state_dict(source_state_dict)

@@ -1,8 +1,17 @@
-from typing import Iterable, List, Tuple, Union, cast
+from typing import Any, List, Tuple, Union, cast
 
 
-def squeeze(x, axis: Union[int, Tuple[int, ...]] = None):
+def squeeze(x: Any, axis: Union[int, Tuple[int, ...]] = None) -> Any:
     """Generic squeeze function.
+
+    Args:
+        x (Any): Object to squeeze. Must have a `shape` attribute and be indexable with
+            slices.
+        axis (Union[int, Tuple[int, ...]], optional): Axis or axes to squeeze along.
+            If None (default), squeezes all dimensions with value `1`.
+
+    Returns:
+        Any: Squeeze object.
     """
     if type(axis) == int:
         axis = cast(Tuple[int, ...], (axis,))

@@ -51,8 +51,8 @@ class SliceWrapper(Generic[T]):
             content_length = None
             content_type = None
             for value in data_dict.values():
-                assert content_length == None or len(value) == content_length
-                assert content_type == None or type(value) == content_type
+                assert content_length is None or len(value) == content_length
+                assert content_type is None or type(value) == content_type
                 content_length = len(value)
                 content_type = type(value)
                 assert content_type in _raw_types

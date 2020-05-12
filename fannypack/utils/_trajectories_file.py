@@ -1,4 +1,4 @@
-from typing import Any, Dict, Optional, Union, cast
+from typing import Any, Dict, Optional, Union
 
 import h5py
 import numpy as np
@@ -216,7 +216,7 @@ class TrajectoriesFile:
             # Expand
             for index in range(self._trajectory_count, count):
                 traj_key = self._trajectory_prefix + str(index)
-                group = self._file.create_group(traj_key)
+                self._file.create_group(traj_key)
 
         elif self._trajectory_count > count:
             # Contract

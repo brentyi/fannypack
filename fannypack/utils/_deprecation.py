@@ -8,7 +8,10 @@ def deprecation_wrapper(message: str, function_or_class: Callable) -> Callable:
 
     Args:
         message (str): Warning message.
-        function_or_class (callable): Function or class to wrap.
+        function_or_class (Callable): Function or class to wrap.
+
+    Returns:
+        Callable: Wrapped function/class.
     """
 
     warned = False
@@ -32,7 +35,10 @@ def new_name_wrapper(
     Args:
         old_name (str): Old name of function or class. Printed in warning.
         new_name (str): New name of function or class. Printed in warning.
-        function_or_class (callable): Function or class to wrap.
+        function_or_class (Callable): Function or class to wrap.
+
+    Returns:
+        Callable: Wrapped function/class.
     """
     return deprecation_wrapper(
         f"{old_name} is deprecated! Use {new_name} instead.", function_or_class

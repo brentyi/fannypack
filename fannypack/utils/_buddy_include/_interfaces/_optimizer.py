@@ -80,14 +80,14 @@ class _BuddyOptimizer(_BuddyForwardDeclarations, abc.ABC):
         self._optimizer_config["global_steps"] += 1
 
         # Autocheckpoint procedure
-        if checkpoint_interval == None:
+        if checkpoint_interval is None:
             checkpoint_interval = self._optimizer_checkpoint_interval
 
         # Disable autocheckpoint if interval is 0
         if checkpoint_interval == 0:
             return
 
-        if self._optimizer_last_checkpoint_time == None:
+        if self._optimizer_last_checkpoint_time is None:
             # First iteration
             self._optimizer_last_checkpoint_time = time.time()
         elif (

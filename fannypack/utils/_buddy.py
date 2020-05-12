@@ -1,5 +1,5 @@
 import warnings
-from typing import Any, Dict, List
+from typing import List
 
 import torch
 import torch.nn as nn
@@ -77,16 +77,15 @@ class Buddy(
         self._print("Using device:", self._device)
 
         # Call constructors for each of our interfaces.
-        # This sets up logging, checkpointing, and optimization-specific state.
+        # Sets up checkpointing, metadata, logging, and optimization-specific state.
         #
-        # State within each interface should be encapsulated. (exception:
-        # checkpointing automatically saves optimizer state)
+        # State within each interface should be encapsulated.
         _BuddyCheckpointing.__init__(self, checkpoint_dir, checkpoint_max_to_keep)
         _BuddyMetadata.__init__(self, metadata_dir)
         _BuddyLogging.__init__(self, log_dir)
         _BuddyOptimizer.__init__(self, optimizer_type, optimizer_checkpoint_interval)
 
-        if optimizer_names != None:
+        if optimizer_names is not None:
             warnings.warn(
                 "The optimizer_names field is no longer needed, and will be "
                 "removed in a future version!",

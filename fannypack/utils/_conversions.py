@@ -57,8 +57,16 @@ def to_device(
 
 
 def to_device(x, device, detach=False):
-    """Copies a tensor, list of tensors, or dict of tensors to a different
-    device.
+    """Move a torch tensor, list of tensors, or dict of tensors to a different device.
+
+    Args:
+        x: (torch.Tensor, list, tuple, or dict) Tensor or container of tensors to move.
+        device (torch.device): Target device.
+        detach (bool, optional): If set, detaches tensors after moving. Defaults to
+            False.
+
+    Returns:
+        torch.Tensor, list, tuple, or dict: Output, type will mirror input.
     """
 
     def convert(x):
@@ -79,15 +87,25 @@ def to_torch(x: np.ndarray, device: str = "cpu") -> torch.Tensor:
     pass
 
 
-def to_torch(x, device="cpu"):
+def to_torch(x, device="cpu", convert_doubles_to_floats=True):
     """Converts a numpy array, list of numpy arrays, or dict of numpy arrays
     for use in PyTorch.
+
+    Args:
+        x: (np.ndarray, list, tuple, or dict) Array or container of arrays to convert to
+            torch tensors.
+        device (torch.device, optional): Torch device to create tensors on. Defaults to
+            `"cpu"`.
+        convert_doubles_to_floats (bool, optional): If set, converts 64-bit floats to
+            32-bit. Defaults to True.
+
+    Returns:
+        torch.Tensor, list, tuple, or dict: Output, type will mirror input.
     """
 
     def convert(x: np.ndarray):
         output = torch.from_numpy(x)
-        if x.dtype == np.float64:
-            # This is maybe sketchy? Undocumented behavior?
+        if x.dtype == np.float64 and convert_doubles_to_floats:
             output = output.float()
         output = output.to(device)
         return output
@@ -107,6 +125,13 @@ def to_numpy(x: torch.Tensor) -> np.ndarray:
 
 def to_numpy(x):
     """Converts a tensor, list of tensors, or dict of tensors for use in Numpy.
+
+    Args:
+        x: (torch.Tensor, list, tuple, or dict) Tensor or container of tensors to
+            convert to numpy.
+
+    Returns:
+        np.ndarray, list, tuple, or dict: Output, type will mirror input.
     """
 
     def convert(x: torch.Tensor):
