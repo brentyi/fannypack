@@ -47,7 +47,7 @@ def test_buddy_load_checkpoint_new_format_path(simple_buddy):
         path=os.path.join(
             # Use path relative to this test
             os.path.dirname(__file__),
-            "../data/checkpoints/simple_net-new.ckpt",
+            "../assets/checkpoints/simple_net-new.ckpt",
         )
     )
     final_loss = F.mse_loss(model(data), labels)
@@ -81,7 +81,7 @@ def test_buddy_load_checkpoint_legacy_format_path(simple_buddy):
         path=os.path.join(
             # Use path relative to this test
             os.path.dirname(__file__),
-            "../data/checkpoints/simple_net-legacy.ckpt",
+            "../assets/checkpoints/simple_net-legacy.ckpt",
         )
     )
     final_loss = F.mse_loss(model(data), labels)

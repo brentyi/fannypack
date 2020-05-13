@@ -13,7 +13,7 @@ def trajectories_file_write():
 
     # Create object
     path = os.path.join(os.path.dirname(__file__), "temporary_trajectory.hdf5")
-    trajectories_file = fannypack.utils.TrajectoriesFile(path, read_only=False)
+    trajectories_file = fannypack.data.TrajectoriesFile(path, read_only=False)
 
     # Yield
     yield trajectories_file
@@ -28,8 +28,8 @@ def trajectories_file_read():
     """Fixture for reading from an existing trajectories file.
     """
 
-    path = os.path.join(os.path.dirname(__file__), "../data/trajectories/test.hdf5")
-    trajectories_file = fannypack.utils.TrajectoriesFile(path, read_only=True)
+    path = os.path.join(os.path.dirname(__file__), "../assets/trajectories/test.hdf5")
+    trajectories_file = fannypack.data.TrajectoriesFile(path, read_only=True)
     return trajectories_file
 
 
@@ -85,7 +85,7 @@ def test_write(trajectories_file_write):
         traj_file.resize(len(traj_file) - 1)
 
     # Open the file we just wrote to, and run standard read tests
-    traj_file = fannypack.utils.TrajectoriesFile(
+    traj_file = fannypack.data.TrajectoriesFile(
         trajectories_file_write._path, read_only=True
     )
     test_read(traj_file)
@@ -99,7 +99,7 @@ def test_write(trajectories_file_write):
         traj_file.clear()
 
     # Open the file we just wrote to, and run standard read tests
-    traj_file = fannypack.utils.TrajectoriesFile(
+    traj_file = fannypack.data.TrajectoriesFile(
         trajectories_file_write._path, read_only=True
     )
     assert len(traj_file) == 0

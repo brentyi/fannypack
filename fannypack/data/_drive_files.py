@@ -7,7 +7,7 @@ cache_path = os.path.expanduser("~/.cache/fannypack-drive-files")
 
 
 def set_cache_path(path: str):
-    """set_cache_path.
+    """Set the cache location for :func:`fannypack.data.cached_drive_file`.
 
     Args:
         cache_path (str): New location for cached files. Defaults to
@@ -22,7 +22,8 @@ def cached_drive_file(name: str, url: str) -> str:
     exist yet locally.
 
     By default, cached files live in `~/.cache/fannypack-drive-files/`. It often makes
-    sense to move this directory (eg for NFS's): see `fannypack.utils.set_cache_path()`.
+    sense to move this directory (eg to an NFS): see
+    :func:`fannypack.data.set_cache_path`.
 
     Args:
         name (str): Name of path, eg `secret_key.pem`.

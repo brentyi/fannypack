@@ -83,9 +83,9 @@ def simple_buddy():
         "simple_net",
         simple_net,
         # Use directories relative to this fixture
-        checkpoint_dir=os.path.join(os.path.dirname(__file__), "data/checkpoints/"),
-        metadata_dir=os.path.join(os.path.dirname(__file__), "data/metadata/"),
-        log_dir=os.path.join(os.path.dirname(__file__), "data/log/"),
+        checkpoint_dir=os.path.join(os.path.dirname(__file__), "assets/checkpoints/"),
+        metadata_dir=os.path.join(os.path.dirname(__file__), "assets/metadata/"),
+        log_dir=os.path.join(os.path.dirname(__file__), "assets/log/"),
         verbose=True,
     )
 
@@ -112,9 +112,9 @@ def simple_buddy_temporary_data():
         "temporary_net",
         simple_net,
         # Use directories relative to this fixture
-        checkpoint_dir=os.path.join(os.path.dirname(__file__), "tmp/data/checkpoints/"),
-        metadata_dir=os.path.join(os.path.dirname(__file__), "tmp/data/metadata/"),
-        log_dir=os.path.join(os.path.dirname(__file__), "tmp/data/log/"),
+        checkpoint_dir=os.path.join(os.path.dirname(__file__), "tmp/assets/checkpoints/"),
+        metadata_dir=os.path.join(os.path.dirname(__file__), "tmp/assets/metadata/"),
+        log_dir=os.path.join(os.path.dirname(__file__), "tmp/assets/log/"),
         verbose=True,
         # Disable auto-checkpointing
         optimizer_checkpoint_interval=0,
@@ -152,9 +152,9 @@ def resblock_buddy_temporary_data():
         "resblock_net",
         resblock_net,
         # Use directories relative to this fixture
-        checkpoint_dir=os.path.join(os.path.dirname(__file__), "tmp/data/checkpoints/"),
-        metadata_dir=os.path.join(os.path.dirname(__file__), "tmp/data/metadata/"),
-        log_dir=os.path.join(os.path.dirname(__file__), "tmp/data/log/"),
+        checkpoint_dir=os.path.join(os.path.dirname(__file__), "tmp/assets/checkpoints/"),
+        metadata_dir=os.path.join(os.path.dirname(__file__), "tmp/assets/metadata/"),
+        log_dir=os.path.join(os.path.dirname(__file__), "tmp/assets/log/"),
         verbose=True,
     )
 

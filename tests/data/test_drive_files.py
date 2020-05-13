@@ -10,11 +10,11 @@ import fannypack
 def test_cached_drive_file():
 
     # Move the cache to a temporary directory
-    fannypack.utils.set_cache_path("tmp/hahah")
+    fannypack.data.set_cache_path("tmp")
 
     # Load file for the first time
     start_time = time.time()
-    path0 = fannypack.utils.cached_drive_file(
+    path0 = fannypack.data.cached_drive_file(
         "secret_key.pem",
         "https://drive.google.com/file/d/1AsY9Cs3xE0RSlr0FKlnSKHp6zIwFSvXe/view",
     )
@@ -22,7 +22,7 @@ def test_cached_drive_file():
 
     # Load it a second
     start_time = time.time()
-    path1 = fannypack.utils.cached_drive_file(
+    path1 = fannypack.data.cached_drive_file(
         "secret_key.pem",
         "https://drive.google.com/file/d/1AsY9Cs3xE0RSlr0FKlnSKHp6zIwFSvXe/view",
     )
