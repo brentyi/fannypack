@@ -93,7 +93,7 @@ class _BuddyLogging(_BuddyForwardDeclarations, abc.ABC):
         """
         popped = self._log_scopes.pop()
         if scope is not None:
-            assert popped == scope
+            assert popped == scope, f"{popped} does not match {scope}!"
 
     def log_image(
         self,
