@@ -1,6 +1,8 @@
+from typing import Dict
+
 import torch.nn as nn
 
-_freeze_restore_values = {}
+_freeze_restore_values: Dict[nn.Module, Dict] = {}
 
 
 def freeze_module(module: nn.Module, recurse: bool = True) -> None:
