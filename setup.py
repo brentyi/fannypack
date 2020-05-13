@@ -24,7 +24,7 @@ setup(
         "pyyaml",
         "tensorboard",
         "torch",
-        "pillow",  # Needed for logging images in Tensorboard
+        "Pillow",  # Needed for logging images in Tensorboard
         "pip>=20.1",
     ],
     classifiers=[
