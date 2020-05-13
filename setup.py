@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name="fannypack",
-    version="0.0.5",
+    version="0.0.7",
     description="PyTorch utilities",
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -20,7 +20,7 @@ setup(
         "dill",
         "h5py",
         "numpy",
-        "numpy-stubs @ https://github.com/numpy/numpy-stubs/tarball/master",
+        # "numpy-stubs @ https://github.com/numpy/numpy-stubs/tarball/master",
         "pyyaml",
         "tensorboard",
         "torch",
