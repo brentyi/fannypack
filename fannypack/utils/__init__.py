@@ -1,6 +1,7 @@
 from ._buddy import Buddy
 from ._conversions import to_device, to_numpy, to_torch
 from ._deprecation import deprecation_wrapper, new_name_wrapper
+from ._drive_files import cached_drive_file, download_drive_file, set_cache_path
 from ._module_freezing import freeze_module, unfreeze_module
 from ._slice_wrapper import SliceWrapper
 from ._squeeze import squeeze
