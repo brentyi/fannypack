@@ -342,6 +342,10 @@ class TrajectoriesFile:
         """
         # Only print in verbose mode
         if self._verbose:
+            identifier = self._path
+            if len(identifier) > 20:
+                identifier = f"...{identifier[-17:]}"
+
             args = list(args)
-            args[0] = f"[TrajectoriesFile-{self._path}] {args[0]}"
+            args[0] = f"[TrajectoriesFile-{identifier}] {args[0]}"
             print(*args, **kwargs)
