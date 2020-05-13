@@ -98,8 +98,14 @@ def _drive_id_from_url(url: str) -> str:
         str: Google Drive ID.
     """
 
-    url_prefix = "https://drive.google.com/file/d/"
-    assert url.startswith(url_prefix)
-    parts = url[len(url_prefix) :].split("/")
-    assert len(parts) in (1, 2)
-    return parts[0]
+    url_prefixes = [
+        "https://drive.google.com/file/d/",
+        "https://drive.google.com/open?id="
+    ]
+
+    for prefix in url_prefixes:
+        if url.startswith(prefix):
+            parts = url[len(prefix) :].split("/")
+            assert len(parts) in (1, 2)
+            return parts[0]
+    assert False, f"Invalid Google Drive URL: {url}"
