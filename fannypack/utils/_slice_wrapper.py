@@ -18,14 +18,19 @@ import torch
 
 import fannypack
 
+# Valid raw types that we can wrap
 _raw_types = set([list, tuple, np.ndarray, torch.Tensor])
 
+# Alias for dictionary types
+DictType = Union[
+    Dict[Any, List], Dict[Any, Tuple], Dict[Any, torch.Tensor], Dict[Any, np.ndarray],
+]
 
-DictType = Dict[Any, Union[List, Tuple, torch.Tensor, np.ndarray]]
-T = TypeVar("T", List, Tuple, torch.Tensor, np.ndarray, DictType)
+# Alias for valid raw types that we can wrap
+InputType = Union[List, Tuple, torch.Tensor, np.ndarray, DictType]
 
 
-class SliceWrapper(Generic[T]):
+class SliceWrapper:
     """A thin wrapper class for creating a unified interface for...
     - Lists
     - Tuples
@@ -38,8 +43,8 @@ class SliceWrapper(Generic[T]):
     calling `append` and `extend` on wrapped lists.
     """
 
-    def __init__(self, data: T):
-        self.data: T = data
+    def __init__(self, data: InputType):
+        self.data = data
         """list, tuple, torch.Tensor, np.ndarray, or dict: Wrapped data."""
 
         # Sanity checks
@@ -171,7 +176,7 @@ class SliceWrapper(Generic[T]):
         else:
             assert False, "Append is only supported for wrapped lists"
 
-    def extend(self, other: T) -> None:
+    def extend(self, other: InputType) -> None:
         """Extend to the end of our data object.
 
         Only supported for wrapped lists and dictionaries containing lists.
@@ -214,19 +219,7 @@ class SliceWrapper(Generic[T]):
         else:
             assert False, "Extend is only supported for wrapped lists"
 
-    @overload
-    def map(
-        self: SliceWrapper[Any], function: Callable[[Any], Any]
-    ) -> SliceWrapper[Any]:
-        pass
-
-    @overload
-    def map(
-        self: SliceWrapper[DictType], function: Callable[[Any], Any]
-    ) -> SliceWrapper[DictType]:
-        pass
-
-    def map(self, function):
+    def map(self, function: Callable[[Any], Any]) -> SliceWrapper:
         """Compute a new SliceWrapper, with a function applied to all values within
         our wrapped data object.
 
