@@ -35,7 +35,7 @@
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="fannypack.nn" href="../nn/index.html" />
+    <link rel="next" title="fannypack.data" href="../data/index.html" />
     <link rel="prev" title="SliceWrapper" href="slice_wrapper.html" /> 
 </head>
 
@@ -83,11 +83,11 @@
               <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">fannypack.utils</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="buddy.html">Buddy</a></li>
-<li class="toctree-l2"><a class="reference internal" href="trajectories_file.html">TrajectoriesFile</a></li>
 <li class="toctree-l2"><a class="reference internal" href="slice_wrapper.html">SliceWrapper</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Potpourri</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../data/index.html">fannypack.data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../nn/index.html">fannypack.nn</a></li>
 </ul>
 
@@ -157,9 +157,9 @@
             
   <div class="section" id="module-fannypack.utils">
 <span id="potpourri"></span><h1>Potpourri<a class="headerlink" href="#module-fannypack.utils" title="Permalink to this headline">¶</a></h1>
-<dl class="function">
+<dl class="py function">
 <dt id="fannypack.utils.squeeze">
-<code class="sig-prename descclassname">fannypack.utils.</code><code class="sig-name descname">squeeze</code><span class="sig-paren">(</span><em class="sig-param">x: Any</em>, <em class="sig-param">axis: Union[int</em>, <em class="sig-param">Tuple[int</em>, <em class="sig-param">...]] = None</em><span class="sig-paren">)</span> &#x2192; Any<a class="headerlink" href="#fannypack.utils.squeeze" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">fannypack.utils.</code><code class="sig-name descname">squeeze</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span><span class="p">:</span> <span class="n">Any</span></em>, <em class="sig-param"><span class="n">axis</span><span class="p">:</span> <span class="n">Union[int, Tuple[int, …]]</span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; Any<a class="headerlink" href="#fannypack.utils.squeeze" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generic squeeze function.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -176,9 +176,9 @@ If None (default), squeezes all dimensions with value <code class="docutils lite
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="fannypack.utils.to_device">
-<code class="sig-prename descclassname">fannypack.utils.</code><code class="sig-name descname">to_device</code><span class="sig-paren">(</span><em class="sig-param">x</em>, <em class="sig-param">device</em>, <em class="sig-param">detach=False</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils.to_device" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">fannypack.utils.</code><code class="sig-name descname">to_device</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">device</span></em>, <em class="sig-param"><span class="n">detach</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils.to_device" title="Permalink to this definition">¶</a></dt>
 <dd><p>Move a torch tensor, list of tensors, or dict of tensors to a different device.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -195,9 +195,9 @@ False.</p></li>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="fannypack.utils.to_numpy">
-<code class="sig-prename descclassname">fannypack.utils.</code><code class="sig-name descname">to_numpy</code><span class="sig-paren">(</span><em class="sig-param">x</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils.to_numpy" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">fannypack.utils.</code><code class="sig-name descname">to_numpy</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils.to_numpy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Converts a tensor, list of tensors, or dict of tensors for use in Numpy.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -210,9 +210,9 @@ convert to numpy.</p>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="fannypack.utils.to_torch">
-<code class="sig-prename descclassname">fannypack.utils.</code><code class="sig-name descname">to_torch</code><span class="sig-paren">(</span><em class="sig-param">x</em>, <em class="sig-param">device='cpu'</em>, <em class="sig-param">convert_doubles_to_floats=True</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils.to_torch" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">fannypack.utils.</code><code class="sig-name descname">to_torch</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">device</span><span class="o">=</span><span class="default_value">'cpu'</span></em>, <em class="sig-param"><span class="n">convert_doubles_to_floats</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils.to_torch" title="Permalink to this definition">¶</a></dt>
 <dd><p>Converts a numpy array, list of numpy arrays, or dict of numpy arrays
 for use in PyTorch.</p>
 <dl class="field-list simple">
@@ -232,9 +232,9 @@ torch tensors.</p></li>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="fannypack.utils.freeze_module">
-<code class="sig-prename descclassname">fannypack.utils.</code><code class="sig-name descname">freeze_module</code><span class="sig-paren">(</span><em class="sig-param">module: torch.nn.modules.module.Module</em>, <em class="sig-param">recurse: bool = True</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#fannypack.utils.freeze_module" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">fannypack.utils.</code><code class="sig-name descname">freeze_module</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">module</span><span class="p">:</span> <span class="n">torch.nn.modules.module.Module</span></em>, <em class="sig-param"><span class="n">recurse</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#fannypack.utils.freeze_module" title="Permalink to this definition">¶</a></dt>
 <dd><p>Freeze the weights of a PyTorch module.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -247,9 +247,9 @@ Otherwise, only freezes immediate parameters.</p></li>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="fannypack.utils.unfreeze_module">
-<code class="sig-prename descclassname">fannypack.utils.</code><code class="sig-name descname">unfreeze_module</code><span class="sig-paren">(</span><em class="sig-param">module: torch.nn.modules.module.Module</em>, <em class="sig-param">recurse: bool = True</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#fannypack.utils.unfreeze_module" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">fannypack.utils.</code><code class="sig-name descname">unfreeze_module</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">module</span><span class="p">:</span> <span class="n">torch.nn.modules.module.Module</span></em>, <em class="sig-param"><span class="n">recurse</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#fannypack.utils.unfreeze_module" title="Permalink to this definition">¶</a></dt>
 <dd><p>Unfreeze the weights of a PyTorch module, which needs to have been
 frozen with <a class="reference internal" href="#fannypack.utils.freeze_module" title="fannypack.utils.freeze_module"><code class="xref py py-func docutils literal notranslate"><span class="pre">fannypack.utils.freeze_module()</span></code></a>.</p>
 <dl class="field-list simple">
@@ -263,9 +263,9 @@ Otherwise, only unfreezes immediate parameters.</p></li>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="fannypack.utils.deprecation_wrapper">
-<code class="sig-prename descclassname">fannypack.utils.</code><code class="sig-name descname">deprecation_wrapper</code><span class="sig-paren">(</span><em class="sig-param">message: str</em>, <em class="sig-param">function_or_class: Callable</em><span class="sig-paren">)</span> &#x2192; Callable<a class="headerlink" href="#fannypack.utils.deprecation_wrapper" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">fannypack.utils.</code><code class="sig-name descname">deprecation_wrapper</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">message</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">function_or_class</span><span class="p">:</span> <span class="n">Callable</span></em><span class="sig-paren">)</span> &#x2192; Callable<a class="headerlink" href="#fannypack.utils.deprecation_wrapper" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates a wrapper for a deprecated function or class. Prints a warning
 the first time a function or class is called.</p>
 <dl class="field-list simple">
@@ -281,9 +281,9 @@ the first time a function or class is called.</p>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="fannypack.utils.new_name_wrapper">
-<code class="sig-prename descclassname">fannypack.utils.</code><code class="sig-name descname">new_name_wrapper</code><span class="sig-paren">(</span><em class="sig-param">old_name: str</em>, <em class="sig-param">new_name: str</em>, <em class="sig-param">function_or_class: Callable</em><span class="sig-paren">)</span> &#x2192; Callable<a class="headerlink" href="#fannypack.utils.new_name_wrapper" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">fannypack.utils.</code><code class="sig-name descname">new_name_wrapper</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">old_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">new_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">function_or_class</span><span class="p">:</span> <span class="n">Callable</span></em><span class="sig-paren">)</span> &#x2192; Callable<a class="headerlink" href="#fannypack.utils.new_name_wrapper" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates a wrapper for a renamed function or class. Prints a warning the first
 time a function or class is called with the old name.</p>
 <dl class="field-list simple">
@@ -310,7 +310,7 @@ time a function or class is called with the old name.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../nn/index.html" class="btn btn-neutral float-right" title="fannypack.nn" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="../data/index.html" class="btn btn-neutral float-right" title="fannypack.data" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="slice_wrapper.html" class="btn btn-neutral float-left" title="SliceWrapper" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

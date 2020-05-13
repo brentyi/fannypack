@@ -36,7 +36,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Potpourri" href="potpourri.html" />
-    <link rel="prev" title="TrajectoriesFile" href="trajectories_file.html" /> 
+    <link rel="prev" title="Buddy" href="buddy.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -83,11 +83,11 @@
               <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">fannypack.utils</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="buddy.html">Buddy</a></li>
-<li class="toctree-l2"><a class="reference internal" href="trajectories_file.html">TrajectoriesFile</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">SliceWrapper</a></li>
 <li class="toctree-l2"><a class="reference internal" href="potpourri.html">Potpourri</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../data/index.html">fannypack.data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../nn/index.html">fannypack.nn</a></li>
 </ul>
 
@@ -157,9 +157,9 @@
             
   <div class="section" id="slicewrapper">
 <h1>SliceWrapper<a class="headerlink" href="#slicewrapper" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
+<dl class="py class">
 <dt id="fannypack.utils.SliceWrapper">
-<em class="property">class </em><code class="sig-prename descclassname">fannypack.utils.</code><code class="sig-name descname">SliceWrapper</code><span class="sig-paren">(</span><em class="sig-param">data: T</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils.SliceWrapper" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">fannypack.utils.</code><code class="sig-name descname">SliceWrapper</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>List<span class="p">, </span>Tuple<span class="p">, </span>torch.Tensor<span class="p">, </span>numpy.ndarray<span class="p">, </span>Dict<span class="p">[</span>Any<span class="p">, </span>List<span class="p">]</span><span class="p">, </span>Dict<span class="p">[</span>Any<span class="p">, </span>Tuple<span class="p">]</span><span class="p">, </span>Dict<span class="p">[</span>Any<span class="p">, </span>torch.Tensor<span class="p">]</span><span class="p">, </span>Dict<span class="p">[</span>Any<span class="p">, </span>numpy.ndarray<span class="p">]</span><span class="p">]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils.SliceWrapper" title="Permalink to this definition">¶</a></dt>
 <dd><p>A thin wrapper class for creating a unified interface for…</p>
 <ul class="simple">
 <li><p>Lists</p></li>
@@ -171,9 +171,9 @@
 <p>This is primarily to make it easier to read, slice, and index into aligned blocks of
 time-series data organized as dictionaries, but we also expose an interface for
 calling <code class="docutils literal notranslate"><span class="pre">append</span></code> and <code class="docutils literal notranslate"><span class="pre">extend</span></code> on wrapped lists.</p>
-<dl class="method">
+<dl class="py method">
 <dt id="fannypack.utils.SliceWrapper.append">
-<code class="sig-name descname">append</code><span class="sig-paren">(</span><em class="sig-param">other: Any</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#fannypack.utils.SliceWrapper.append" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">append</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">other</span><span class="p">:</span> <span class="n">Any</span></em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#fannypack.utils.SliceWrapper.append" title="Permalink to this definition">¶</a></dt>
 <dd><p>Append to the end of our data object.</p>
 <p>Only supported for wrapped lists and dictionaries containing lists.</p>
 <p>For wrapped lists, this is equivalent to <code class="docutils literal notranslate"><span class="pre">data.append(other)</span></code>.</p>
@@ -196,9 +196,9 @@ Behavior example…</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="fannypack.utils.SliceWrapper.data">
-<code class="sig-name descname">data</code><em class="property">: T</em><em class="property"> = None</em><a class="headerlink" href="#fannypack.utils.SliceWrapper.data" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">data</code><em class="property"> = None</em><a class="headerlink" href="#fannypack.utils.SliceWrapper.data" title="Permalink to this definition">¶</a></dt>
 <dd><p>Wrapped data.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -207,9 +207,9 @@ Behavior example…</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="fannypack.utils.SliceWrapper.extend">
-<code class="sig-name descname">extend</code><span class="sig-paren">(</span><em class="sig-param">other: T</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#fannypack.utils.SliceWrapper.extend" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">extend</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">other</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>List<span class="p">, </span>Tuple<span class="p">, </span>torch.Tensor<span class="p">, </span>numpy.ndarray<span class="p">, </span>Dict<span class="p">[</span>Any<span class="p">, </span>List<span class="p">]</span><span class="p">, </span>Dict<span class="p">[</span>Any<span class="p">, </span>Tuple<span class="p">]</span><span class="p">, </span>Dict<span class="p">[</span>Any<span class="p">, </span>torch.Tensor<span class="p">]</span><span class="p">, </span>Dict<span class="p">[</span>Any<span class="p">, </span>numpy.ndarray<span class="p">]</span><span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#fannypack.utils.SliceWrapper.extend" title="Permalink to this definition">¶</a></dt>
 <dd><p>Extend to the end of our data object.</p>
 <p>Only supported for wrapped lists and dictionaries containing lists.</p>
 <p>For wrapped lists, this is equivalent to <code class="docutils literal notranslate"><span class="pre">data.extend(other)</span></code>.</p>
@@ -232,9 +232,9 @@ Behavior example…</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="fannypack.utils.SliceWrapper.map">
-<code class="sig-name descname">map</code><span class="sig-paren">(</span><em class="sig-param">function</em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils.SliceWrapper.map" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">map</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">function</span><span class="p">:</span> <span class="n">Callable<span class="p">[</span><span class="p">[</span>Any<span class="p">]</span><span class="p">, </span>Any<span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; fannypack.utils._slice_wrapper.SliceWrapper<a class="headerlink" href="#fannypack.utils.SliceWrapper.map" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute a new SliceWrapper, with a function applied to all values within
 our wrapped data object.</p>
 <p>For iterables that are directly wrapped, this is equivalent to evaluating:</p>
@@ -263,7 +263,7 @@ Thus, an input of…</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="fannypack.utils.SliceWrapper.shape">
 <em class="property">property </em><code class="sig-name descname">shape</code><a class="headerlink" href="#fannypack.utils.SliceWrapper.shape" title="Permalink to this definition">¶</a></dt>
 <dd><p>Unified interface for polling the shape of our wrapped object.</p>
@@ -294,7 +294,7 @@ our wrapped values, starting from the leftmost dimension.</p>
         <a href="potpourri.html" class="btn btn-neutral float-right" title="Potpourri" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="trajectories_file.html" class="btn btn-neutral float-left" title="TrajectoriesFile" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="buddy.html" class="btn btn-neutral float-left" title="Buddy" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

@@ -9,4 +9,5 @@ Github_
    :maxdepth: 2
 
    utils/index
+   data/index
    nn/index
