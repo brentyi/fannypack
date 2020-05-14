@@ -112,7 +112,9 @@ def simple_buddy_temporary_data():
         "temporary_net",
         simple_net,
         # Use directories relative to this fixture
-        checkpoint_dir=os.path.join(os.path.dirname(__file__), "tmp/assets/checkpoints/"),
+        checkpoint_dir=os.path.join(
+            os.path.dirname(__file__), "tmp/assets/checkpoints/"
+        ),
         metadata_dir=os.path.join(os.path.dirname(__file__), "tmp/assets/metadata/"),
         log_dir=os.path.join(os.path.dirname(__file__), "tmp/assets/log/"),
         verbose=True,
@@ -152,7 +154,9 @@ def resblock_buddy_temporary_data():
         "resblock_net",
         resblock_net,
         # Use directories relative to this fixture
-        checkpoint_dir=os.path.join(os.path.dirname(__file__), "tmp/assets/checkpoints/"),
+        checkpoint_dir=os.path.join(
+            os.path.dirname(__file__), "tmp/assets/checkpoints/"
+        ),
         metadata_dir=os.path.join(os.path.dirname(__file__), "tmp/assets/metadata/"),
         log_dir=os.path.join(os.path.dirname(__file__), "tmp/assets/log/"),
         verbose=True,

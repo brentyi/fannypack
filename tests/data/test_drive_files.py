@@ -30,7 +30,6 @@ def test_cached_drive_file():
 
     # Make sure second time was faster
     assert elapsed0 > elapsed1
-    print(path0)
 
     # Check path values
     assert path0 == path1
@@ -66,7 +65,6 @@ def test_cached_drive_file_alternate():
 
     # Make sure second time was faster
     assert elapsed0 > elapsed1
-    print(path0)
 
     # Check path values
     assert path0 == path1

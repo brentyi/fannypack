@@ -23,6 +23,7 @@ def test_buddy_log_scopes(simple_buddy_temporary_data):
             buddy.log_image("garbage_image", np.zeros((3, 32, 32), dtype=np.float32))
         buddy.log_scope_pop("scope1")
 
+
 def test_buddy_learning_rates(simple_buddy_temporary_data):
     """Check that log scope function as expected.
     """

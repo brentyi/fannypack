@@ -1,4 +1,5 @@
 import os
+import signal
 
 import requests
 from tqdm.auto import tqdm
@@ -46,7 +47,7 @@ def cached_drive_file(name: str, url: str) -> str:
 
 
 def download_drive_file(url: str, target_path: str, chunk_size=32768) -> None:
-    """Download a file via a public Google Drive download_url.
+    """Download a file via a public Google Drive url.
 
     Example usage:
     ```
@@ -57,7 +58,7 @@ def download_drive_file(url: str, target_path: str, chunk_size=32768) -> None:
     ```
 
     Args:
-        url (str): Google Drive download_url.
+        url (str): Google Drive url.
         target_path (str): Destination to write to.
     """
     # Create directory if it doesn't exist yet
@@ -72,7 +73,12 @@ def download_drive_file(url: str, target_path: str, chunk_size=32768) -> None:
 
     # Download file
     session = requests.Session()
-    response = session.get(download_url, params={"id": drive_id}, stream=True)
+    response = session.get(
+        download_url,
+        params={"id": drive_id},
+        stream=True,
+        headers={"Accept-Encoding": None},
+    )
 
     token = None
     for key, value in response.cookies.items():
@@ -81,11 +87,38 @@ def download_drive_file(url: str, target_path: str, chunk_size=32768) -> None:
             response = session.get(download_url, params=params, stream=True)
             break
 
+    progress_bar = tqdm(unit="iB", unit_scale=True)
+
+    # Delete partially downloaded files if we hit interrupt (Ctrl+C) before download
+    # finishes
+    try:
+        orig_handler = signal.getsignal(signal.SIGINT)
+
+        def sigint_handler(sig, frame):  # pragma: no cover
+            print("[fannypack-drive] Deleting file:", target_path)
+            os.remove(target_path)
+            orig_handler(sig, frame)
+            # Restore SIGINT handler
+            if orig_handler is not None:
+                signal.signal(signal.SIGINT, orig_handler)
+
+        signal.signal(signal.SIGINT, sigint_handler)
+    except ValueError as e:  # pragma: no cover
+        # signal throws a ValueError if we're not in the main thread
+        print("[fannypack-drive] Error while attaching SIGINT handler:", e)
+        orig_handler = None
+
+    # Download file
     with open(target_path, "wb") as f:
-        for chunk in tqdm(response.iter_content(chunk_size)):
+        for chunk in response.iter_content(chunk_size):
             # Filter out keep-alive new chunks
             if chunk:
+                progress_bar.update(len(chunk))
                 f.write(chunk)
+
+    # Restore SIGINT handler
+    if orig_handler is not None:
+        signal.signal(signal.SIGINT, orig_handler)
 
 
 def _drive_id_from_url(url: str) -> str:
@@ -100,7 +133,7 @@ def _drive_id_from_url(url: str) -> str:
 
     url_prefixes = [
         "https://drive.google.com/file/d/",
-        "https://drive.google.com/open?id="
+        "https://drive.google.com/open?id=",
     ]
 
     for prefix in url_prefixes:
