@@ -87,8 +87,6 @@ def download_drive_file(url: str, target_path: str, chunk_size=32768) -> None:
             response = session.get(download_url, params=params, stream=True)
             break
 
-    progress_bar = tqdm(unit="iB", unit_scale=True)
-
     # Delete partially downloaded files if we hit interrupt (Ctrl+C) before download
     # finishes
     try:
@@ -109,6 +107,7 @@ def download_drive_file(url: str, target_path: str, chunk_size=32768) -> None:
         orig_handler = None
 
     # Download file
+    progress_bar = tqdm(unit="iB", unit_scale=True)
     with open(target_path, "wb") as f:
         for chunk in response.iter_content(chunk_size):
             # Filter out keep-alive new chunks
