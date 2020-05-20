@@ -160,7 +160,7 @@ class TrajectoriesFile:
         """
         assert self._file is not None, "Not called in with statement!"
 
-        # Check that the input items is sane
+        # Input type validation
         assert type(item) == dict
 
         # Index checks

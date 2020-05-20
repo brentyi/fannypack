@@ -63,7 +63,7 @@ class SliceWrapper:
                 assert content_type in _raw_types
         else:
             # Non-dictionary inputs
-            assert type(data) in _raw_types, "Invalid datatype!"
+            assert type(data) in _raw_types, "Unsupported datatype!"
 
         # Backwards-compatibility
         def convert_to_numpy():  # pragma: no cover
@@ -108,7 +108,7 @@ class SliceWrapper:
             # Cast for type-checking
             data_dict = cast(dict, self.data)
 
-            # Check that the index is sane
+            # Check that the index makes sense
             # Allows use as a standard iterator, eg `for obj in SliceWrapper(...)`
             if type(index) == int and index >= len(self):
                 raise IndexError
@@ -121,7 +121,7 @@ class SliceWrapper:
         elif type(self.data) in _raw_types:
             return self.data[index]
         else:
-            assert False, "Invalid operation!"
+            assert False, "Unsupported dataype!"
 
     def __len__(self) -> int:
         """Unified interface for evaluating the length of a wrapped object.
@@ -264,7 +264,7 @@ class SliceWrapper:
     def shape(self) -> Tuple[int, ...]:
         """Unified interface for polling the shape of our wrapped object.
 
-        For lists and tuples, this simply evaluates to `(len(data),)`.
+        For lists and tuples, this evaluates to `(len(data),)`.
 
         For Numpy arrays and torch tensors, we get `data.shape`.
 
@@ -311,4 +311,4 @@ class SliceWrapper:
             # Return 1D shape
             return (len(data),)
         else:
-            assert False, "Invalid operation!"
+            assert False, "Unsupported datatype!"

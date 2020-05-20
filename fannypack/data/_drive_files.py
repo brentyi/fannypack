@@ -140,4 +140,4 @@ def _drive_id_from_url(url: str) -> str:
             parts = url[len(prefix) :].split("/")
             assert len(parts) in (1, 2)
             return parts[0]
-    assert False, f"Invalid Google Drive URL: {url}"
+    assert False, f"Malformed Google Drive URL: {url}"

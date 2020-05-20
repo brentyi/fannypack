@@ -40,7 +40,7 @@ def _convert(x, convert):
         x = cast(tuple, x)
         output = tuple(_convert(value, convert) for value in x)
     else:
-        assert False, f"Invalid datatype {type(x)}!"
+        assert False, f"Unsupported datatype {type(x)}!"
     return output
 
 

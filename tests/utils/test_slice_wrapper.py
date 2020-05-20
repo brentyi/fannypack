@@ -34,16 +34,16 @@ def wrapper_thin():
     return wrapper
 
 
-def test_fixture(wrapper):
-    """Fixture sanity check.
+def test_map(wrapper):
+    """Validate pre/post-conditions of a call to `map()`.
     """
     assert type(wrapper.data["a"]) == list
     wrapper = wrapper.map(np.asarray)
     assert type(wrapper.data["a"]) == np.ndarray
 
 
-def test_fixture_thin(wrapper_thin):
-    """Fixture sanity check.
+def test_thin_map(wrapper_thin):
+    """Validate pre/post-conditions of a call to `map()`.
     """
     assert type(wrapper_thin.data) == list
     wrapper_thin = wrapper_thin.map(np.asarray)

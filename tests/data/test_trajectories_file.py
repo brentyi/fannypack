@@ -84,7 +84,7 @@ def test_write(trajectories_file_write):
         # Contract (removes last trajectory)
         traj_file.resize(len(traj_file) - 1)
 
-    # Open the file we just wrote to, and run standard read tests
+    # Open the file we wrote to, and run standard read tests
     traj_file = fannypack.data.TrajectoriesFile(
         trajectories_file_write._path, read_only=True
     )
@@ -98,7 +98,7 @@ def test_write(trajectories_file_write):
     with trajectories_file_write as traj_file:
         traj_file.clear()
 
-    # Open the file we just wrote to, and run standard read tests
+    # Open the file we wrote to, and run standard read tests
     traj_file = fannypack.data.TrajectoriesFile(
         trajectories_file_write._path, read_only=True
     )
@@ -182,7 +182,7 @@ def test_get_all_string(trajectories_file_read):
 
 
 def test_out_of_bounds_index_read(trajectories_file_read):
-    """Check that we throw an appropriate error when passed an invalid index.
+    """Check that we throw an appropriate error when passed an out-of-bounds index.
     (read, positive)
     """
     with trajectories_file_read as traj_file, pytest.raises(IndexError):
@@ -190,7 +190,7 @@ def test_out_of_bounds_index_read(trajectories_file_read):
 
 
 def test_out_of_bounds_index_read_negative(trajectories_file_read):
-    """Check that we throw an appropriate error when passed an invalid index.
+    """Check that we throw an appropriate error when passed an out-of-bounds index.
     (read, negative)
     """
     with trajectories_file_read as traj_file, pytest.raises(IndexError):
@@ -198,7 +198,7 @@ def test_out_of_bounds_index_read_negative(trajectories_file_read):
 
 
 def test_out_of_bounds_index_write(trajectories_file_read):
-    """Check that we throw an appropriate error when passed an invalid index.
+    """Check that we throw an appropriate error when passed an out-of-bounds index.
     (write, positive)
     """
     with trajectories_file_read as traj_file, pytest.raises(IndexError):
@@ -206,7 +206,7 @@ def test_out_of_bounds_index_write(trajectories_file_read):
 
 
 def test_out_of_bounds_index_write_negative(trajectories_file_read):
-    """Check that we throw an appropriate error when passed an invalid index.
+    """Check that we throw an appropriate error when passed an out-of-bounds index.
     (write, negative)
     """
     with trajectories_file_read as traj_file, pytest.raises(IndexError):

@@ -267,7 +267,7 @@ Thus, an input of…</p>
 <dt id="fannypack.utils.SliceWrapper.shape">
 <em class="property">property </em><code class="sig-name descname">shape</code><a class="headerlink" href="#fannypack.utils.SliceWrapper.shape" title="Permalink to this definition">¶</a></dt>
 <dd><p>Unified interface for polling the shape of our wrapped object.</p>
-<p>For lists and tuples, this simply evaluates to <code class="docutils literal notranslate"><span class="pre">(len(data),)</span></code>.</p>
+<p>For lists and tuples, this evaluates to <code class="docutils literal notranslate"><span class="pre">(len(data),)</span></code>.</p>
 <p>For Numpy arrays and torch tensors, we get <code class="docutils literal notranslate"><span class="pre">data.shape</span></code>.</p>
 <p>For dictionaries, we return a tuple containing all shared dimensions between
 our wrapped values, starting from the leftmost dimension.</p>

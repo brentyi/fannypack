@@ -40,14 +40,14 @@ def test_conversion_values(nested_conversion):
 
 
 def test_conversion_failure():
-    """Sanity check for invalid input.
+    """Smoke test for an unsupported input type.
     """
     with pytest.raises(AssertionError):
         fannypack.utils.to_torch(None)
 
 
 def test_to_device():
-    """Sanity check for to_device.
+    """Smoke test for to_device.
     """
     X = {"data": [np.zeros((10, 1, 5, 1, 10))]}
     X_torch = fannypack.utils.to_torch(X)

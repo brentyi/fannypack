@@ -173,7 +173,7 @@ class _BuddyCheckpointing(_BuddyForwardDeclarations, abc.ABC):
         # Find and read our checkpoint file
         checkpoint = self._read_checkpoint_file(label, path, experiment_name)
 
-        # Sanity check
+        # Input validation
         assert (
             source in checkpoint["optimizer_states"].keys()
         ), "Nonexistent source optimizer!"
@@ -262,7 +262,7 @@ class _BuddyCheckpointing(_BuddyForwardDeclarations, abc.ABC):
             if key in optimizer_config.keys():
                 optimizer_config[key] = value
             else:
-                warnings.warn(f"Skipping invalid configuration key: {key}={value}")
+                warnings.warn(f"Skipping missing configuration key: {key}={value}")
 
         # Instantiate optimizers & load state
         for name, state_dict in checkpoint["optimizer_states"].items():
@@ -295,7 +295,7 @@ class _BuddyCheckpointing(_BuddyForwardDeclarations, abc.ABC):
                     experiment_name=experiment_name,
                 )
             if len(paths) == 0:
-                raise FileNotFoundError("Failed to find checkpoint file")
+                raise FileNotFoundError("Missing checkpoint file")
 
             # The list of paths will be sorted by optimizer step count
             path = paths[-1]
@@ -310,7 +310,9 @@ class _BuddyCheckpointing(_BuddyForwardDeclarations, abc.ABC):
             # Load a checkpoint by its location
             path = path
         else:
-            assert False, "invalid arguments!"
+            assert (
+                False
+            ), "Too many arguments! Only one of (label, path) is supported at a time."
 
         # Load checkpoint dict
         checkpoint = torch.load(path, map_location=self._device, pickle_module=dill)
@@ -332,12 +334,12 @@ class _BuddyCheckpointing(_BuddyForwardDeclarations, abc.ABC):
             checkpoint["optimizer_config"]["global_steps"] = checkpoint["steps"]
             checkpoint.pop("steps")
 
-        # Sanity check: our checkpoint file is a sensible-looking dict
+        # Checkpoint file validation
         valid_keys = set(["optimizer_config", "optimizer_states", "state_dict"])
         for key in checkpoint.keys():
             assert key in valid_keys
 
-        # Sanity check: optimizer type should typically be consistent
+        # Raise warning for optimizer type mismatches
         if (
             checkpoint["optimizer_config"]["optimizer_type"]
             != cast("_BuddyOptimizer", self)._optimizer_config["optimizer_type"]
