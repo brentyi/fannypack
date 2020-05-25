@@ -4,7 +4,6 @@ import signal
 import requests
 from tqdm.auto import tqdm
 
-__all__ = ["cached_drive_file", "download_drive_file", "set_cache_path"]
 _cache_path = os.path.expanduser("~/.cache/fannypack-drive-files")
 
 

@@ -3,8 +3,6 @@ import signal
 import sys
 import traceback as tb
 
-__all__ = ["pdb_safety_net"]
-
 
 def pdb_safety_net():
     """Helper for opening PDB when either (a) the user hits Ctrl+C or (b) we encounter

@@ -1,7 +1,5 @@
 from typing import Any, List, Tuple, Union, cast
 
-__all__ = ["squeeze"]
-
 
 def squeeze(x: Any, axis: Union[int, Tuple[int, ...]] = None) -> Any:
     """Generic squeeze function.
