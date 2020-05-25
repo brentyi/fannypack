@@ -22,9 +22,10 @@ import fannypack
 # Valid raw types that we can wrap
 _raw_types = set([list, tuple, np.ndarray, torch.Tensor])
 
-# Alias for valid raw types that we can wrap
-InputType = TypeVar(
-    "InputType",
+# Generic types
+MapOutputType = TypeVar("MapOutputType")
+WrappedType = TypeVar(
+    "WrappedType",
     List,
     Tuple,
     torch.Tensor,
@@ -40,7 +41,7 @@ InputType = TypeVar(
 )
 
 
-class SliceWrapper(Iterable, Generic[InputType]):
+class SliceWrapper(Iterable, Generic[WrappedType]):
     """A thin wrapper class for creating a unified interface for...
     - Lists
     - Tuples
@@ -53,8 +54,8 @@ class SliceWrapper(Iterable, Generic[InputType]):
     calling `append` and `extend` on wrapped lists.
     """
 
-    def __init__(self, data: InputType):
-        self.data: InputType = data
+    def __init__(self, data: WrappedType):
+        self.data: WrappedType = data
         """list, tuple, torch.Tensor, np.ndarray, or dict: Wrapped data."""
 
         # Sanity checks
@@ -77,7 +78,7 @@ class SliceWrapper(Iterable, Generic[InputType]):
 
         # Backwards-compatibility
         def convert_to_numpy():  # pragma: no cover
-            self.data = self.map(np.asarray).data
+            self.data = self.map(np.asarray)
 
         self.convert_to_numpy = fannypack.utils.deprecation_wrapper(
             "SliceWrapper.convert_to_numpy() is deprecated -- please use "
@@ -203,7 +204,7 @@ class SliceWrapper(Iterable, Generic[InputType]):
         else:
             assert False, "Append is only supported for wrapped lists"
 
-    def extend(self, other: InputType) -> None:
+    def extend(self, other: WrappedType) -> None:
         """Extend to the end of our data object.
 
         Only supported for wrapped lists and dictionaries containing lists.
@@ -246,13 +247,15 @@ class SliceWrapper(Iterable, Generic[InputType]):
         else:
             assert False, "Extend is only supported for wrapped lists"
 
-    def map(self, function: Callable[[Any], Any]) -> SliceWrapper:
+    def map(
+        self, function: Callable[[Any], MapOutputType]
+    ) -> Union[MapOutputType, WrappedType]:
         """Compute a new SliceWrapper, with a function applied to all values within
         our wrapped data object.
 
         For iterables that are directly wrapped, this is equivalent to evaluating:
         ```
-        SliceWrapper(function(data))
+        function(data)
         ```
 
         For dictionaries, `function` is applied value-wise.
@@ -265,10 +268,10 @@ class SliceWrapper(Iterable, Generic[InputType]):
         ```
         would return...
         ```
-        SliceWrapper({
+        {
             "a": function(a),
             "b": function(b),
-        })
+        }
         ```
 
         Args:
@@ -287,7 +290,7 @@ class SliceWrapper(Iterable, Generic[InputType]):
         else:
             assert False, f"Unsupported data type: {type(self.data)}"
 
-        return SliceWrapper(mapped_data)
+        return mapped_data
 
     @property
     def shape(self) -> Tuple[int, ...]:

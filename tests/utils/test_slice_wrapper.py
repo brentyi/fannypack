@@ -38,7 +38,7 @@ def test_map(wrapper):
     """Validate pre/post-conditions of a call to `map()`.
     """
     assert type(wrapper.data["a"]) == list
-    wrapper = wrapper.map(np.asarray)
+    wrapper = fannypack.utils.SliceWrapper(wrapper.map(np.asarray))
     assert type(wrapper.data["a"]) == np.ndarray
 
 
@@ -46,7 +46,7 @@ def test_thin_map(wrapper_thin):
     """Validate pre/post-conditions of a call to `map()`.
     """
     assert type(wrapper_thin.data) == list
-    wrapper_thin = wrapper_thin.map(np.asarray)
+    wrapper_thin = fannypack.utils.SliceWrapper(wrapper_thin.map(np.asarray))
     assert type(wrapper_thin.data) == np.ndarray
 
 
@@ -126,7 +126,7 @@ def test_iterable(wrapper):
 def test_iterable_numpy(wrapper):
     """Check iterable interface. (numpy)
     """
-    wrapper = wrapper.map(np.asarray)
+    wrapper = fannypack.utils.SliceWrapper(wrapper.map(np.asarray))
     counter = 0
     for x in wrapper:
         assert type(x) == dict
@@ -148,7 +148,7 @@ def test_iterable_thin(wrapper_thin):
 def test_iterable_numpy_thin(wrapper_thin):
     """Check iterable interface. (numpy)
     """
-    wrapper_thin = wrapper_thin.map(np.asarray)
+    wrapper_thin = fannypack.utils.SliceWrapper(wrapper_thin.map(np.asarray))
     counter = 0
     for x in wrapper_thin:
         assert type(x) == np.int64
@@ -160,7 +160,7 @@ def test_len(wrapper):
     """Check `len()` output.
     """
     assert len(wrapper) == 4
-    wrapper = wrapper.map(np.asarray)
+    wrapper = fannypack.utils.SliceWrapper(wrapper.map(np.asarray))
     assert len(wrapper) == 4
 
 
@@ -168,7 +168,7 @@ def test_shape(wrapper):
     """Check `shape` property.
     """
     assert wrapper.shape == (4,)
-    wrapper = wrapper.map(np.asarray)
+    wrapper = fannypack.utils.SliceWrapper(wrapper.map(np.asarray))
     assert wrapper.shape == (4,)
 
 
@@ -194,7 +194,7 @@ def test_read_slice(wrapper):
 def test_read_slice_numpy(wrapper):
     """Check that we can read slices of our wrappers (numpy).
     """
-    wrapper = wrapper.map(np.asarray)
+    wrapper = fannypack.utils.SliceWrapper(wrapper.map(np.asarray))
 
     assert np.allclose(wrapper[::1]["a"], [1, 2, 3, 4])
     assert np.allclose(wrapper[::1]["b"], [5, 6, 7, 8])
@@ -216,7 +216,7 @@ def test_write_slice(wrapper):
 def test_write_slice_numpy(wrapper):
     """Check that we can write to slices for wrappers containing numpy arrays.
     """
-    wrapper = wrapper.map(np.asarray)
+    wrapper = fannypack.utils.SliceWrapper(wrapper.map(np.asarray))
 
     wrapper[::1]["a"][::2] = 0
 
