@@ -26,7 +26,7 @@ setup(
         "torch",
         "tqdm",
         "Pillow",  # Needed for logging images in Tensorboard
-        "pip>=20.1",
+        # "pip>=20.1",
     ],
     classifiers=[
         "Programming Language :: Python :: 3.7",

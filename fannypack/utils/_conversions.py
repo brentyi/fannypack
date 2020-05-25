@@ -8,24 +8,24 @@ import torch
 __all__ = ["to_device", "to_numpy", "to_torch"]
 
 # Type aliases, variables
-# > We'd ideally be able to use a TypeVar for Container, but this causes conflicting
-#   function signatures
+# > We'd ideally be able to use a TypeVar for Container, but this causes an overlapping
+#   function signatures error in mypy
 Container = Any
-InputType = TypeVar("InputType")
-OutputType = TypeVar("OutputType")
-
-
-@overload
-def _convert_recursive(
-    x: Container, convert: Callable[[InputType], OutputType], input_type: type,
-) -> Container:
-    pass
+InputType = TypeVar("InputType", np.ndarray, torch.Tensor)
+OutputType = TypeVar("OutputType", np.ndarray, torch.Tensor)
 
 
 @overload
 def _convert_recursive(
     x: InputType, convert: Callable[[InputType], OutputType], input_type: type,
 ) -> OutputType:
+    pass
+
+
+@overload
+def _convert_recursive(
+    x: Container, convert: Callable[[InputType], OutputType], input_type: type,
+) -> Container:
     pass
 
 
