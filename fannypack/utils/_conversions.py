@@ -1,49 +1,69 @@
 import dataclasses
+import functools
 from typing import Any, Callable, Dict, List, Tuple, TypeVar, Union, cast, overload
 
 import numpy as np
 import torch
 
 # General Container template; used by all conversion functions
+# We unfortunately need to include `Any` to account for arbitrary dataclasses
 Container = Union[List, Tuple, Dict, Any]
 
 
-# Private conversion helper: recursively calls a conversion function on all inputs
-# within any nested set of containers
-def _convert(
-    x: Union[Container, torch.Tensor, np.ndarray], convert: Callable
-) -> Union[Container, torch.Tensor, np.ndarray]:
-    if type(x) in (torch.Tensor, np.ndarray):
-        # Convert plain arrays
-        output = convert(x)
-    elif type(x) == dict:
-        # Convert dictionaries of values
+InputType = TypeVar("InputType")
+OutputType = TypeVar("OutputType")
+
+
+def _convert_recursive(
+    x: Union[Container, InputType],
+    convert: Callable[[InputType], OutputType],
+    input_type: type,
+) -> Union[Container, OutputType]:
+    """Private conversion helper. Recursively calls a conversion function on inputs
+    within a nested set of containers.
+    """
+
+    # Conversion base case
+    if type(x) == input_type:
+        x = cast(InputType, x)
+        return convert(x)
+
+    # Convert containers: bind arguments to helper function
+    convert_recursive = functools.partial(
+        _convert_recursive, convert=convert, input_type=input_type
+    )
+
+    # Convert dictionaries of values
+    if type(x) == dict:
         x = cast(dict, x)
-        output = {}
-        for key, value in x.items():
-            output[key] = _convert(value, convert)
+        return {k: convert_recursive(v) for k, v in x.items()}
+
+    # Convert lists of values
     elif type(x) == list:
-        # Convert lists of values
         x = cast(list, x)
-        output = [_convert(value, convert) for value in x]
+        return list(map(convert_recursive, x))
+
+    # Convert tuples of values
     elif type(x) == tuple:
-        # Convert tuples of values
         x = cast(tuple, x)
-        output = tuple(_convert(value, convert) for value in x)
+        return tuple(map(convert_recursive, x))
+
+    # Convert dataclass containing values
     elif dataclasses.is_dataclass(x):
-        # Convert dataclass of values
         changes = {}
         for field in dataclasses.fields(x):
             value = getattr(x, field.name)
             try:
-                changes[field.name] = _convert(value, convert)
+                changes[field.name] = convert_recursive(value)
             except AssertionError as e:
+                # For dataclasses, we leave unsupported types alone
+                # May want to rethink this?
                 pass
+        return dataclasses.replace(x, **changes)
 
-        output = dataclasses.replace(x, **changes)
+    # Unsupported input types
     else:
         assert False, f"Unsupported datatype {type(x)}!"
-    return output
 
 
 def to_device(
@@ -68,7 +88,7 @@ def to_device(
             x = x.detach()
         return x.to(device)
 
-    return _convert(x, convert)
+    return _convert_recursive(x, convert=convert, input_type=torch.Tensor)
 
 
 def to_torch(
@@ -91,17 +111,17 @@ def to_torch(
         torch.Tensor, list, tuple, dict, or dataclass: Output, type will mirror input.
     """
 
-    def convert(x: np.ndarray):
+    def convert(x: np.ndarray) -> torch.Tensor:
         output = torch.from_numpy(x)
         if x.dtype == np.float64 and convert_doubles_to_floats:
             output = output.float()
         output = output.to(device)
         return output
 
-    return _convert(x, convert)
+    return _convert_recursive(x, convert=convert, input_type=np.ndarray)
 
 
-def to_numpy(x: Union[torch.Tensor, Container]) -> Union[np.ndarray, Container]:
+def to_numpy(x: Union[Container, torch.Tensor]) -> Union[Container, np.ndarray]:
     """Converts a tensor, list of tensors, dict, or dataclass of tensors for use in
     Numpy.
 
@@ -113,8 +133,8 @@ def to_numpy(x: Union[torch.Tensor, Container]) -> Union[np.ndarray, Container]:
         np.ndarray, list, tuple, dict, or dataclass: Output, type will mirror input.
     """
 
-    def convert(x: torch.Tensor):
+    def convert(x: torch.Tensor) -> np.ndarray:
         output = x.detach().cpu().numpy()
         return output
 
-    return _convert(x, convert)
+    return _convert_recursive(x, convert=convert, input_type=torch.Tensor)
