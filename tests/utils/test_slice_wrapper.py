@@ -112,8 +112,8 @@ def test_extend_thin(wrapper_thin):
     assert wrapper_thin[-1:] == new
 
 
-def test_iterator(wrapper):
-    """Check iterator interface.
+def test_iterable(wrapper):
+    """Check iterable interface.
     """
     counter = 0
     for x in wrapper:
@@ -123,8 +123,8 @@ def test_iterator(wrapper):
     assert counter == len(wrapper)
 
 
-def test_iterator_numpy(wrapper):
-    """Check iterator interface. (numpy)
+def test_iterable_numpy(wrapper):
+    """Check iterable interface. (numpy)
     """
     wrapper = wrapper.map(np.asarray)
     counter = 0
@@ -135,8 +135,8 @@ def test_iterator_numpy(wrapper):
     assert counter == len(wrapper)
 
 
-def test_iterator_thin(wrapper_thin):
-    """Check iterator interface.
+def test_iterable_thin(wrapper_thin):
+    """Check iterable interface.
     """
     counter = 0
     for x in wrapper_thin:
@@ -145,8 +145,8 @@ def test_iterator_thin(wrapper_thin):
     assert counter == len(wrapper_thin)
 
 
-def test_iterator_numpy_thin(wrapper_thin):
-    """Check iterator interface. (numpy)
+def test_iterable_numpy_thin(wrapper_thin):
+    """Check iterable interface. (numpy)
     """
     wrapper_thin = wrapper_thin.map(np.asarray)
     counter = 0

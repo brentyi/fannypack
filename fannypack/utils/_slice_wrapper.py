@@ -5,6 +5,7 @@ from typing import (
     Callable,
     Dict,
     Generic,
+    Iterable,
     List,
     Tuple,
     TypeVar,
@@ -32,7 +33,7 @@ DictType = Union[
 InputType = Union[List, Tuple, torch.Tensor, np.ndarray, DictType]
 
 
-class SliceWrapper:
+class SliceWrapper(Iterable):
     """A thin wrapper class for creating a unified interface for...
     - Lists
     - Tuples
@@ -134,6 +135,23 @@ class SliceWrapper:
             int: Length of wrapped object.
         """
         return self.shape[0]
+
+    def __iter__(self):
+        """Iterable __iter__() interface.
+        """
+        self._iter_index = 0
+        return self
+
+    def __next__(self):
+        """Iterable __next__() interface.
+        """
+        try:
+            output = self[self._iter_index]
+            self._iter_index += 1
+            return output
+        except IndexError:
+            pass
+        raise StopIteration
 
     def append(self, other: Any) -> None:
         """Append to the end of our data object.
