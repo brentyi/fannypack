@@ -87,7 +87,8 @@ class SliceWrapper(Iterable, Generic[WrappedType]):
         )
 
     def __getitem__(self, index: Any) -> Any:
-        """Unified interface for indexing into our wrapped object.
+        """Unified interface for indexing into our wrapped object; shorthand for
+        `SliceWrapper.get(lambda v: v[index])`.
 
         For iterables that are directly wrapped, this is equivalent to evaluating
         `data[index]`.
@@ -115,24 +116,7 @@ class SliceWrapper(Iterable, Generic[WrappedType]):
         Returns:
             Any: Indexed value. See overall function docstring.
         """
-        if type(self.data) == dict:
-            # Cast for type-checking
-            data_dict = cast(dict, self.data)
-
-            # Check that the index makes sense
-            # Allows use as a standard iterator, eg `for obj in SliceWrapper(...)`
-            if type(index) == int and index >= len(self):
-                raise IndexError
-
-            # Construct & return output
-            output = {}
-            for key, value in data_dict.items():
-                output[key] = value[index]
-            return output
-        elif type(self.data) in _raw_types:
-            return self.data[index]
-        else:
-            assert False, "Unsupported dataype!"
+        return cast(WrappedType, self.map(lambda v: v[index]))
 
     def __len__(self) -> int:
         """Unified interface for evaluating the length of a wrapped object.
@@ -249,7 +233,7 @@ class SliceWrapper(Iterable, Generic[WrappedType]):
 
     def map(
         self, function: Callable[[Any], MapOutputType]
-    ) -> Union[MapOutputType, WrappedType]:
+    ) -> Union[MapOutputType, Dict[Any, MapOutputType]]:
         """Compute a new SliceWrapper, with a function applied to all values within
         our wrapped data object.
 
@@ -285,12 +269,11 @@ class SliceWrapper(Iterable, Generic[WrappedType]):
             mapped_data = {}
             for key, value in data_dict.items():
                 mapped_data[key] = function(value)
+            return mapped_data
         elif type(self.data) in _raw_types:
-            mapped_data = function(self.data)
+            return function(self.data)
         else:
             assert False, f"Unsupported data type: {type(self.data)}"
-
-        return mapped_data
 
     @property
     def shape(self) -> Tuple[int, ...]:
@@ -328,8 +311,10 @@ class SliceWrapper(Iterable, Generic[WrappedType]):
                         break
 
             return tuple(output)
-        else:
+        elif type(self.data) in _raw_types:
             return self._shape_helper(self.data)
+        else:
+            assert False, "Unsupported datatype!"
 
     @staticmethod
     def _shape_helper(data) -> Tuple[int, ...]:
