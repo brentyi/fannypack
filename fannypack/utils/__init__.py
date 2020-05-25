@@ -3,6 +3,7 @@ from ._buddy import *
 from ._conversions import *
 from ._deprecation import *
 from ._module_freezing import *
+from ._pdb_safety_net import *
 from ._slice_wrapper import *
 from ._squeeze import *
 
