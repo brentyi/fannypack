@@ -178,19 +178,21 @@ If None (default), squeezes all dimensions with value <code class="docutils lite
 
 <dl class="py function">
 <dt id="fannypack.utils.to_device">
-<code class="sig-prename descclassname">fannypack.utils.</code><code class="sig-name descname">to_device</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">device</span></em>, <em class="sig-param"><span class="n">detach</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils.to_device" title="Permalink to this definition">¶</a></dt>
-<dd><p>Move a torch tensor, list of tensors, or dict of tensors to a different device.</p>
+<code class="sig-prename descclassname">fannypack.utils.</code><code class="sig-name descname">to_device</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>Any<span class="p">, </span>torch.Tensor<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">device</span><span class="p">:</span> <span class="n">torch.device</span></em>, <em class="sig-param"><span class="n">detach</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span> &#x2192; Union<span class="p">[</span>Any<span class="p">, </span>torch.Tensor<span class="p">]</span><a class="headerlink" href="#fannypack.utils.to_device" title="Permalink to this definition">¶</a></dt>
+<dd><p>Move a torch tensor, list of tensors, dict, or dataclass of tensors to a
+different device.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> – (torch.Tensor, list, tuple, or dict) Tensor or container of tensors to move.</p></li>
+<li><p><strong>x</strong> – (torch.Tensor, list, tuple, dict, or dataclass) Tensor or container of
+tensors to move.</p></li>
 <li><p><strong>device</strong> (<em>torch.device</em>) – Target device.</p></li>
 <li><p><strong>detach</strong> (<em>bool</em><em>, </em><em>optional</em>) – If set, detaches tensors after moving. Defaults to
 False.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><em>torch.Tensor, list, tuple, or dict</em> – Output, type will mirror input.</p>
+<dd class="field-even"><p><em>torch.Tensor, list, tuple, dict, or dataclass</em> – Output, type will mirror input.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -198,14 +200,15 @@ False.</p></li>
 <dl class="py function">
 <dt id="fannypack.utils.to_numpy">
 <code class="sig-prename descclassname">fannypack.utils.</code><code class="sig-name descname">to_numpy</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils.to_numpy" title="Permalink to this definition">¶</a></dt>
-<dd><p>Converts a tensor, list of tensors, or dict of tensors for use in Numpy.</p>
+<dd><p>Converts a tensor, list of tensors, dict, or dataclass of tensors for use in
+Numpy.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>x</strong> – (torch.Tensor, list, tuple, or dict) Tensor or container of tensors to
-convert to numpy.</p>
+<dd class="field-odd"><p><strong>x</strong> – (torch.Tensor, list, tuple, dict, or dataclass) Tensor or container of
+tensors to convert to numpy.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><em>np.ndarray, list, tuple, or dict</em> – Output, type will mirror input.</p>
+<dd class="field-even"><p><em>np.ndarray, list, tuple, dict, or dataclass</em> – Output, type will mirror input.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -213,13 +216,13 @@ convert to numpy.</p>
 <dl class="py function">
 <dt id="fannypack.utils.to_torch">
 <code class="sig-prename descclassname">fannypack.utils.</code><code class="sig-name descname">to_torch</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">device</span><span class="o">=</span><span class="default_value">'cpu'</span></em>, <em class="sig-param"><span class="n">convert_doubles_to_floats</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils.to_torch" title="Permalink to this definition">¶</a></dt>
-<dd><p>Converts a numpy array, list of numpy arrays, or dict of numpy arrays
+<dd><p>Converts a numpy array, list of numpy arrays, dict, or dataclass of numpy arrays
 for use in PyTorch.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> – (np.ndarray, list, tuple, or dict) Array or container of arrays to convert to
-torch tensors.</p></li>
+<li><p><strong>x</strong> – (np.ndarray, list, tuple, dict, or dataclass) Array or container of arrays to
+convert to torch tensors.</p></li>
 <li><p><strong>device</strong> (<em>torch.device</em><em>, </em><em>optional</em>) – Torch device to create tensors on. Defaults to
 <code class="docutils literal notranslate"><span class="pre">&quot;cpu&quot;</span></code>.</p></li>
 <li><p><strong>convert_doubles_to_floats</strong> (<em>bool</em><em>, </em><em>optional</em>) – If set, converts 64-bit floats to
@@ -227,7 +230,7 @@ torch tensors.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><em>torch.Tensor, list, tuple, or dict</em> – Output, type will mirror input.</p>
+<dd class="field-even"><p><em>torch.Tensor, list, tuple, dict, or dataclass</em> – Output, type will mirror input.</p>
 </dd>
 </dl>
 </dd></dl>
