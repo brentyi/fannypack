@@ -7,20 +7,29 @@ import torch
 
 __all__ = ["to_device", "to_numpy", "to_torch"]
 
-# General Container template; used by all conversion functions
-# We unfortunately need to include `Any` to account for arbitrary dataclasses
-Container = Union[List, Tuple, Dict, Any]
-
-
+# Type aliases, variables
+# > We'd ideally be able to use a TypeVar for Container, but this causes conflicting
+#   function signatures
+Container = Any
 InputType = TypeVar("InputType")
 OutputType = TypeVar("OutputType")
 
 
+@overload
 def _convert_recursive(
-    x: Union[Container, InputType],
-    convert: Callable[[InputType], OutputType],
-    input_type: type,
-) -> Union[Container, OutputType]:
+    x: Container, convert: Callable[[InputType], OutputType], input_type: type,
+) -> Container:
+    pass
+
+
+@overload
+def _convert_recursive(
+    x: InputType, convert: Callable[[InputType], OutputType], input_type: type,
+) -> OutputType:
+    pass
+
+
+def _convert_recursive(x, convert, input_type):
     """Private conversion helper. Recursively calls a conversion function on inputs
     within a nested set of containers.
     """
@@ -68,6 +77,18 @@ def _convert_recursive(
         assert False, f"Unsupported datatype {type(x)}!"
 
 
+@overload
+def to_device(
+    x: torch.Tensor, device: torch.device, detach: bool = False
+) -> torch.Tensor:
+    pass
+
+
+@overload
+def to_device(x: Container, device: torch.device, detach: bool = False) -> Container:
+    pass
+
+
 def to_device(
     x: Union[Container, torch.Tensor], device: torch.device, detach: bool = False
 ) -> Union[Container, torch.Tensor]:
@@ -93,11 +114,23 @@ def to_device(
     return _convert_recursive(x, convert=convert, input_type=torch.Tensor)
 
 
+@overload
 def to_torch(
-    x: Union[Container, np.ndarray],
-    device: str = "cpu",
-    convert_doubles_to_floats: bool = True,
-) -> Union[Container, torch.Tensor]:
+    x: np.ndarray, device: str = "cpu", convert_doubles_to_floats: bool = True,
+) -> torch.Tensor:
+    pass
+
+
+@overload
+def to_torch(
+    x: Container, device: str = "cpu", convert_doubles_to_floats: bool = True,
+) -> Container:
+    pass
+
+
+def to_torch(
+    x, device="cpu", convert_doubles_to_floats=True,
+):
     """Converts a numpy array, list of numpy arrays, dict, or dataclass of numpy arrays
     for use in PyTorch.
 
@@ -123,7 +156,17 @@ def to_torch(
     return _convert_recursive(x, convert=convert, input_type=np.ndarray)
 
 
-def to_numpy(x: Union[Container, torch.Tensor]) -> Union[Container, np.ndarray]:
+@overload
+def to_numpy(x: torch.Tensor) -> np.ndarray:
+    pass
+
+
+@overload
+def to_numpy(x: Container) -> Container:
+    pass
+
+
+def to_numpy(x):
     """Converts a tensor, list of tensors, dict, or dataclass of tensors for use in
     Numpy.
 
