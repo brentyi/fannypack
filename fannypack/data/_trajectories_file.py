@@ -3,6 +3,8 @@ from typing import Any, Dict, Optional, Union
 import h5py
 import numpy as np
 
+__all__ = ["TrajectoriesFile"]
+
 
 class TrajectoriesFile:
     """An interface for reading/writing trajectory files using hdf5 files.

@@ -92,7 +92,7 @@ class _BuddyCheckpointing(_BuddyForwardDeclarations, abc.ABC):
             orig_handler = None
 
         # "Atomic" checkpoint saving
-        tmp_path = "{}/tmp-{}.ckpt".format(checkpoint_dir, np.random.randint(1e10),)
+        tmp_path = "{}/tmp-{}.ckpt".format(checkpoint_dir, np.random.randint(1e10))
         torch.save(state, tmp_path, pickle_module=dill)
         os.rename(tmp_path, path)
         self._print("Saved checkpoint to path:", path)

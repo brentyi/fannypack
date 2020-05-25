@@ -1,6 +1,8 @@
 import warnings
 from typing import Callable
 
+__all__ = ["deprecation_wrapper", "new_name_wrapper"]
+
 
 def deprecation_wrapper(message: str, function_or_class: Callable) -> Callable:
     """Creates a wrapper for a deprecated function or class. Prints a warning

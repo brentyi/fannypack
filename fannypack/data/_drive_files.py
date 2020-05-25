@@ -4,18 +4,19 @@ import signal
 import requests
 from tqdm.auto import tqdm
 
-cache_path = os.path.expanduser("~/.cache/fannypack-drive-files")
+__all__ = ["cached_drive_file", "download_drive_file", "set_cache_path"]
+_cache_path = os.path.expanduser("~/.cache/fannypack-drive-files")
 
 
 def set_cache_path(path: str):
     """Set the cache location for :func:`fannypack.data.cached_drive_file`.
 
     Args:
-        cache_path (str): New location for cached files. Defaults to
+        _cache_path (str): New location for cached files. Defaults to
             `~/.cache/fannypack-drive-files/`.
     """
-    global cache_path
-    cache_path = path
+    global _cache_path
+    _cache_path = path
 
 
 def cached_drive_file(name: str, url: str) -> str:
@@ -37,7 +38,7 @@ def cached_drive_file(name: str, url: str) -> str:
 
     # Generated cached filename
     cached_filename = f"{_drive_id_from_url(url)}-{name}"
-    cached_filepath = os.path.join(cache_path, cached_filename)
+    cached_filepath = os.path.join(_cache_path, cached_filename)
 
     if not os.path.exists(cached_filepath):
         print(f"[fannypack-drive] Downloading file to {cached_filepath}")

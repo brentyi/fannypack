@@ -18,6 +18,8 @@ import torch
 
 import fannypack
 
+__all__ = ["SliceWrapper"]
+
 # Valid raw types that we can wrap
 _raw_types = set([list, tuple, np.ndarray, torch.Tensor])
 

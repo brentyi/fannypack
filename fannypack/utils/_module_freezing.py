@@ -2,6 +2,7 @@ from typing import Dict
 
 import torch.nn as nn
 
+__all__ = ["freeze_module", "unfreeze_module"]
 _freeze_restore_values: Dict[nn.Module, Dict] = {}
 
 
