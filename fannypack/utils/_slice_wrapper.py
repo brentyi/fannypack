@@ -22,16 +22,25 @@ import fannypack
 # Valid raw types that we can wrap
 _raw_types = set([list, tuple, np.ndarray, torch.Tensor])
 
-# Alias for dictionary types
-DictType = Union[
-    Dict[Any, List], Dict[Any, Tuple], Dict[Any, torch.Tensor], Dict[Any, np.ndarray],
-]
-
 # Alias for valid raw types that we can wrap
-InputType = Union[List, Tuple, torch.Tensor, np.ndarray, DictType]
+InputType = TypeVar(
+    "InputType",
+    List,
+    Tuple,
+    torch.Tensor,
+    np.ndarray,
+    Dict[Any, List],
+    Dict[Any, Tuple],
+    Dict[Any, torch.Tensor],
+    Dict[Any, np.ndarray],
+    Union[List, Dict[Any, List]],
+    Union[Tuple, Dict[Any, Tuple]],
+    Union[torch.Tensor, Dict[Any, torch.Tensor]],
+    Union[np.ndarray, Dict[Any, np.ndarray]],
+)
 
 
-class SliceWrapper(Iterable):
+class SliceWrapper(Iterable, Generic[InputType]):
     """A thin wrapper class for creating a unified interface for...
     - Lists
     - Tuples
@@ -45,7 +54,7 @@ class SliceWrapper(Iterable):
     """
 
     def __init__(self, data: InputType):
-        self.data = data
+        self.data: InputType = data
         """list, tuple, torch.Tensor, np.ndarray, or dict: Wrapped data."""
 
         # Sanity checks
@@ -270,13 +279,15 @@ class SliceWrapper(Iterable):
             data_dict = cast(dict, self.data)
 
             # Construct output
-            mapped_data_dict = {}
+            mapped_data = {}
             for key, value in data_dict.items():
-                mapped_data_dict[key] = function(value)
+                mapped_data[key] = function(value)
+        elif type(self.data) in _raw_types:
+            mapped_data = function(self.data)
         else:
-            mapped_data_dict = function(self.data)
+            assert False, f"Unsupported data type: {type(self.data)}"
 
-        return SliceWrapper(mapped_data_dict)
+        return SliceWrapper(mapped_data)
 
     @property
     def shape(self) -> Tuple[int, ...]:
