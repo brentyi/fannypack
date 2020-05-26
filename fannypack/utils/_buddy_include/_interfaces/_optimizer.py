@@ -185,9 +185,9 @@ class _BuddyOptimizer(_BuddyForwardDeclarations, abc.ABC):
 
         # Parameters
         Optimizer = self._OPTIMIZER_TYPES[optimizer_type]
-        initial_learning_rate = self._optimizer_default_learning_rate
 
         # Construct optimizer
-        self._optimizer_dict[optimizer_name] = Optimizer(
-            self._model.parameters(), lr=initial_learning_rate
+        self._optimizer_dict[optimizer_name] = Optimizer(self._model.parameters())
+        self.set_learning_rate(
+            self._optimizer_default_learning_rate, optimizer_name=optimizer_name
         )
