@@ -234,27 +234,28 @@ class SliceWrapper(Iterable, Generic[WrappedType]):
     def map(
         self, function: Callable[[Any], MapOutputType]
     ) -> Union[MapOutputType, Dict[Any, MapOutputType]]:
-        """Compute a new SliceWrapper, with a function applied to all values within
-        our wrapped data object.
+        """Apply a function to all iterables within our wrapped data object.
 
-        For iterables that are directly wrapped, this is equivalent to evaluating:
+        For iterables that are directly wrapped (eg lists), this is equivalent to
+        evaluating:
         ```
-        function(data)
+        slice_wrapper: SliceWrapper[List]
+        function(slice_wrapper.data)
         ```
 
         For dictionaries, `function` is applied value-wise.
         Thus, an input of...
         ```
         SliceWrapper({
-            "a": a,
-            "b": b,
+            "a": [1, 2, 3],
+            "b": [2, 4, 5],
         })
         ```
         would return...
         ```
         {
-            "a": function(a),
-            "b": function(b),
+            "a": function([1, 2, 3]),
+            "b": function([2, 4, 5]),
         }
         ```
 
