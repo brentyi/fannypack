@@ -36,6 +36,7 @@ class _BuddyCheckpointing(_BuddyForwardDeclarations, abc.ABC):
     def save_checkpoint(self, label: str = None, path: str = None) -> None:
         """Saves a checkpoint, which can optionally be labeled.
         """
+        assert self._model is not None, "No model attached!"
 
         # Determine path to checkpoint file
         unlabeled = False
@@ -123,6 +124,7 @@ class _BuddyCheckpointing(_BuddyForwardDeclarations, abc.ABC):
 
         Can also be specified via a label or file path.
         """
+        assert self._model is not None, "No model attached!"
 
         if target is None:
             target = source
@@ -165,6 +167,7 @@ class _BuddyCheckpointing(_BuddyForwardDeclarations, abc.ABC):
 
         Can also be specified via a label or file path.
         """
+        assert self._model is not None, "No model attached!"
 
         if target is None:
             target = source
@@ -196,6 +199,7 @@ class _BuddyCheckpointing(_BuddyForwardDeclarations, abc.ABC):
 
         Can also be specified via a label or file path.
         """
+        assert self._model is not None, "No model attached!"
 
         # Find and read our checkpoint file
         checkpoint = self._read_checkpoint_file(label, path, experiment_name)
@@ -211,6 +215,7 @@ class _BuddyCheckpointing(_BuddyForwardDeclarations, abc.ABC):
 
         Can also be specified via a label or file path.
         """
+        assert self._model is not None, "No model attached!"
 
         # Find and read our checkpoint file
         checkpoint = self._read_checkpoint_file(label, path, experiment_name)

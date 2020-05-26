@@ -60,7 +60,7 @@ class _BuddyOptimizer(_BuddyForwardDeclarations, abc.ABC):
     ) -> None:
         """Compute gradients and use them to minimize a loss function.
         """
-
+        assert self._model is not None, "No model attached!"
         self._instantiate_optimizer(optimizer_name)
 
         # Update learning rate using scheduler if possible
@@ -101,6 +101,7 @@ class _BuddyOptimizer(_BuddyForwardDeclarations, abc.ABC):
     def get_learning_rate(self, optimizer_name: str = "primary") -> float:
         """Gets an optimizer learning rate.
         """
+        assert self._model is not None, "No model attached!"
         assert optimizer_name in self._optimizer_dict
 
         # Return scheduled learning rate
@@ -122,7 +123,7 @@ class _BuddyOptimizer(_BuddyForwardDeclarations, abc.ABC):
         """Sets an optimizer learning rate. Accepts either a floating point
         learning rate or a schedule function (int steps -> float LR).
         """
-
+        assert self._model is not None, "No model attached!"
         schedulers = self._optimizer_config["learning_rate_schedulers"]
         if callable(value):
             # Store a scheduler
@@ -159,6 +160,7 @@ class _BuddyOptimizer(_BuddyForwardDeclarations, abc.ABC):
         """(Private) Instantiates an optimizer. Returns immediately if
         optimizer already exists.
         """
+        assert self._model is not None, "No model attached!"
         if optimizer_name in self._optimizer_dict.keys():
             # Optimizer already exists: do nothing!
             return

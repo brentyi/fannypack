@@ -46,7 +46,7 @@ class Buddy(
     def __init__(
         self,
         experiment_name: str,
-        model: nn.Module,
+        model: nn.Module = None,
         *,
         checkpoint_dir: str = "checkpoints",
         checkpoint_max_to_keep: int = 5,
@@ -61,20 +61,24 @@ class Buddy(
         """
         # Validate and assign core parameters.
         assert type(experiment_name) == str
-        assert isinstance(model, nn.Module)
+        assert model is None or isinstance(model, nn.Module)
         assert type(verbose) == bool
 
         self._experiment_name = experiment_name
-        self._model = model
         self._verbose = True
 
         # Use GPU for training if available.
         if torch.cuda.is_available():
             self._device = torch.device("cuda")
-            model.cuda()
         else:
             self._device = torch.device("cpu")
         self._print("Using device:", self._device)
+
+        # Attach model if available
+        if model != None:
+            self.attach_model(model)
+        else:
+            self._model = None
 
         # Call constructors for each of our interfaces.
         # Sets up checkpointing, metadata, logging, and optimization-specific state.
@@ -96,10 +100,28 @@ class Buddy(
         # Print available checkpoints
         self._print("Available checkpoint labels:", self.checkpoint_labels)
 
+    def attach_model(self, model: nn.Module) -> None:
+        """Attach a model to our Buddy, and move it onto `buddy.device`.
+
+        If a model isn't explicitly passed into the constructor's `model` field,
+        `attach_model` should be called before any optimization, checkpointing, etc
+        happens.
+
+        Args:
+            model (nn.Module): Model to attach.
+        """
+
+        # Move model to correct device
+        model.to(self._device)
+
+        # Attach model
+        self._model = model
+
     # Shared functions
     @property
     def device(self) -> torch.device:
-        """Read-only interface for the active torch device.
+        """Read-only interface for the active torch device. Auto-detected in the
+        constructor based on CUDA support.
         """
         return self._device
 

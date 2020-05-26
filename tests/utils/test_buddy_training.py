@@ -10,6 +10,22 @@ import fannypack
 from ..fixtures import simple_buddy_temporary_data
 
 
+def test_buddy_no_model():
+    """Check that errors are raised if a Buddy is used without a model attached.
+    """
+    buddy = fannypack.utils.Buddy("no_model")
+
+    with pytest.raises(AssertionError):
+        buddy.save_checkpoint()
+
+    with pytest.raises(AssertionError):
+        buddy.load_checkpoint()
+
+    with pytest.raises(AssertionError):
+        fake_loss = torch.Tensor([0.0]).to(buddy.device)
+        buddy.minimize(fake_loss)
+
+
 def test_buddy_log_scopes(simple_buddy_temporary_data):
     """Check that log scope function as expected.
     """
