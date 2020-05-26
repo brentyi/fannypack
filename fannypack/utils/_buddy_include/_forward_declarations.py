@@ -1,4 +1,5 @@
 import abc
+from typing import Optional
 
 import torch
 import torch.nn as nn
@@ -10,7 +11,7 @@ class _BuddyForwardDeclarations(abc.ABC):
     """
 
     _experiment_name: str
-    _model: nn.Module
+    _model: Optional[nn.Module]
     _device: torch.device
 
     @abc.abstractproperty

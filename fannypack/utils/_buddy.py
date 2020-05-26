@@ -1,5 +1,5 @@
 import warnings
-from typing import List
+from typing import List, Optional, cast
 
 import torch
 import torch.nn as nn
@@ -46,7 +46,7 @@ class Buddy(
     def __init__(
         self,
         experiment_name: str,
-        model: nn.Module = None,
+        model: Optional[nn.Module] = None,
         *,
         checkpoint_dir: str = "checkpoints",
         checkpoint_max_to_keep: int = 5,
@@ -54,14 +54,13 @@ class Buddy(
         log_dir: str = "logs",
         optimizer_type: str = "adam",
         optimizer_checkpoint_interval: float = 300,
-        optimizer_names: List[str] = None,  # Deprecated!
+        optimizer_names: Optional[List[str]] = None,  # Deprecated!
         verbose: bool = True,
     ) -> None:
         """Constructor
         """
         # Validate and assign core parameters.
         assert type(experiment_name) == str
-        assert model is None or isinstance(model, nn.Module)
         assert type(verbose) == bool
 
         self._experiment_name = experiment_name
@@ -76,7 +75,7 @@ class Buddy(
 
         # Attach model if available
         if model != None:
-            self.attach_model(model)
+            self.attach_model(cast(nn.Module, model))
         else:
             self._model = None
 
@@ -110,6 +109,8 @@ class Buddy(
         Args:
             model (nn.Module): Model to attach.
         """
+
+        assert isinstance(model, nn.Module)
 
         # Move model to correct device
         model.to(self._device)
