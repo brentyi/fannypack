@@ -87,6 +87,7 @@ def simple_buddy():
         metadata_dir=os.path.join(os.path.dirname(__file__), "assets/metadata/"),
         log_dir=os.path.join(os.path.dirname(__file__), "assets/log/"),
         verbose=True,
+        cpu_only=True,
     )
 
     # Batch size
@@ -120,6 +121,7 @@ def simple_buddy_temporary_data():
         verbose=True,
         # Disable auto-checkpointing
         optimizer_checkpoint_interval=0,
+        cpu_only=True,
     )
 
     # Batch size
@@ -160,6 +162,7 @@ def resblock_buddy_temporary_data():
         metadata_dir=os.path.join(os.path.dirname(__file__), "tmp/assets/metadata/"),
         log_dir=os.path.join(os.path.dirname(__file__), "tmp/assets/log/"),
         verbose=True,
+        cpu_only=True,
     )
 
     # Batch size

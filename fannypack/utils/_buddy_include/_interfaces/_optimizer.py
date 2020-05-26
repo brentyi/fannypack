@@ -50,6 +50,11 @@ class _BuddyOptimizer(_BuddyForwardDeclarations, abc.ABC):
         self._optimizer_checkpoint_interval: float = optimizer_checkpoint_interval
         self._optimizer_last_checkpoint_time: Optional[float] = None
 
+        # Default learning rate
+        self._optimizer_default_learning_rate: Union[
+            float, Callable[[int], float]
+        ] = self._OPTIMIZER_DEFAULT_LEARNING_RATES[optimizer_type]
+
     def minimize(
         self,
         loss: torch.Tensor,
@@ -139,6 +144,13 @@ class _BuddyOptimizer(_BuddyForwardDeclarations, abc.ABC):
             # Set scalar learning rate
             self._set_learning_rate(value, optimizer_name)
 
+    def set_default_learning_rate(
+        self, value: Union[float, Callable[[int], float]]
+    ) -> None:
+        """Sets a default learning rate for new optimizers.
+        """
+        self._optimizer_default_learning_rate = value
+
     @property
     def optimizer_steps(self) -> int:
         """Read-only interface for # of steps taken by optimizer.
@@ -173,7 +185,7 @@ class _BuddyOptimizer(_BuddyForwardDeclarations, abc.ABC):
 
         # Parameters
         Optimizer = self._OPTIMIZER_TYPES[optimizer_type]
-        initial_learning_rate = self._OPTIMIZER_DEFAULT_LEARNING_RATES[optimizer_type]
+        initial_learning_rate = self._optimizer_default_learning_rate
 
         # Construct optimizer
         self._optimizer_dict[optimizer_name] = Optimizer(

@@ -41,6 +41,8 @@ class Buddy(
             the first call to minimize(). Set to 0 to disable. Defaults to 300.
         verbose (bool, optional): Flag for toggling debug messages. Defaults to
             `True`.
+        cpu_only (bool, optional): Set to True to turn off auto-detection of cuda
+            support.
     """
 
     def __init__(
@@ -56,6 +58,7 @@ class Buddy(
         optimizer_checkpoint_interval: float = 300,
         optimizer_names: Optional[List[str]] = None,  # Deprecated!
         verbose: bool = True,
+        cpu_only: bool = False,
     ) -> None:
         """Constructor
         """
@@ -67,7 +70,7 @@ class Buddy(
         self._verbose = True
 
         # Use GPU for training if available.
-        if torch.cuda.is_available():
+        if not cpu_only and torch.cuda.is_available():
             self._device = torch.device("cuda")
         else:
             self._device = torch.device("cpu")

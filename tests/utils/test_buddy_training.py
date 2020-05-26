@@ -64,8 +64,8 @@ def test_buddy_train(simple_buddy_temporary_data):
 
     initial_loss = F.mse_loss(model(data), labels)
 
-    # Try using LR scheduler interface
-    buddy.set_learning_rate(lambda steps: 1e-3)
+    # Try using default learning rate
+    buddy.set_default_learning_rate(1e-3)
 
     for _ in range(200):
         # Optimize
@@ -76,6 +76,7 @@ def test_buddy_train(simple_buddy_temporary_data):
         with buddy.log_scope("scope"):
             buddy.log_scalar("loss", loss)
 
+    assert buddy.get_learning_rate() == 1e-3
     assert buddy.optimizer_steps == 200
 
     # Loss should at least have halved
