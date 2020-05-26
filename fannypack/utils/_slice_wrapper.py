@@ -88,7 +88,7 @@ class SliceWrapper(Iterable, Generic[WrappedType]):
 
     def __getitem__(self, index: Any) -> Any:
         """Unified interface for indexing into our wrapped object; shorthand for
-        `SliceWrapper.get(lambda v: v[index])`.
+        `SliceWrapper.map(lambda v: v[index])`.
 
         For iterables that are directly wrapped, this is equivalent to evaluating
         `data[index]`.
