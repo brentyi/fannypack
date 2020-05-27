@@ -78,7 +78,7 @@ class SliceWrapper(Iterable, Generic[WrappedType]):
 
         # Backwards-compatibility
         def convert_to_numpy():  # pragma: no cover
-            self.data = self.map(np.asarray)
+            self.data.update(self.map(np.asarray))
 
         self.convert_to_numpy = fannypack.utils.deprecation_wrapper(
             "SliceWrapper.convert_to_numpy() is deprecated -- please use "
