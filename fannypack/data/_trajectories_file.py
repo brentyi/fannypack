@@ -1,10 +1,10 @@
-from typing import Any, Dict, Optional, Union
+from typing import Any, Dict, Iterable, Optional, Union
 
 import h5py
 import numpy as np
 
 
-class TrajectoriesFile:
+class TrajectoriesFile(Iterable):
     """An interface for reading/writing trajectory files using hdf5 files.
 
     Each TrajectoriesFile represents an iterable list of trajectories, where
@@ -149,6 +149,23 @@ class TrajectoriesFile:
                 output[key] = converted_value
 
         return output
+
+    def __iter__(self):
+        """Iterable __iter__() interface.
+        """
+        self._iter_index = 0
+        return self
+
+    def __next__(self) -> Dict[str, Union[np.ndarray, str]]:
+        """Iterable __next__() interface.
+        """
+        try:
+            output = self[self._iter_index]
+            self._iter_index += 1
+            return output
+        except IndexError:
+            pass
+        raise StopIteration
 
     def __setitem__(self, index: int, item: Dict[str, Union[np.ndarray, str]]):
         """Assignment operation for modifying or mutating trajectories.
