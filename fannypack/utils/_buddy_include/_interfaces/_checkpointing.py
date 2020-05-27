@@ -29,8 +29,10 @@ class _BuddyCheckpointing(_BuddyForwardDeclarations, abc.ABC):
         self._checkpoint_max_to_keep = checkpoint_max_to_keep
 
         # Find all unlabeled checkpoints for this experiment
-        self._checkpoint_unlabeled_files = self._find_unlabeled_checkpoints(
-            checkpoint_dir=self._checkpoint_dir, experiment_name=self._experiment_name,
+        self._checkpoint_unlabeled_files = self._find_checkpoints(
+            checkpoint_dir=self._checkpoint_dir,
+            experiment_name=self._experiment_name,
+            unlabeled_only=True,
         )
 
     def save_checkpoint(self, label: str = None, path: str = None) -> None:
@@ -237,6 +239,9 @@ class _BuddyCheckpointing(_BuddyForwardDeclarations, abc.ABC):
         """ Accessor for listing available checkpoint labels.
         These should be saved as: `experiment_name-label.ckpt` in the
         `checkpoint_dir` directory.
+
+        Returns:
+            List[str]: Checkpoint labels, sorted alphabetically.
         """
 
         experiment_name = self._experiment_name
@@ -290,15 +295,14 @@ class _BuddyCheckpointing(_BuddyForwardDeclarations, abc.ABC):
         # Determine path to checkpoint file
         if path is None and label is None:
             # Load latest unlabeled checkpoint
-            if experiment_name is None:
-                # Use our current experiment name by default
-                paths = self._checkpoint_unlabeled_files
-            else:
-                # Use specified experiment name
-                paths = self._find_unlabeled_checkpoints(
-                    checkpoint_dir=self._checkpoint_dir,
-                    experiment_name=experiment_name,
-                )
+
+            # First, find all checkpoint paths
+            paths = self._find_checkpoints(
+                checkpoint_dir=self._checkpoint_dir,
+                experiment_name=self._experiment_name
+                if experiment_name is None
+                else experiment_name,
+            )
             if len(paths) == 0:
                 raise FileNotFoundError("Missing checkpoint file")
 
@@ -346,7 +350,8 @@ class _BuddyCheckpointing(_BuddyForwardDeclarations, abc.ABC):
 
         # Raise warning for optimizer type mismatches
         if (
-            checkpoint["optimizer_config"]["optimizer_type"]
+            hasattr(self, "_optimizer_config")
+            and checkpoint["optimizer_config"]["optimizer_type"]
             != cast("_BuddyOptimizer", self)._optimizer_config["optimizer_type"]
         ):
             warnings.warn("Checkpoint loading: overriding optimizer type.")
@@ -354,9 +359,8 @@ class _BuddyCheckpointing(_BuddyForwardDeclarations, abc.ABC):
         self._print("Read checkpoint from path:", path)
         return checkpoint
 
-    @staticmethod
-    def _find_unlabeled_checkpoints(
-        checkpoint_dir: str, experiment_name: str
+    def _find_checkpoints(
+        self, checkpoint_dir: str, experiment_name: str, unlabeled_only: bool = False
     ) -> List[str]:
         """(Private) Returns a list of all unlabeled checkpoints associated
         with this experiment, sorted from oldest to newest.
@@ -367,21 +371,39 @@ class _BuddyCheckpointing(_BuddyForwardDeclarations, abc.ABC):
         if len(path_choices) == 0:
             return []
 
-        # Find unlabeled checkpoint files + associated step counts
-        output = []
+        # Find checkpoint files + associated step counts
+        paths = []
+        step_counts = {}
         for choice in path_choices:
             prefix_len = len("{}/{}-".format(checkpoint_dir, experiment_name))
-
             suffix_len = len(".ckpt")
+
+            steps = None
             string_steps = choice[prefix_len:-suffix_len]
             try:
-                steps = int(string_steps)
-                output.append((choice, steps))
+                step_counts[choice] = int(string_steps)
             except ValueError:
                 pass
 
+            # Only include unlabeled if unlabeld_only == True
+            if choice in step_counts or not unlabeled_only:
+                paths.append(choice)
+
+        # Add step counts for labeled checkpoints
+        for path in paths:
+            if path in step_counts:
+                continue
+            elif unlabeled_only:
+                # This condition should never be hit
+                assert False
+
+            steps = self._read_checkpoint_file(path=path)["optimizer_config"][
+                "global_steps"
+            ]
+            step_counts[path] = steps
+
         # Sort output by steps
-        output.sort(key=lambda x: x[1])
+        paths.sort(key=lambda path: step_counts[path])
 
         # Return paths only
-        return [x[0] for x in output]
+        return paths

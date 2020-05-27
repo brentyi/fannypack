@@ -44,7 +44,7 @@ buddy.save_checkpoint(label="memorable_name")
 # Save a checkpoint to a specific path
 buddy.save_checkpoint(path="checkpoints/specific_path.ckpt")
 
-# Load a checkpoint (latest that's been labeled with a step count)
+# Load a checkpoint (latest)
 buddy.load_checkpoint()
 
 # Load a labeled checkpoint
