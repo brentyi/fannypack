@@ -19,15 +19,28 @@ class _BuddyMetadata(_BuddyForwardDeclarations, abc.ABC):
         # Attempt to read existing metadata
         self._metadata_dir = metadata_dir
         try:
-            self._read_metadata()
+            self.load_metadata()
         except FileNotFoundError:
             self._metadata: Dict[str, Any] = {}
 
-        # Backwards-compatibility for deprecated API
-        self.load_metadata = _deprecation.deprecation_wrapper(
-            "Buddy.load_metadata() is deprecated -- metadata is read automatically.",
-            self._read_metadata,
-        )
+    def load_metadata(
+        self, experiment_name: str = None, metadata_dir: str = None, path: str = None
+    ) -> None:
+        """Read existing metadata file. Metadata is loaded automatically: this function
+        should not need to be called.
+        """
+        if path is None:
+            if experiment_name is None:
+                experiment_name = self._experiment_name
+            if metadata_dir is None:
+                metadata_dir = self._metadata_dir
+            path = os.path.join(metadata_dir, f"{experiment_name}.yaml")
+        else:
+            assert experiment_name is None and metadata_dir is None
+
+        with open(path, "r") as file:
+            self._metadata = yaml.load(file, Loader=yaml.SafeLoader)
+            self._print("Loaded metadata:", self._metadata)
 
     def add_metadata(self, content: Dict[str, Any]) -> None:
         """Add human-readable metadata for this experiment. Input should be a
@@ -65,25 +78,6 @@ class _BuddyMetadata(_BuddyForwardDeclarations, abc.ABC):
         with open(metadata_path, "w") as file:
             yaml.dump(self._metadata, file, default_flow_style=False)
             self._print("Wrote metadata to:", metadata_path)
-
-    def _read_metadata(
-        self, experiment_name: str = None, metadata_dir: str = None, path: str = None
-    ) -> None:
-        """Read existing metadata file. Metadata is loaded automatically: this function
-        should not need to be called.
-        """
-        if path is None:
-            if experiment_name is None:
-                experiment_name = self._experiment_name
-            if metadata_dir is None:
-                metadata_dir = self._metadata_dir
-            path = os.path.join(metadata_dir, f"{experiment_name}.yaml")
-        else:
-            assert experiment_name is None and metadata_dir is None
-
-        with open(path, "r") as file:
-            self._metadata = yaml.load(file, Loader=yaml.SafeLoader)
-            self._print("Loaded metadata:", self._metadata)
 
     @property
     def metadata(self) -> Dict[str, Any]:
