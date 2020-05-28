@@ -2,14 +2,16 @@ from __future__ import annotations
 
 import abc
 from dataclasses import dataclass
-from typing import List, Optional, Union, cast
+from typing import TYPE_CHECKING, List, Optional, Union, cast
 
 import numpy as np
 import torch.utils.tensorboard
 
-from ... import _deprecation
-from .._forward_declarations import _BuddyForwardDeclarations
+from .. import _deprecation
 from ._optimizer import _BuddyOptimizer
+
+if TYPE_CHECKING:
+    from .._buddy import Buddy
 
 
 @dataclass
@@ -17,16 +19,16 @@ class _LogNamespace:
     buddy: _BuddyLogging
     scope: str
 
-    def __enter__(self):
+    def __enter__(self) -> _LogNamespace:
         self.buddy.log_scope_push(self.scope)
         return self
 
-    def __exit__(self, *unused):
+    def __exit__(self, *unused) -> None:
         self.buddy.log_scope_pop(self.scope)
         return
 
 
-class _BuddyLogging(_BuddyForwardDeclarations, abc.ABC):
+class _BuddyLogging(abc.ABC):
     """Buddy's TensorBoard logging interface.
     """
 
@@ -65,7 +67,7 @@ class _BuddyLogging(_BuddyForwardDeclarations, abc.ABC):
         Returns:
             _LogNamespace: Object for automatically pushing/popping scope.
         """
-        return _LogNamespace(self, scope)
+        return _LogNamespace(buddy=self, scope=scope)
 
     def log_scope_push(self, scope: str) -> None:
         """Push a scope to log tensors into.
@@ -184,6 +186,6 @@ class _BuddyLogging(_BuddyForwardDeclarations, abc.ABC):
         """
         if self._log_writer is None:
             self._log_writer = torch.utils.tensorboard.SummaryWriter(
-                self._log_dir + "/" + self._experiment_name
+                self._log_dir + "/" + cast("Buddy", self)._experiment_name
             )
         return self._log_writer

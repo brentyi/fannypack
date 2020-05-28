@@ -1,14 +1,16 @@
 import abc
 import os
-from typing import Any, Dict
+from typing import TYPE_CHECKING, Any, Dict, cast
 
 import yaml
 
-from ... import _deprecation
-from .._forward_declarations import _BuddyForwardDeclarations
+from .. import _deprecation
+
+if TYPE_CHECKING:
+    from .._buddy import Buddy
 
 
-class _BuddyMetadata(_BuddyForwardDeclarations, abc.ABC):
+class _BuddyMetadata(abc.ABC):
     """Buddy's experiment metadata management interface.
     """
 
@@ -31,7 +33,7 @@ class _BuddyMetadata(_BuddyForwardDeclarations, abc.ABC):
         """
         if path is None:
             if experiment_name is None:
-                experiment_name = self._experiment_name
+                experiment_name = cast("Buddy", self)._experiment_name
             if metadata_dir is None:
                 metadata_dir = self._metadata_dir
             path = os.path.join(metadata_dir, f"{experiment_name}.yaml")
@@ -40,7 +42,7 @@ class _BuddyMetadata(_BuddyForwardDeclarations, abc.ABC):
 
         with open(path, "r") as file:
             self._metadata = yaml.load(file, Loader=yaml.SafeLoader)
-            self._print("Loaded metadata:", self._metadata)
+            cast("Buddy", self)._print("Loaded metadata:", self._metadata)
 
     def add_metadata(self, content: Dict[str, Any]) -> None:
         """Add human-readable metadata for this experiment. Input should be a
@@ -71,13 +73,15 @@ class _BuddyMetadata(_BuddyForwardDeclarations, abc.ABC):
         # Create metadata directory if needed
         if not os.path.isdir(self._metadata_dir):
             os.makedirs(self._metadata_dir)
-            self._print("Created directory:", self._metadata_dir)
+            cast("Buddy", self)._print("Created directory:", self._metadata_dir)
 
         # Write metadata to file
-        metadata_path = "{}/{}.yaml".format(self._metadata_dir, self._experiment_name,)
+        metadata_path = "{}/{}.yaml".format(
+            self._metadata_dir, cast("Buddy", self)._experiment_name,
+        )
         with open(metadata_path, "w") as file:
             yaml.dump(self._metadata, file, default_flow_style=False)
-            self._print("Wrote metadata to:", metadata_path)
+            cast("Buddy", self)._print("Wrote metadata to:", metadata_path)
 
     @property
     def metadata(self) -> Dict[str, Any]:
@@ -89,4 +93,6 @@ class _BuddyMetadata(_BuddyForwardDeclarations, abc.ABC):
     def metadata_path(self) -> str:
         """Read-only path to my metadata file.
         """
-        return os.path.join(self._metadata_dir, f"{self._experiment_name}.yaml")
+        return os.path.join(
+            self._metadata_dir, f"{cast('Buddy', self)._experiment_name}.yaml"
+        )

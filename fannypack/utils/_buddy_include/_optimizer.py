@@ -6,13 +6,13 @@ from typing import TYPE_CHECKING, Any, Callable, Dict, Optional, Union, cast
 
 import torch
 
-from .._forward_declarations import _BuddyForwardDeclarations
-
 if TYPE_CHECKING:
     from ._checkpointing import _BuddyCheckpointing
+    from .._buddy import Buddy
+    import torch.nn as nn
 
 
-class _BuddyOptimizer(_BuddyForwardDeclarations, abc.ABC):
+class _BuddyOptimizer(abc.ABC):
     """Buddy's optimization interface.
     """
 
@@ -65,7 +65,7 @@ class _BuddyOptimizer(_BuddyForwardDeclarations, abc.ABC):
     ) -> None:
         """Compute gradients and use them to minimize a loss function.
         """
-        assert self._model is not None, "No model attached!"
+        assert cast("Buddy", self)._model is not None, "No model attached!"
         self._instantiate_optimizer(optimizer_name)
 
         # Update learning rate using scheduler if possible
@@ -106,7 +106,7 @@ class _BuddyOptimizer(_BuddyForwardDeclarations, abc.ABC):
     def get_learning_rate(self, optimizer_name: str = "primary") -> float:
         """Gets an optimizer learning rate.
         """
-        assert self._model is not None, "No model attached!"
+        assert cast("Buddy", self)._model is not None, "No model attached!"
         assert optimizer_name in self._optimizer_dict
 
         # Return scheduled learning rate
@@ -128,7 +128,7 @@ class _BuddyOptimizer(_BuddyForwardDeclarations, abc.ABC):
         """Sets an optimizer learning rate. Accepts either a floating point
         learning rate or a schedule function (int steps -> float LR).
         """
-        assert self._model is not None, "No model attached!"
+        assert cast("Buddy", self)._model is not None, "No model attached!"
         schedulers = self._optimizer_config["learning_rate_schedulers"]
         if callable(value):
             # Store a scheduler
@@ -172,12 +172,12 @@ class _BuddyOptimizer(_BuddyForwardDeclarations, abc.ABC):
         """(Private) Instantiates an optimizer. Returns immediately if
         optimizer already exists.
         """
-        assert self._model is not None, "No model attached!"
+        assert cast("Buddy", self)._model is not None, "No model attached!"
         if optimizer_name in self._optimizer_dict.keys():
             # Optimizer already exists: do nothing!
             return
 
-        self._print("Instantiating optimizer: ", optimizer_name)
+        cast("Buddy", self)._print("Instantiating optimizer: ", optimizer_name)
 
         # Make sure we're creating a valid optimizer
         optimizer_type = self._optimizer_config["optimizer_type"]
@@ -187,7 +187,9 @@ class _BuddyOptimizer(_BuddyForwardDeclarations, abc.ABC):
         Optimizer = self._OPTIMIZER_TYPES[optimizer_type]
 
         # Construct optimizer
-        self._optimizer_dict[optimizer_name] = Optimizer(self._model.parameters())
+        self._optimizer_dict[optimizer_name] = Optimizer(
+            cast("nn.Module", cast("Buddy", self)._model).parameters()
+        )
         self.set_learning_rate(
             self._optimizer_default_learning_rate, optimizer_name=optimizer_name
         )

@@ -12,13 +12,13 @@ import dill
 import numpy as np
 import torch
 
-from .._forward_declarations import _BuddyForwardDeclarations
-
 if TYPE_CHECKING:
     from ._optimizer import _BuddyOptimizer
+    from .._buddy import Buddy
+    import torch.nn as nn
 
 
-class _BuddyCheckpointing(_BuddyForwardDeclarations, abc.ABC):
+class _BuddyCheckpointing(abc.ABC):
     """Buddy's model checkpointing interface.
     """
 
@@ -31,28 +31,30 @@ class _BuddyCheckpointing(_BuddyForwardDeclarations, abc.ABC):
         # Find all unlabeled checkpoints for this experiment
         self._checkpoint_unlabeled_files = self._find_checkpoints(
             checkpoint_dir=self._checkpoint_dir,
-            experiment_name=self._experiment_name,
+            experiment_name=cast("Buddy", self)._experiment_name,
             unlabeled_only=True,
         )
 
     def save_checkpoint(self, label: str = None, path: str = None) -> None:
         """Saves a checkpoint, which can optionally be labeled.
         """
-        assert self._model is not None, "No model attached!"
+        assert cast("Buddy", self)._model is not None, "No model attached!"
 
         # Determine path to checkpoint file
         unlabeled = False
         if path is None and label is None:
             optimizer_steps = cast("_BuddyOptimizer", self).optimizer_steps
             path = "{}/{}-{:016d}.ckpt".format(
-                self._checkpoint_dir, self._experiment_name, optimizer_steps,
+                self._checkpoint_dir,
+                cast("Buddy", self)._experiment_name,
+                optimizer_steps,
             )
 
             if (
                 self._checkpoint_unlabeled_files
                 and path == self._checkpoint_unlabeled_files[-1]
             ):
-                self._print("Skipping redundant checkpoint save")
+                cast("Buddy", self)._print("Skipping redundant checkpoint save")
                 return
 
             unlabeled = True
@@ -61,7 +63,7 @@ class _BuddyCheckpointing(_BuddyForwardDeclarations, abc.ABC):
             label = cast(str, label)
             assert not label.isdigit()
             path = "{}/{}-{}.ckpt".format(
-                self._checkpoint_dir, self._experiment_name, label
+                self._checkpoint_dir, cast("Buddy", self)._experiment_name, label
             )
 
         # Create directory if it doesn't exist yet
@@ -82,7 +84,7 @@ class _BuddyCheckpointing(_BuddyForwardDeclarations, abc.ABC):
         state = {
             "optimizer_config": cast("_BuddyOptimizer", self)._optimizer_config,
             "optimizer_states": optimizer_states,
-            "state_dict": self._model.state_dict(),
+            "state_dict": cast("nn.Module", cast("Buddy", self)._model).state_dict(),
         }
 
         # Ignore SIGINT (eg ctrl+c) events while we save to disk...
@@ -91,14 +93,14 @@ class _BuddyCheckpointing(_BuddyForwardDeclarations, abc.ABC):
             signal.signal(signal.SIGINT, lambda _sig, _frame: None)
         except ValueError as e:  # pragma: no cover
             # signal throws a ValueError if we're not in the main thread
-            self._print("Error while attaching SIGINT handler:", e)
+            cast("Buddy", self)._print("Error while attaching SIGINT handler:", e)
             orig_handler = None
 
         # "Atomic" checkpoint saving
         tmp_path = "{}/tmp-{}.ckpt".format(checkpoint_dir, np.random.randint(1e10))
         torch.save(state, tmp_path, pickle_module=dill)
         os.rename(tmp_path, path)
-        self._print("Saved checkpoint to path:", path)
+        cast("Buddy", self)._print("Saved checkpoint to path:", path)
 
         # Restore SIGINT handler
         if orig_handler is not None:
@@ -126,7 +128,7 @@ class _BuddyCheckpointing(_BuddyForwardDeclarations, abc.ABC):
 
         Can also be specified via a label or file path.
         """
-        assert self._model is not None, "No model attached!"
+        assert cast("Buddy", self)._model is not None, "No model attached!"
 
         if target is None:
             target = source
@@ -135,7 +137,9 @@ class _BuddyCheckpointing(_BuddyForwardDeclarations, abc.ABC):
         checkpoint = self._read_checkpoint_file(label, path, experiment_name)
 
         # Get possible target modules
-        module_dict = dict(self._model.named_modules())
+        module_dict = dict(
+            cast("nn.Module", cast("Buddy", self)._model).named_modules()
+        )
         assert target in module_dict.keys(), "Nonexistent target module!"
 
         # Build a state dict for this module only
@@ -153,7 +157,7 @@ class _BuddyCheckpointing(_BuddyForwardDeclarations, abc.ABC):
         assert len(missing) == 0
         assert len(unexpected) == 0
 
-        self._print(f"Loaded module: {source} => {target}")
+        cast("Buddy", self)._print(f"Loaded module: {source} => {target}")
 
     def load_checkpoint_optimizer(
         self,
@@ -169,7 +173,7 @@ class _BuddyCheckpointing(_BuddyForwardDeclarations, abc.ABC):
 
         Can also be specified via a label or file path.
         """
-        assert self._model is not None, "No model attached!"
+        assert cast("Buddy", self)._model is not None, "No model attached!"
 
         if target is None:
             target = source
@@ -191,7 +195,7 @@ class _BuddyCheckpointing(_BuddyForwardDeclarations, abc.ABC):
         cast("_BuddyOptimizer", self)._optimizer_dict[target].load_state_dict(
             state_dict
         )
-        self._print(f"Loaded optimizer: {source} => {target}")
+        cast("Buddy", self)._print(f"Loaded optimizer: {source} => {target}")
 
     def load_checkpoint_optimizers(
         self, label=None, path=None, experiment_name=None
@@ -201,7 +205,7 @@ class _BuddyCheckpointing(_BuddyForwardDeclarations, abc.ABC):
 
         Can also be specified via a label or file path.
         """
-        assert self._model is not None, "No model attached!"
+        assert cast("Buddy", self)._model is not None, "No model attached!"
 
         # Find and read our checkpoint file
         checkpoint = self._read_checkpoint_file(label, path, experiment_name)
@@ -217,7 +221,7 @@ class _BuddyCheckpointing(_BuddyForwardDeclarations, abc.ABC):
 
         Can also be specified via a label or file path.
         """
-        assert self._model is not None, "No model attached!"
+        assert cast("Buddy", self)._model is not None, "No model attached!"
 
         # Find and read our checkpoint file
         checkpoint = self._read_checkpoint_file(label, path, experiment_name)
@@ -226,12 +230,14 @@ class _BuddyCheckpointing(_BuddyForwardDeclarations, abc.ABC):
         self._load_checkpoint_optimizers(checkpoint)
 
         # Load model parameters
-        missing, unexpected = self._model.load_state_dict(checkpoint["state_dict"])
+        missing, unexpected = cast(
+            "nn.Module", cast("Buddy", self)._model
+        ).load_state_dict(checkpoint["state_dict"])
         assert len(missing) == 0
         assert len(unexpected) == 0
 
         optimizer_steps = cast("_BuddyOptimizer", self).optimizer_steps
-        self._print("Loaded checkpoint at step:", optimizer_steps)
+        cast("Buddy", self)._print("Loaded checkpoint at step:", optimizer_steps)
         return
 
     @property
@@ -244,7 +250,7 @@ class _BuddyCheckpointing(_BuddyForwardDeclarations, abc.ABC):
             List[str]: Checkpoint labels, sorted alphabetically.
         """
 
-        experiment_name = self._experiment_name
+        experiment_name = cast("Buddy", self)._experiment_name
         checkpoint_dir = self._checkpoint_dir
 
         # Find all matching checkpoint files
@@ -299,7 +305,7 @@ class _BuddyCheckpointing(_BuddyForwardDeclarations, abc.ABC):
             # First, find all checkpoint paths
             paths = self._find_checkpoints(
                 checkpoint_dir=self._checkpoint_dir,
-                experiment_name=self._experiment_name
+                experiment_name=cast("Buddy", self)._experiment_name
                 if experiment_name is None
                 else experiment_name,
             )
@@ -313,7 +319,7 @@ class _BuddyCheckpointing(_BuddyForwardDeclarations, abc.ABC):
             # Load a labeled checkpoint
             if experiment_name is None:
                 # Use our current experiment name by default
-                experiment_name = self._experiment_name
+                experiment_name = cast("Buddy", self)._experiment_name
             path = os.path.join(self._checkpoint_dir, f"{experiment_name}-{label}.ckpt")
         elif path is not None:
             # Load a checkpoint by its location
@@ -324,7 +330,9 @@ class _BuddyCheckpointing(_BuddyForwardDeclarations, abc.ABC):
             ), "Too many arguments! Only one of (label, path) is supported at a time."
 
         # Load checkpoint dict
-        checkpoint = torch.load(path, map_location=self._device, pickle_module=dill)
+        checkpoint = torch.load(
+            path, map_location=cast("Buddy", self)._device, pickle_module=dill
+        )
 
         # Backwards-compatibility
         # This should eventually be removed :)
@@ -334,12 +342,14 @@ class _BuddyCheckpointing(_BuddyForwardDeclarations, abc.ABC):
         ]
         for old_name, new_name in renamed_fields:
             if old_name in checkpoint.keys():
-                self._print(f"Legacy checkpoint field: {old_name} => {new_name}")
+                cast("Buddy", self)._print(
+                    f"Legacy checkpoint field: {old_name} => {new_name}"
+                )
                 checkpoint[new_name] = checkpoint[old_name]
                 checkpoint.pop(old_name)
 
         if "steps" in checkpoint.keys():
-            self._print("Legacy checkpoint field: steps")
+            cast("Buddy", self)._print("Legacy checkpoint field: steps")
             checkpoint["optimizer_config"]["global_steps"] = checkpoint["steps"]
             checkpoint.pop("steps")
 
@@ -356,7 +366,7 @@ class _BuddyCheckpointing(_BuddyForwardDeclarations, abc.ABC):
         ):
             warnings.warn("Checkpoint loading: overriding optimizer type.")
 
-        self._print("Read checkpoint from path:", path)
+        cast("Buddy", self)._print("Read checkpoint from path:", path)
         return checkpoint
 
     def _find_checkpoints(

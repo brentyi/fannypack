@@ -4,10 +4,10 @@ from typing import List, Optional, cast
 import torch
 import torch.nn as nn
 
-from ._buddy_include._interfaces._checkpointing import _BuddyCheckpointing
-from ._buddy_include._interfaces._logging import _BuddyLogging
-from ._buddy_include._interfaces._metadata import _BuddyMetadata
-from ._buddy_include._interfaces._optimizer import _BuddyOptimizer
+from ._buddy_include._checkpointing import _BuddyCheckpointing
+from ._buddy_include._logging import _BuddyLogging
+from ._buddy_include._metadata import _BuddyMetadata
+from ._buddy_include._optimizer import _BuddyOptimizer
 
 
 class Buddy(
@@ -70,6 +70,7 @@ class Buddy(
         self._verbose = True
 
         # Use GPU for training if available.
+        self._device: torch.device
         if not cpu_only and torch.cuda.is_available():
             self._device = torch.device("cuda")
         else:
@@ -77,10 +78,9 @@ class Buddy(
         self._print("Using device:", self._device)
 
         # Attach model if available
+        self._model: Optional[nn.Module] = None
         if model != None:
             self.attach_model(cast(nn.Module, model))
-        else:
-            self._model = None
 
         # Call constructors for each of our interfaces.
         # Sets up checkpointing, metadata, logging, and optimization-specific state.
