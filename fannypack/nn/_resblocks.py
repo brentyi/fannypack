@@ -1,18 +1,29 @@
 import abc
+import functools
+from typing import Callable, Dict
 
 import torch
 import torch.nn as nn
 
 
 class Base(nn.Module, abc.ABC):
+    _activation_types: Dict[str, Callable[..., nn.Module]] = {
+        "relu": nn.ReLU,
+        "leaky_relu": nn.LeakyReLU,
+        "selu": nn.SELU,
+        "none": nn.Identity,
+    }
+    """Dictionary of support activation types.
+    """
+
     def __init__(self, activation: str = "relu", activations_inplace: bool = False):
         super().__init__()
 
-        self.activations_inplace = activations_inplace
-
         self.block1: nn.Module
         self.block2: nn.Module
-        self.activation = self._activation_func(activation)
+        self.activation: nn.Module = self._activation_types[activation](
+            inplace=activations_inplace
+        )
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         """ResBlock forward pass.
@@ -25,16 +36,6 @@ class Base(nn.Module, abc.ABC):
         x += residual
         x = self.activation(x)
         return x
-
-    def _activation_func(self, activation: str) -> nn.Module:
-        return nn.ModuleDict(
-            {
-                "relu": nn.ReLU(inplace=self.activations_inplace),
-                "leaky_relu": nn.LeakyReLU(inplace=self.activations_inplace),
-                "selu": nn.SELU(inplace=self.activations_inplace),
-                "none": nn.Identity(),
-            }
-        )[activation]
 
 
 class Linear(Base):

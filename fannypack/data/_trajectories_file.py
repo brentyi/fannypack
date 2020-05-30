@@ -5,11 +5,10 @@ import numpy as np
 
 
 class TrajectoriesFile(Iterable):
-    """An interface for reading/writing trajectory files using hdf5 files.
+    """An interface for reading/writing trajectories via h5py.
 
-    Each TrajectoriesFile represents an iterable list of trajectories, where
-    each trajectory is stored as a dictionary that maps `str` keys to
-    `np.ndarray` contents.
+    Each TrajectoriesFile represents an iterable list of trajectories, where trajectores
+    are stored as dictionaries that maps `str` keys to `np.ndarray` contents.
 
     Example usage (read):
     ```
@@ -39,8 +38,8 @@ class TrajectoriesFile(Iterable):
         print(traj_file[0]['b']) # [2, 4]
     ```
 
-    Note that some operations -- ones that require interfacing with the
-    filesytem -- need to be called within a `with` statement.
+    Note that some operations -- ones that require interfacing with the filesytem --
+    need to be called within a `with` statement.
 
     Args:
         path (str): File path for this trajectory file.
