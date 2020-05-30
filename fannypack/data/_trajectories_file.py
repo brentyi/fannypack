@@ -42,6 +42,12 @@ class TrajectoriesFile(Iterable):
     Note that some operations -- ones that require interfacing with the
     filesytem -- need to be called within a `with` statement.
 
+    Args:
+        path (str): File path for this trajectory file.
+        convert_doubles (bool): Convert doubles to floats to shrink files.
+        read_only (bool, optional): Open file in read-only mode.
+        compress (bool, optional): Reduce filesize w/ gzip.
+        verbose (bool, optional): Enable debug prints.
     """
 
     def __init__(
@@ -52,15 +58,6 @@ class TrajectoriesFile(Iterable):
         compress: bool = True,
         verbose: bool = True,
     ):
-        """Constructs an interface for reading from/writing to hdf5 files.
-
-        Args:
-            path (str): File path for this trajectory file.
-            convert_doubles (bool): Convert doubles to floats to shrink files.
-            read_only (bool, optional): Open file in read-only mode.
-            compress (bool, optional): Reduce filesize w/ gzip.
-            verbose (bool, optional): Enable debug prints.
-        """
         assert path[-5:] == ".hdf5", "Missing file extension!"
 
         # Meta

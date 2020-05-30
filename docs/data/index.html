@@ -185,6 +185,17 @@ each trajectory is stored as a dictionary that maps <code class="docutils litera
 </div>
 <p>Note that some operations – ones that require interfacing with the
 filesytem – need to be called within a <code class="docutils literal notranslate"><span class="pre">with</span></code> statement.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> (<em>str</em>) – File path for this trajectory file.</p></li>
+<li><p><strong>convert_doubles</strong> (<em>bool</em>) – Convert doubles to floats to shrink files.</p></li>
+<li><p><strong>read_only</strong> (<em>bool</em><em>, </em><em>optional</em>) – Open file in read-only mode.</p></li>
+<li><p><strong>compress</strong> (<em>bool</em><em>, </em><em>optional</em>) – Reduce filesize w/ gzip.</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em><em>, </em><em>optional</em>) – Enable debug prints.</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="py method">
 <dt id="fannypack.data.TrajectoriesFile.abandon_trajectory">
 <code class="sig-name descname">abandon_trajectory</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#fannypack.data.TrajectoriesFile.abandon_trajectory" title="Permalink to this definition">¶</a></dt>
