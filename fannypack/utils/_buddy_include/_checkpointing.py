@@ -96,7 +96,9 @@ class _BuddyCheckpointing(abc.ABC):
             cast("Buddy", self)._print("Error while attaching SIGINT handler:", e)
             orig_handler = None
 
-        # "Atomic" checkpoint saving
+        # Checkpoint saving
+        # > os.rename is POSIX-compliant and as such atomic
+        # > https://docs.python.org/3/library/os.html#os.rename
         tmp_path = "{}/tmp-{}.ckpt".format(checkpoint_dir, np.random.randint(1e10))
         torch.save(state, tmp_path, pickle_module=dill)
         os.rename(tmp_path, path)
