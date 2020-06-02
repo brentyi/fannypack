@@ -15,6 +15,7 @@ setup(
     license="MIT",
     packages=find_packages(exclude=["examples", "tests"]),
     package_data={"fannypack": ["py.typed"]},
+    entry_points={"console_scripts": ["buddy = fannypack.scripts.buddy_cli:main"]},
     python_requires=">=3.7",
     install_requires=[
         "dill",
@@ -26,6 +27,7 @@ setup(
         "torch",
         "tqdm",
         "Pillow",  # Needed for logging images in Tensorboard
+        "prettytable",
         # "pip>=20.1",
     ],
     classifiers=[

@@ -35,14 +35,35 @@ class _BuddyCheckpointing(abc.ABC):
             unlabeled_only=True,
         )
 
-    def save_checkpoint(self, label: str = None, path: str = None) -> None:
+    def save_checkpoint(self, label: str = None) -> None:
         """Saves a checkpoint, which can optionally be labeled.
         """
         assert cast("Buddy", self)._model is not None, "No model attached!"
 
         # Determine path to checkpoint file
-        unlabeled = False
-        if path is None and label is None:
+        if label is not None:
+            # Label explicitly specified!
+
+            # Numerical labels are reserved for step counts (see below)
+            label = cast(str, label)
+            assert not label.isdigit()
+
+            # Warn if hyphen in label name
+            # > This can cause minor issues because a hyphen is used as a separator
+            if "-" in label:
+                experiment_name = cast("Buddy", self)._experiment_name
+                warnings.warn(
+                    f"[buddy-{experiment_name}] Hyphens are not supported in labels, "
+                    "please use an underscore or space instead!",
+                    category=RuntimeWarning,
+                    stacklevel=2,
+                )
+
+            path = "{}/{}-{}.ckpt".format(
+                self._checkpoint_dir, cast("Buddy", self)._experiment_name, label
+            )
+        else:
+            # Automatically decide label using global step count
             optimizer_steps = cast("_BuddyOptimizer", self).optimizer_steps
             path = "{}/{}-{:016d}.ckpt".format(
                 self._checkpoint_dir,
@@ -56,15 +77,6 @@ class _BuddyCheckpointing(abc.ABC):
             ):
                 cast("Buddy", self)._print("Skipping redundant checkpoint save")
                 return
-
-            unlabeled = True
-        elif path is None:
-            # Numerical labels are reserved for step counts (see above)
-            label = cast(str, label)
-            assert not label.isdigit()
-            path = "{}/{}-{}.ckpt".format(
-                self._checkpoint_dir, cast("Buddy", self)._experiment_name, label
-            )
 
         # Create directory if it doesn't exist yet
         checkpoint_dir = pathlib.Path(path).parents[0]
@@ -109,7 +121,7 @@ class _BuddyCheckpointing(abc.ABC):
             signal.signal(signal.SIGINT, orig_handler)
 
         # If unlabeled, add to list
-        if unlabeled:
+        if label is None:
             self._checkpoint_unlabeled_files.append(path)
 
         # Prune checkpoint files
