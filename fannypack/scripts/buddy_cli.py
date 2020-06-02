@@ -181,3 +181,7 @@ class ListSubcommand:
         # Print table
         print(f"Found {len(experiment_names)} experiments!")
         print(table)
+
+
+if __name__ == "__main__":
+    main()
