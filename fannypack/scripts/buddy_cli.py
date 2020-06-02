@@ -1,11 +1,18 @@
+"""CLI interface for experiment management.
+
+To print options, install `fannypack` via pip and run:
+```
+$ buddy --help
+```
+"""
+
 import abc
 import argparse
 import datetime
 import os
+from typing import Dict
 
 import prettytable
-
-import fannypack
 
 
 def listdir(path: str):
@@ -18,7 +25,7 @@ def listdir(path: str):
         return []
 
 
-def main():  # pragma: no cover
+def main():
     parser = argparse.ArgumentParser(
         prog="buddy",
         description="CLI interface for Buddy, a tool for managing PyTorch experiments.",
@@ -92,10 +99,10 @@ class ListSubcommand:
     def main(cls, args: argparse.Namespace):
         # Last modified: checkpoints and metadata only
         # > We could also do logs, but seems high effort?
-        timestamps = {}
+        timestamps: Dict[str, float] = {}
 
-        # Get experiment names from checkpoints
-        checkpoint_counts = {}
+        # Count checkpoints for each experiment
+        checkpoint_counts: Dict[str, int] = {}
         for file in listdir(args.checkpoint_dir):
             # Remove .ckpt suffix
             if file[-5:] != ".ckpt":
@@ -138,15 +145,15 @@ class ListSubcommand:
         # Get experiment names from log directories
         log_experiments = set(listdir(args.log_dir))
 
-        # Print experiment names
+        # Generate table
         experiment_names = (
             set(checkpoint_counts.keys()) | log_experiments | metadata_experiments
         )
-        print(f"Found {len(experiment_names)} experiments!")
         table = prettytable.PrettyTable(
             field_names=["Name", "Checkpoints", "Metadata", "Logs", "Last Modified"]
         )
-        for name in sorted(experiment_names):
+        table.sortby = "Name"
+        for name in experiment_names:
             # Get checkpoint count
             checkpoint_count = 0
             if name in checkpoint_counts:
@@ -156,7 +163,7 @@ class ListSubcommand:
             timestamp = ""
             if name in timestamps:
                 timestamp = datetime.datetime.fromtimestamp(timestamps[name]).strftime(
-                    "%-H:%M:%S on %B %d, %Y"
+                    "%B %d, %Y @ %-H:%M:%S "
                 )
 
             # Add row for experiment
@@ -170,4 +177,7 @@ class ListSubcommand:
                     timestamp,
                 ]
             )
+
+        # Print table
+        print(f"Found {len(experiment_names)} experiments!")
         print(table)
