@@ -22,7 +22,8 @@ class Buddy(
     - Saving human-readable metadata files.
 
     Args:
-        experiment_name (str): Name for the current model/experiment.
+        experiment_name (str): Name for the current model/experiment. Should not contain
+            hyphens.
         model (torch.nn.Module): PyTorch model to work with.
 
     Keyword Args:
@@ -65,6 +66,17 @@ class Buddy(
         # Validate and assign core parameters.
         assert type(experiment_name) == str
         assert type(verbose) == bool
+
+        # Warn if hyphen in experiment name
+        # > This can cause minor issues because hyphens are used to separate experiment
+        #   names and labels in checkpoint files
+        if "-" in experiment_name:
+            warnings.warn(
+                f"[buddy-{experiment_name}] Hyphens are not supported in experiment "
+                "names, please use an underscore or space instead!",
+                category=RuntimeWarning,
+                stacklevel=2
+            )
 
         self._experiment_name = experiment_name
         self._verbose = True
