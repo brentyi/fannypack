@@ -6,7 +6,7 @@ import os
 import pathlib
 import signal
 import warnings
-from typing import TYPE_CHECKING, Any, Dict, List, cast
+from typing import TYPE_CHECKING, Any, Dict, List, Tuple, cast
 
 import dill
 import numpy as np
@@ -29,7 +29,7 @@ class _BuddyCheckpointing(abc.ABC):
         self._checkpoint_max_to_keep = checkpoint_max_to_keep
 
         # Find all unlabeled checkpoints for this experiment
-        self._checkpoint_unlabeled_files = self._find_checkpoints(
+        self._checkpoint_unlabeled_files, _ = self._find_checkpoints(
             checkpoint_dir=self._checkpoint_dir,
             experiment_name=cast("Buddy", self)._experiment_name,
             unlabeled_only=True,
@@ -316,7 +316,7 @@ class _BuddyCheckpointing(abc.ABC):
             # Load latest unlabeled checkpoint
 
             # First, find all checkpoint paths
-            paths = self._find_checkpoints(
+            paths, _ = self._find_checkpoints(
                 checkpoint_dir=self._checkpoint_dir,
                 experiment_name=cast("Buddy", self)._experiment_name
                 if experiment_name is None
@@ -384,7 +384,7 @@ class _BuddyCheckpointing(abc.ABC):
 
     def _find_checkpoints(
         self, checkpoint_dir: str, experiment_name: str, unlabeled_only: bool = False
-    ) -> List[str]:
+    ) -> Tuple[List[str], Dict[str, int]]:
         """(Private) Returns a list of all unlabeled checkpoints associated
         with this experiment, sorted from oldest to newest.
         """
@@ -428,5 +428,5 @@ class _BuddyCheckpointing(abc.ABC):
         # Sort output by steps
         paths.sort(key=lambda path: step_counts[path])
 
-        # Return paths only
-        return paths
+        # Return paths & steps
+        return paths, step_counts

@@ -5,6 +5,8 @@ import shutil
 
 import prettytable
 
+import fannypack
+
 from ._buddy_cli_subcommand import Subcommand
 
 
@@ -71,13 +73,16 @@ class InfoSubcommand(Subcommand):
         if len(checkpoint_paths) > 0:
             checkpoint_total_size = 0
             checkpoint_labels = []
-            for path in checkpoint_paths:
+            buddy = fannypack.utils.Buddy(experiment_name, verbose=False)
+            paths, steps = buddy._find_checkpoints(args.checkpoint_dir, args.experiment_name)
+            for path in paths:
                 prefix = os.path.join(args.checkpoint_dir, f"{experiment_name}-")
                 suffix = ".ckpt"
                 assert path.startswith(prefix)
                 assert path.endswith(suffix)
                 label = path[len(prefix) : -len(suffix)]
-                checkpoint_labels.append(label)
+
+                checkpoint_labels.append(f"{label} (steps: {steps[path]})")
                 checkpoint_total_size += _get_size(path)
 
             table.add_row(

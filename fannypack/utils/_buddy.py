@@ -79,7 +79,7 @@ class Buddy(
             )
 
         self._experiment_name = experiment_name
-        self._verbose = True
+        self._verbose = verbose
 
         # Use GPU for training if available.
         self._device: torch.device
