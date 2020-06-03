@@ -392,7 +392,7 @@ class _BuddyCheckpointing(abc.ABC):
         # Find all matching checkpoint files
         path_choices = glob.glob("{}/{}-*.ckpt".format(checkpoint_dir, experiment_name))
         if len(path_choices) == 0:
-            return []
+            return [], {}
 
         # Find checkpoint files + associated step counts
         paths = []
