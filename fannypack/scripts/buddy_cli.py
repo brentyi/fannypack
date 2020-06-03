@@ -7,7 +7,7 @@ $ buddy --help
 """
 
 import argparse
-from typing import Dict, List
+from typing import Dict, List, Type
 
 from ._buddy_cli_subcommand import Subcommand
 from ._buddy_cli_subcommand_delete import DeleteSubcommand
@@ -15,7 +15,7 @@ from ._buddy_cli_subcommand_list import ListSubcommand
 from ._buddy_cli_subcommand_rename import RenameSubcommand
 
 
-def main():
+def main() -> None:
     parser = argparse.ArgumentParser(
         prog="buddy",
         description="CLI interface for Buddy, a tool for managing PyTorch experiments.",
@@ -50,12 +50,12 @@ def main():
     )
 
     # Add subcommands
-    subcommand_types: List[Callable[..., Subcommand]] = [
+    subcommand_types: List[Type[Subcommand]] = [
         ListSubcommand,
         RenameSubcommand,
         DeleteSubcommand,
     ]
-    subcommand_map: Dict[str, Callable] = {}
+    subcommand_map: Dict[str, Type[Subcommand]] = {}
     for S in subcommand_types:
         subparser = subparsers.add_parser(
             S.subcommand, help=S.__doc__, description=S.__doc__

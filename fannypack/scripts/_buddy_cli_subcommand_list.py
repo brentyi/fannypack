@@ -1,13 +1,14 @@
 import argparse
 import datetime
 import os
+from typing import Dict, List
 
 import prettytable
 
 from ._buddy_cli_subcommand import Subcommand
 
 
-def _listdir(path: str):
+def _listdir(path: str) -> List[str]:
     """Helper for listing files in a directory
     """
     try:
@@ -24,12 +25,12 @@ class ListSubcommand(Subcommand):
     subcommand: str = "list"
 
     @classmethod
-    def add_arguments(cls, parser: argparse.ArgumentParser):
+    def add_arguments(cls, parser: argparse.ArgumentParser) -> None:
         # No arguments
         pass
 
     @classmethod
-    def main(cls, args: argparse.Namespace):
+    def main(cls, args: argparse.Namespace) -> None:
         # Last modified: checkpoints and metadata only
         # > We could also do logs, but seems high effort?
         timestamps: Dict[str, float] = {}

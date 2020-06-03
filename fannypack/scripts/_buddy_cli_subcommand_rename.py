@@ -12,7 +12,7 @@ class RenameSubcommand(Subcommand):
     subcommand: str = "rename"
 
     @classmethod
-    def add_arguments(cls, parser: argparse.ArgumentParser):
+    def add_arguments(cls, parser: argparse.ArgumentParser) -> None:
         parser.add_argument(
             "source",
             type=str,
@@ -21,14 +21,16 @@ class RenameSubcommand(Subcommand):
         parser.add_argument("dest", type=str, help="New name of experiment.")
 
     @classmethod
-    def main(cls, args: argparse.Namespace):
+    def main(cls, args: argparse.Namespace) -> None:
         # Get old, new experiment names
         old_experiment_name = args.source
         new_experiment_name = args.dest
 
         # Validate that new experiment name doesn't exist
         new_checkpoint_files = glob.glob(
-            os.path.join(args.checkpoint_dir, f"{glob.escape(new_experiment_name)}-*.ckpt")
+            os.path.join(
+                args.checkpoint_dir, f"{glob.escape(new_experiment_name)}-*.ckpt"
+            )
         )
         if len(new_checkpoint_files) != 0:
             raise RuntimeError(
@@ -47,7 +49,9 @@ class RenameSubcommand(Subcommand):
 
         # Move checkpoint files
         checkpoint_paths = glob.glob(
-            os.path.join(args.checkpoint_dir, f"{glob.escape(old_experiment_name)}-*.ckpt")
+            os.path.join(
+                args.checkpoint_dir, f"{glob.escape(old_experiment_name)}-*.ckpt"
+            )
         )
         print(f"Found {len(checkpoint_paths)} checkpoint files")
         for path in checkpoint_paths:

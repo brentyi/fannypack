@@ -8,7 +8,7 @@ from ._buddy_cli_subcommand import Subcommand
 _TRASH_DIR = "./_trash/"
 
 
-def _delete(path, forever):
+def _delete(path, forever) -> None:
     assert os.path.exists(path)
 
     if forever:
@@ -42,7 +42,7 @@ class DeleteSubcommand(Subcommand):
     subcommand: str = "delete"
 
     @classmethod
-    def add_arguments(cls, parser: argparse.ArgumentParser):
+    def add_arguments(cls, parser: argparse.ArgumentParser) -> None:
         parser.add_argument(
             "experiment_name",
             type=str,
@@ -55,7 +55,7 @@ class DeleteSubcommand(Subcommand):
         )
 
     @classmethod
-    def main(cls, args: argparse.Namespace):
+    def main(cls, args: argparse.Namespace) -> None:
         # Get experiment name
         experiment_name = args.experiment_name
 
