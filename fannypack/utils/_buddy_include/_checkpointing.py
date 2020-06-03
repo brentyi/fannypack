@@ -51,10 +51,9 @@ class _BuddyCheckpointing(abc.ABC):
             # Warn if hyphen in label name
             # > This can cause minor issues because a hyphen is used as a separator
             if "-" in label:
-                experiment_name = cast("Buddy", self)._experiment_name
                 warnings.warn(
-                    f"[buddy-{experiment_name}] Hyphens are not supported in labels, "
-                    "please use an underscore or space instead!",
+                    f"[buddy-{cast('Buddy', self).experiment_name}] Hyphens are not"
+                    "supported in labels, please use an underscore or space instead!",
                     category=RuntimeWarning,
                     stacklevel=2,
                 )
