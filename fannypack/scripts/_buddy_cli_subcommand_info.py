@@ -50,12 +50,17 @@ class InfoSubcommand(Subcommand):
         # Get experiment name
         experiment_name = args.experiment_name
 
-        # Set up table
+        # Set up & format table
         table = prettytable.PrettyTable(field_names=["Name", "Value"])
+
         table.align = "l"
         table.header = False
         table.hrules = prettytable.ALL
         table.right_padding_width = 3
+
+        table.horizontal_char = "─"
+        table.vertical_char = "│"
+        table.junction_char = "┼"
 
         # Find checkpoint files
         checkpoint_paths = glob.glob(
@@ -63,25 +68,32 @@ class InfoSubcommand(Subcommand):
         )
 
         # Display size, labels of checkpoints
-        checkpoint_total_size = 0
-        checkpoint_labels = []
-        for path in checkpoint_paths:
-            prefix = os.path.join(args.checkpoint_dir, f"{experiment_name}-")
-            suffix = ".ckpt"
-            assert path.startswith(prefix)
-            assert path.endswith(suffix)
-            label = path[len(prefix) : -len(suffix)]
-            checkpoint_labels.append(label)
-            checkpoint_total_size += _get_size(path)
+        if len(checkpoint_paths) > 0:
+            checkpoint_total_size = 0
+            checkpoint_labels = []
+            for path in checkpoint_paths:
+                prefix = os.path.join(args.checkpoint_dir, f"{experiment_name}-")
+                suffix = ".ckpt"
+                assert path.startswith(prefix)
+                assert path.endswith(suffix)
+                label = path[len(prefix) : -len(suffix)]
+                checkpoint_labels.append(label)
+                checkpoint_total_size += _get_size(path)
 
-        table.add_row(["Total checkpoint size", _format_size(checkpoint_total_size)])
-        table.add_row(
-            [
-                "Average checkpoint size",
-                _format_size(checkpoint_total_size / len(checkpoint_paths)),
-            ]
-        )
-        table.add_row(["Checkpoint labels", "\n".join(checkpoint_labels)])
+            table.add_row(
+                ["Total checkpoint size", _format_size(checkpoint_total_size)]
+            )
+            table.add_row(
+                [
+                    "Average checkpoint size",
+                    _format_size(checkpoint_total_size / len(checkpoint_paths)),
+                ]
+            )
+            table.add_row(["Checkpoint labels", "\n".join(checkpoint_labels)])
+        else:
+            table.add_row(["Total checkpoint size", "N/A"])
+            table.add_row(["Average checkpoint size", "N/A"])
+            table.add_row(["Checkpoint labels", ""])
 
         # Display log file size
         log_path = os.path.join(args.log_dir, f"{experiment_name}")
@@ -96,7 +108,7 @@ class InfoSubcommand(Subcommand):
         if os.path.exists(metadata_path):
             table.add_row(["Metadata size", _format_size(_get_size(metadata_path))])
             with open(metadata_path, "r") as f:
-                table.add_row(["Metadata", f.read()])
+                table.add_row(["Metadata", f.read().strip()])
         else:
             table.add_row(["Metadata size", "N/A"])
             table.add_row(["Metadata", "N/A"])

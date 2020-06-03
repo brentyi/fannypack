@@ -86,7 +86,13 @@ class ListSubcommand(Subcommand):
         table = prettytable.PrettyTable(
             field_names=["Name", "Checkpoints", "Metadata", "Logs", "Last Modified"]
         )
+
+        table.horizontal_char = "─"
+        table.vertical_char = "│"
+        table.junction_char = "┼"
+
         table.sortby = "Name"
+
         for name in experiment_names:
             # Get checkpoint count
             checkpoint_count = 0
@@ -97,7 +103,7 @@ class ListSubcommand(Subcommand):
             timestamp = ""
             if name in timestamps:
                 timestamp = datetime.datetime.fromtimestamp(timestamps[name]).strftime(
-                    "%B %d, %Y @ %-H:%M:%S "
+                    "%B %d, %Y @ %-H:%M:%S"
                 )
 
             # Add row for experiment
