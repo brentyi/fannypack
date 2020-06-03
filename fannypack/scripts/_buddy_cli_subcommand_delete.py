@@ -101,7 +101,7 @@ class DeleteSubcommand(Subcommand):
         if os.path.exists(metadata_path):
             _delete(metadata_path, args.forever)
         else:
-            print("No metadata found", args.forever)
+            print("No metadata found")
 
         # Delete logs
         log_path = os.path.join(args.log_dir, f"{experiment_name}")

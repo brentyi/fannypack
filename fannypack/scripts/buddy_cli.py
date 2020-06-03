@@ -11,6 +11,7 @@ from typing import Dict, List, Type
 
 from ._buddy_cli_subcommand import Subcommand
 from ._buddy_cli_subcommand_delete import DeleteSubcommand
+from ._buddy_cli_subcommand_info import InfoSubcommand
 from ._buddy_cli_subcommand_list import ListSubcommand
 from ._buddy_cli_subcommand_rename import RenameSubcommand
 
@@ -51,9 +52,10 @@ def main() -> None:
 
     # Add subcommands
     subcommand_types: List[Type[Subcommand]] = [
+        DeleteSubcommand,
+        InfoSubcommand,
         ListSubcommand,
         RenameSubcommand,
-        DeleteSubcommand,
     ]
     subcommand_map: Dict[str, Type[Subcommand]] = {}
     for S in subcommand_types:
