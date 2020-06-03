@@ -10,6 +10,7 @@ import argparse
 from typing import Dict, List
 
 from ._buddy_cli_subcommand import Subcommand
+from ._buddy_cli_subcommand_delete import DeleteSubcommand
 from ._buddy_cli_subcommand_list import ListSubcommand
 from ._buddy_cli_subcommand_rename import RenameSubcommand
 
@@ -42,16 +43,23 @@ def main():
     )
 
     # Separate parsers for subcommands
-    subparsers = parser.add_subparsers(required=True, dest="subcommand", help="blah")
+    subparsers = parser.add_subparsers(
+        required=True,
+        dest="subcommand",
+        help="Get help by running `$ buddy {subcommand} --help`.",
+    )
 
     # Add subcommands
     subcommand_types: List[Callable[..., Subcommand]] = [
         ListSubcommand,
         RenameSubcommand,
+        DeleteSubcommand,
     ]
     subcommand_map: Dict[str, Callable] = {}
     for S in subcommand_types:
-        subparser = subparsers.add_parser(S.subcommand, help=S.__doc__)
+        subparser = subparsers.add_parser(
+            S.subcommand, help=S.__doc__, description=S.__doc__
+        )
         S.add_arguments(subparser)
         subcommand_map[S.subcommand] = S
     args = parser.parse_args()

@@ -28,7 +28,7 @@ class RenameSubcommand(Subcommand):
 
         # Validate that new experiment name doesn't exist
         new_checkpoint_files = glob.glob(
-            os.path.join(args.checkpoint_dir, f"{new_experiment_name}-*.ckpt")
+            os.path.join(args.checkpoint_dir, f"{glob.escape(new_experiment_name)}-*.ckpt")
         )
         if len(new_checkpoint_files) != 0:
             raise RuntimeError(
@@ -47,7 +47,7 @@ class RenameSubcommand(Subcommand):
 
         # Move checkpoint files
         checkpoint_paths = glob.glob(
-            os.path.join(args.checkpoint_dir, f"{old_experiment_name}-*.ckpt")
+            os.path.join(args.checkpoint_dir, f"{glob.escape(old_experiment_name)}-*.ckpt")
         )
         print(f"Found {len(checkpoint_paths)} checkpoint files")
         for path in checkpoint_paths:
@@ -62,7 +62,7 @@ class RenameSubcommand(Subcommand):
             )
 
             # Move checkpoint
-            print(f"\tMoving {path} to {new_path}")
+            print(f"> Moving {path} to {new_path}")
             os.rename(path, new_path)
 
         # Move metadata
