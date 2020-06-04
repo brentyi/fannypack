@@ -94,8 +94,8 @@ class ListSubcommand(Subcommand):
         column_headers = [
             "Name",
             "Checkpoints",
-            "Metadata",
             "Logs",
+            "Metadata",
             "Last Modified",
         ]
         table.column_headers = [
@@ -115,7 +115,7 @@ class ListSubcommand(Subcommand):
             timestamp = ""
             if name in timestamps:
                 timestamp = datetime.datetime.fromtimestamp(timestamps[name]).strftime(
-                    "%B %d, %Y @ %-H:%M:%S"
+                    "%b %d, %Y @ %-H:%M" if terminal_columns > 100 else "%Y-%m-%d"
                 )
 
             # Add row for experiment
@@ -127,8 +127,8 @@ class ListSubcommand(Subcommand):
                 [
                     name,
                     checkpoint_count,
-                    yes_no[name in metadata_experiments],
                     yes_no[name in log_experiments],
+                    yes_no[name in metadata_experiments],
                     timestamp,
                 ]
             )
