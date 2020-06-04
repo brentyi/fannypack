@@ -3,12 +3,14 @@ import glob
 import os
 import shutil
 
+import argcomplete
 import beautifultable
 import termcolor
 
 import fannypack
 
-from ._buddy_cli_subcommand import Subcommand
+from ._buddy_cli_subcommand import BuddyPaths, Subcommand
+from ._buddy_cli_subcommand_list import find_experiments
 
 
 def _get_size(path):
@@ -41,15 +43,19 @@ class InfoSubcommand(Subcommand):
     subcommand: str = "info"
 
     @classmethod
-    def add_arguments(cls, parser: argparse.ArgumentParser) -> None:
+    def add_arguments(
+        cls, *, parser: argparse.ArgumentParser, paths: BuddyPaths
+    ) -> None:
         parser.add_argument(
             "experiment_name",
             type=str,
             help="Name of experiment, as printed by `$ buddy list`.",
+        ).completer = argcomplete.completers.ChoicesCompleter(
+            choices=find_experiments(paths).experiment_names
         )
 
     @classmethod
-    def main(cls, args: argparse.Namespace) -> None:
+    def main(cls, *, args: argparse.Namespace, paths: BuddyPaths) -> None:
         # Get experiment name
         experiment_name = args.experiment_name
 
@@ -73,7 +79,7 @@ class InfoSubcommand(Subcommand):
 
         # Find checkpoint files
         checkpoint_paths = glob.glob(
-            os.path.join(args.checkpoint_dir, f"{glob.escape(experiment_name)}-*.ckpt")
+            os.path.join(paths.checkpoint_dir, f"{glob.escape(experiment_name)}-*.ckpt")
         )
 
         # Display size, labels of checkpoints
@@ -82,10 +88,10 @@ class InfoSubcommand(Subcommand):
             checkpoint_labels = []
             buddy = fannypack.utils.Buddy(experiment_name, verbose=False)
             paths, steps = buddy._find_checkpoints(
-                args.checkpoint_dir, args.experiment_name
+                paths.checkpoint_dir, args.experiment_name
             )
             for path in paths:
-                prefix = os.path.join(args.checkpoint_dir, f"{experiment_name}-")
+                prefix = os.path.join(paths.checkpoint_dir, f"{experiment_name}-")
                 suffix = ".ckpt"
                 assert path.startswith(prefix)
                 assert path.endswith(suffix)
@@ -106,7 +112,7 @@ class InfoSubcommand(Subcommand):
             add_table_row("Checkpoint labels", "")
 
         # Display log file size
-        log_path = os.path.join(args.log_dir, f"{experiment_name}")
+        log_path = os.path.join(paths.log_dir, f"{experiment_name}")
         if os.path.exists(log_path):
             #  _delete(log_path, args.forever)
             add_table_row("Log size", _format_size(_get_size(log_path)))
@@ -114,7 +120,7 @@ class InfoSubcommand(Subcommand):
             add_table_row("Log size", NA)
 
         # Display metadata + metadata size
-        metadata_path = os.path.join(args.metadata_dir, f"{experiment_name}.yaml")
+        metadata_path = os.path.join(paths.metadata_dir, f"{experiment_name}.yaml")
         if os.path.exists(metadata_path):
             add_table_row("Metadata size", _format_size(_get_size(metadata_path)))
             with open(metadata_path, "r") as f:

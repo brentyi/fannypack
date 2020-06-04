@@ -18,6 +18,7 @@ setup(
     entry_points={"console_scripts": ["buddy = fannypack.scripts.buddy_cli:main"]},
     python_requires=">=3.7",
     install_requires=[
+        "argcomplete",
         "beautifultable",
         "dill",
         "h5py",

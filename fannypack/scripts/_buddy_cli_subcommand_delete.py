@@ -3,7 +3,10 @@ import glob
 import os
 import shutil
 
-from ._buddy_cli_subcommand import Subcommand
+import argcomplete
+
+from ._buddy_cli_subcommand import BuddyPaths, Subcommand
+from ._buddy_cli_subcommand_list import find_experiments
 
 _TRASH_DIR = "./_trash/"
 
@@ -42,11 +45,15 @@ class DeleteSubcommand(Subcommand):
     subcommand: str = "delete"
 
     @classmethod
-    def add_arguments(cls, parser: argparse.ArgumentParser) -> None:
+    def add_arguments(
+        cls, *, parser: argparse.ArgumentParser, paths: BuddyPaths
+    ) -> None:
         parser.add_argument(
             "experiment_name",
             type=str,
             help="Name of experiment, as printed by `$ buddy list`.",
+        ).completer = argcomplete.completers.ChoicesCompleter(
+            choices=find_experiments(paths).experiment_names
         )
         parser.add_argument(
             "--forever",
@@ -55,7 +62,7 @@ class DeleteSubcommand(Subcommand):
         )
 
     @classmethod
-    def main(cls, args: argparse.Namespace) -> None:
+    def main(cls, *, args: argparse.Namespace, paths: BuddyPaths) -> None:
         # Get experiment name
         experiment_name = args.experiment_name
 
@@ -64,7 +71,7 @@ class DeleteSubcommand(Subcommand):
             new_checkpoint_files = glob.glob(
                 os.path.join(
                     _TRASH_DIR,
-                    args.checkpoint_dir,
+                    paths.checkpoint_dir,
                     f"{glob.escape(experiment_name)}-*.ckpt",
                 )
             )
@@ -74,14 +81,14 @@ class DeleteSubcommand(Subcommand):
                     "rename experiment before deleting."
                 )
             if os.path.exists(
-                os.path.join(_TRASH_DIR, args.log_dir, f"{experiment_name}")
+                os.path.join(_TRASH_DIR, paths.log_dir, f"{experiment_name}")
             ):
                 raise RuntimeError(
                     "Logs for matching experiment name already exist in trash; "
                     "rename experiment before deleting."
                 )
             if os.path.exists(
-                os.path.join(_TRASH_DIR, args.metadata_dir, f"{experiment_name}.yaml")
+                os.path.join(_TRASH_DIR, paths.metadata_dir, f"{experiment_name}.yaml")
             ):
                 raise RuntimeError(
                     "Metadata for matching experiment name already exist in trash; "
@@ -90,21 +97,21 @@ class DeleteSubcommand(Subcommand):
 
         # Delete checkpoint files
         checkpoint_paths = glob.glob(
-            os.path.join(args.checkpoint_dir, f"{glob.escape(experiment_name)}-*.ckpt")
+            os.path.join(paths.checkpoint_dir, f"{glob.escape(experiment_name)}-*.ckpt")
         )
         print(f"Found {len(checkpoint_paths)} checkpoint files")
         for path in checkpoint_paths:
             _delete(path, args.forever)
 
         # Delete metadata
-        metadata_path = os.path.join(args.metadata_dir, f"{experiment_name}.yaml")
+        metadata_path = os.path.join(paths.metadata_dir, f"{experiment_name}.yaml")
         if os.path.exists(metadata_path):
             _delete(metadata_path, args.forever)
         else:
             print("No metadata found")
 
         # Delete logs
-        log_path = os.path.join(args.log_dir, f"{experiment_name}")
+        log_path = os.path.join(paths.log_dir, f"{experiment_name}")
         if os.path.exists(log_path):
             _delete(log_path, args.forever)
         else:

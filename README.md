@@ -8,12 +8,39 @@
 Helpers for PyTorch.
 
 Standard installation:
+
 ```
 pip install fannypack
 ```
 
-Github:
-https://github.com/brentyi/fannypack
+Install from source:
 
-Documentation (work-in-progress):
-https://brentyi.github.io/fannypack
+```
+git clone https://github.com/brentyi/fannypack.git
+cd fannypack && pip install -e .
+```
+
+---
+
+To enable autocomplete for the `buddy` commandline tool:
+
+- bash:
+
+  ```sh
+  # Append to .bashrc
+  eval "$(register-python-argcomplete buddy)"
+  ```
+
+- zsh:
+  ```sh
+  # Append to .zshrc
+  autoload -U +X compinit && compinit
+  autoload -U +X bashcompinit && bashcompinit
+  eval "$(register-python-argcomplete buddy)"
+  ```
+
+---
+
+Github: https://github.com/brentyi/fannypack
+
+Documentation (work-in-progress): https://brentyi.github.io/fannypack
