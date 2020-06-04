@@ -75,7 +75,7 @@ class Buddy(
                 f"[buddy-{experiment_name}] Hyphens are not supported in experiment "
                 "names, please use an underscore or space instead!",
                 category=RuntimeWarning,
-                stacklevel=2
+                stacklevel=2,
             )
 
         self._experiment_name = experiment_name

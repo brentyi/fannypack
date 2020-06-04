@@ -3,7 +3,8 @@ import datetime
 import os
 from typing import Dict, List
 
-import prettytable
+import beautifultable
+import termcolor
 
 from ._buddy_cli_subcommand import Subcommand
 
@@ -79,20 +80,31 @@ class ListSubcommand(Subcommand):
         # Get experiment names from log directories
         log_experiments = set(_listdir(args.log_dir))
 
-        # Generate table
+        # Generate dynamic-width table
+        try:
+            terminal_columns = int(os.popen("stty size", "r").read().split()[1])
+        except IndexError:
+            # stty size fails when run from outside proper terminal (eg in tests)
+            terminal_columns = 100
+        table = beautifultable.BeautifulTable(max_width=min(100, terminal_columns))
+        table.set_style(beautifultable.STYLE_BOX_ROUNDED)
+        table.row_separator_char = ""
+
+        # Add bolded headers
+        column_headers = [
+            "Name",
+            "Checkpoints",
+            "Metadata",
+            "Logs",
+            "Last Modified",
+        ]
+        table.column_headers = [
+            termcolor.colored(h, attrs=["bold"]) for h in column_headers
+        ]
+
         experiment_names = (
             set(checkpoint_counts.keys()) | log_experiments | metadata_experiments
         )
-        table = prettytable.PrettyTable(
-            field_names=["Name", "Checkpoints", "Metadata", "Logs", "Last Modified"]
-        )
-
-        table.horizontal_char = "─"
-        table.vertical_char = "│"
-        table.junction_char = "┼"
-
-        table.sortby = "Name"
-
         for name in experiment_names:
             # Get checkpoint count
             checkpoint_count = 0
@@ -107,8 +119,11 @@ class ListSubcommand(Subcommand):
                 )
 
             # Add row for experiment
-            yes_no = {True: "Yes", False: ""}
-            table.add_row(
+            yes_no = {
+                True: termcolor.colored("Yes", "green"),
+                False: termcolor.colored("No", "red"),
+            }
+            table.append_row(
                 [
                     name,
                     checkpoint_count,
@@ -118,6 +133,7 @@ class ListSubcommand(Subcommand):
                 ]
             )
 
-        # Print table
+        # Print table, sorted by name
         print(f"Found {len(experiment_names)} experiments!")
+        table.sort(table.column_headers[0])
         print(table)

@@ -18,16 +18,17 @@ setup(
     entry_points={"console_scripts": ["buddy = fannypack.scripts.buddy_cli:main"]},
     python_requires=">=3.7",
     install_requires=[
+        "beautifultable",
         "dill",
         "h5py",
         "numpy",
         # "numpy-stubs @ https://github.com/numpy/numpy-stubs/tarball/master",
         "pyyaml",
         "tensorboard",
+        "termcolor",
         "torch",
         "tqdm",
         "Pillow",  # Needed for logging images in Tensorboard
-        "prettytable",
         # "pip>=20.1",
     ],
     classifiers=[

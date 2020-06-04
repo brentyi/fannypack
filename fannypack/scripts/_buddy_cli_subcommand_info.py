@@ -3,7 +3,8 @@ import glob
 import os
 import shutil
 
-import prettytable
+import beautifultable
+import termcolor
 
 import fannypack
 
@@ -52,17 +53,23 @@ class InfoSubcommand(Subcommand):
         # Get experiment name
         experiment_name = args.experiment_name
 
-        # Set up & format table
-        table = prettytable.PrettyTable(field_names=["Name", "Value"])
+        # Generate dynamic-width table
+        try:
+            terminal_columns = int(os.popen("stty size", "r").read().split()[1])
+        except IndexError:
+            # stty size fails when run from outside proper terminal (eg in tests)
+            terminal_columns = 100
+        table = beautifultable.BeautifulTable(
+            max_width=min(100, terminal_columns),
+            default_alignment=beautifultable.ALIGN_LEFT,
+        )
+        table.set_style(beautifultable.STYLE_BOX_ROUNDED)
 
-        table.align = "l"
-        table.header = False
-        table.hrules = prettytable.ALL
-        table.right_padding_width = 3
+        def add_table_row(label, value):
+            table.append_row([termcolor.colored(label, attrs=["bold"]), value])
 
-        table.horizontal_char = "─"
-        table.vertical_char = "│"
-        table.junction_char = "┼"
+        # Constant for "not applicable" fields
+        NA = termcolor.colored("N/A", "red")
 
         # Find checkpoint files
         checkpoint_paths = glob.glob(
@@ -74,7 +81,9 @@ class InfoSubcommand(Subcommand):
             checkpoint_total_size = 0
             checkpoint_labels = []
             buddy = fannypack.utils.Buddy(experiment_name, verbose=False)
-            paths, steps = buddy._find_checkpoints(args.checkpoint_dir, args.experiment_name)
+            paths, steps = buddy._find_checkpoints(
+                args.checkpoint_dir, args.experiment_name
+            )
             for path in paths:
                 prefix = os.path.join(args.checkpoint_dir, f"{experiment_name}-")
                 suffix = ".ckpt"
@@ -85,38 +94,35 @@ class InfoSubcommand(Subcommand):
                 checkpoint_labels.append(f"{label} (steps: {steps[path]})")
                 checkpoint_total_size += _get_size(path)
 
-            table.add_row(
-                ["Total checkpoint size", _format_size(checkpoint_total_size)]
+            add_table_row("Total checkpoint size", _format_size(checkpoint_total_size))
+            add_table_row(
+                "Average checkpoint size",
+                _format_size(checkpoint_total_size / len(checkpoint_paths)),
             )
-            table.add_row(
-                [
-                    "Average checkpoint size",
-                    _format_size(checkpoint_total_size / len(checkpoint_paths)),
-                ]
-            )
-            table.add_row(["Checkpoint labels", "\n".join(checkpoint_labels)])
+            add_table_row("Checkpoint labels", "\n".join(checkpoint_labels))
         else:
-            table.add_row(["Total checkpoint size", "N/A"])
-            table.add_row(["Average checkpoint size", "N/A"])
-            table.add_row(["Checkpoint labels", ""])
+            add_table_row("Total checkpoint size", NA)
+            add_table_row("Average checkpoint size", NA)
+            add_table_row("Checkpoint labels", "")
 
         # Display log file size
         log_path = os.path.join(args.log_dir, f"{experiment_name}")
         if os.path.exists(log_path):
             #  _delete(log_path, args.forever)
-            table.add_row(["Log size", _format_size(_get_size(log_path))])
+            add_table_row("Log size", _format_size(_get_size(log_path)))
         else:
-            table.add_row(["Log size", "N/A"])
+            add_table_row("Log size", NA)
 
         # Display metadata + metadata size
         metadata_path = os.path.join(args.metadata_dir, f"{experiment_name}.yaml")
         if os.path.exists(metadata_path):
-            table.add_row(["Metadata size", _format_size(_get_size(metadata_path))])
+            add_table_row("Metadata size", _format_size(_get_size(metadata_path)))
             with open(metadata_path, "r") as f:
-                table.add_row(["Metadata", f.read().strip()])
+                add_table_row("Metadata", f.read().strip())
         else:
-            table.add_row(["Metadata size", "N/A"])
-            table.add_row(["Metadata", "N/A"])
+            add_table_row("Metadata size", NA)
+            add_table_row("Metadata", NA)
 
+        # Print table
         print(experiment_name)
         print(table)
