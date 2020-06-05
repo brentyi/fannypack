@@ -52,8 +52,8 @@ class DeleteSubcommand(Subcommand):
             "experiment_name",
             type=str,
             help="Name of experiment, as printed by `$ buddy list`.",
-        ).completer = argcomplete.completers.ChoicesCompleter(
-            choices=find_experiments(paths).experiment_names
+            metavar="EXPERIMENT_NAME",  # Set metavar => don't show choices in help menu
+            choices=find_experiments(paths).experiment_names,
         )
         parser.add_argument(
             "--forever",

@@ -50,8 +50,8 @@ class InfoSubcommand(Subcommand):
             "experiment_name",
             type=str,
             help="Name of experiment, as printed by `$ buddy list`.",
-        ).completer = argcomplete.completers.ChoicesCompleter(
-            choices=find_experiments(paths).experiment_names
+            metavar="EXPERIMENT_NAME",  # Set metavar => don't show choices in help menu
+            choices=find_experiments(paths).experiment_names,
         )
 
     @classmethod
@@ -87,18 +87,18 @@ class InfoSubcommand(Subcommand):
             checkpoint_total_size = 0
             checkpoint_labels = []
             buddy = fannypack.utils.Buddy(experiment_name, verbose=False)
-            paths, steps = buddy._find_checkpoints(
+            checkpoint_paths, steps = buddy._find_checkpoints(
                 paths.checkpoint_dir, args.experiment_name
             )
-            for path in paths:
+            for checkpoint_path in checkpoint_paths:
                 prefix = os.path.join(paths.checkpoint_dir, f"{experiment_name}-")
                 suffix = ".ckpt"
-                assert path.startswith(prefix)
-                assert path.endswith(suffix)
-                label = path[len(prefix) : -len(suffix)]
+                assert checkpoint_path.startswith(prefix)
+                assert checkpoint_path.endswith(suffix)
+                label = checkpoint_path[len(prefix) : -len(suffix)]
 
-                checkpoint_labels.append(f"{label} (steps: {steps[path]})")
-                checkpoint_total_size += _get_size(path)
+                checkpoint_labels.append(f"{label} (steps: {steps[checkpoint_path]})")
+                checkpoint_total_size += _get_size(checkpoint_path)
 
             add_table_row("Total checkpoint size", _format_size(checkpoint_total_size))
             add_table_row(

@@ -22,8 +22,8 @@ class RenameSubcommand(Subcommand):
             "source",
             type=str,
             help="Current name of experiment, as printed by `$ buddy list`.",
-        ).completer = argcomplete.completers.ChoicesCompleter(
-            choices=find_experiments(paths).experiment_names
+            metavar="SOURCE",  # Set metavar => don't show choices in help menu
+            choices=find_experiments(paths).experiment_names,
         )
         parser.add_argument("dest", type=str, help="New name of experiment.")
 
