@@ -10,6 +10,15 @@ import termcolor
 from ._buddy_cli_subcommand import BuddyPaths, Subcommand
 
 
+def _listdir(path: str) -> List[str]:
+    """Helper for listing files in a directory
+    """
+    try:
+        return os.listdir(path)
+    except FileNotFoundError:
+        return []
+
+
 @dataclass
 class FindOutput:
     experiment_names: Set[str]
@@ -19,22 +28,23 @@ class FindOutput:
     timestamps: Dict[str, float]
 
 
+find_output_cache = None
+
+
 def find_experiments(paths: BuddyPaths, verbose: bool = False) -> FindOutput:
     """Helper for listing experiments
     """
 
+    # Return cached results
+    global find_output_cache
+    if find_output_cache is not None:
+        return find_output_cache
+
+    # Print helper
     def _print(*args, **kwargs):
         if not verbose:
             return
         print(*args, **kwargs)
-
-    def _listdir(path: str) -> List[str]:
-        """Helper for listing files in a directory
-        """
-        try:
-            return os.listdir(path)
-        except FileNotFoundError:
-            return []
 
     # Last modified: checkpoints and metadata only
     # > We could also do logs, but seems high effort?
@@ -89,13 +99,15 @@ def find_experiments(paths: BuddyPaths, verbose: bool = False) -> FindOutput:
         set(checkpoint_counts.keys()) | log_experiments | metadata_experiments
     )
 
-    return FindOutput(
+    # Update global find_output cache
+    find_output_cache = FindOutput(
         experiment_names=experiment_names,
         checkpoint_counts=checkpoint_counts,
         log_experiments=log_experiments,
         metadata_experiments=metadata_experiments,
         timestamps=timestamps,
     )
+    return find_output_cache
 
 
 class ListSubcommand(Subcommand):
