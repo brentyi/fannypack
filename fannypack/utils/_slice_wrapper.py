@@ -231,9 +231,37 @@ class SliceWrapper(Iterable, Generic[WrappedType]):
         else:
             assert False, "Extend is only supported for wrapped lists"
 
+    @overload
+    def map(
+        self: Union[
+            SliceWrapper[Dict[Any, List]],
+            SliceWrapper[Dict[Any, Tuple]],
+            SliceWrapper[Dict[Any, torch.Tensor]],
+            SliceWrapper[Dict[Any, np.ndarray]],
+        ],
+        function: Callable[[Any], MapOutputType],
+    ) -> Dict[Any, MapOutputType]:
+        pass
+
+    @overload
+    def map(
+        self: Union[
+            SliceWrapper[List],
+            SliceWrapper[Tuple],
+            SliceWrapper[torch.Tensor],
+            SliceWrapper[np.ndarray],
+        ],
+        function: Callable[[Any], MapOutputType],
+    ) -> MapOutputType:
+        pass
+
+    @overload
     def map(
         self, function: Callable[[Any], MapOutputType]
     ) -> Union[MapOutputType, Dict[Any, MapOutputType]]:
+        pass
+
+    def map(self, function):
         """Apply a function to all iterables within our wrapped data object.
 
         For iterables that are directly wrapped (eg lists), this is equivalent to
