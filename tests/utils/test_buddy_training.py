@@ -55,7 +55,7 @@ def test_buddy_learning_rates(simple_buddy_temporary_data):
     assert buddy.get_learning_rate() == 1e-5
 
 
-def test_buddy_learning_rates(simple_buddy_temporary_data):
+def test_buddy_learning_rates_lambda(simple_buddy_temporary_data):
     """Check that we can set learning rates. (lambda)
     """
     model, buddy, data, labels = simple_buddy_temporary_data

@@ -131,8 +131,13 @@ class _BuddyOptimizer(abc.ABC):
         assert cast("Buddy", self)._model is not None, "No model attached!"
         schedulers = self._optimizer_config["learning_rate_schedulers"]
         if callable(value):
-            # Store a scheduler
             assert type(value(0)) == float
+
+            # Make sure optimizer is instantiated: if not, learning rate will be
+            # overriden when it is
+            self._instantiate_optimizer(optimizer_name)
+
+            # Store scheduler
             schedulers[optimizer_name] = value
         else:
             # Set learning rate to a float
