@@ -1,13 +1,7 @@
 import abc
 import argparse
-from dataclasses import dataclass
 
-
-@dataclass
-class BuddyPaths:
-    checkpoint_dir: str
-    log_dir: str
-    metadata_dir: str
+from ._buddy_cli_utils import BuddyPaths
 
 
 class Subcommand(abc.ABC):

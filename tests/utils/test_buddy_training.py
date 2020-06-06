@@ -27,7 +27,7 @@ def test_buddy_no_model():
 
 
 def test_buddy_log_scopes(simple_buddy_temporary_data):
-    """Check that log scope function as expected.
+    """Check that log scope functions as expected.
     """
     model, buddy, data, labels = simple_buddy_temporary_data
 
@@ -41,7 +41,7 @@ def test_buddy_log_scopes(simple_buddy_temporary_data):
 
 
 def test_buddy_learning_rates(simple_buddy_temporary_data):
-    """Check that log scope function as expected.
+    """Check that we can set learning rates. (scalar)
     """
     model, buddy, data, labels = simple_buddy_temporary_data
 
@@ -52,6 +52,18 @@ def test_buddy_learning_rates(simple_buddy_temporary_data):
     assert buddy.get_learning_rate() == 1e-3
 
     buddy.set_learning_rate(1e-5)
+    assert buddy.get_learning_rate() == 1e-5
+
+
+def test_buddy_learning_rates(simple_buddy_temporary_data):
+    """Check that we can set learning rates. (lambda)
+    """
+    model, buddy, data, labels = simple_buddy_temporary_data
+
+    buddy.set_learning_rate(lambda s: 1e-2)
+    assert buddy.get_learning_rate() == 1e-2
+
+    buddy.set_learning_rate(lambda steps: 1e-5)
     assert buddy.get_learning_rate() == 1e-5
 
 

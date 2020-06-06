@@ -1,5 +1,4 @@
 import argparse
-import glob
 import os
 import shutil
 
@@ -9,8 +8,8 @@ import termcolor
 
 import fannypack
 
-from ._buddy_cli_subcommand import BuddyPaths, Subcommand
-from ._buddy_cli_subcommand_list import find_experiments
+from ._buddy_cli_subcommand import Subcommand
+from ._buddy_cli_utils import BuddyPaths, find_checkpoints, find_experiments
 
 
 def _get_size(path):
@@ -79,9 +78,7 @@ class InfoSubcommand(Subcommand):
         NA = termcolor.colored("N/A", "red")
 
         # Find checkpoint files
-        checkpoint_paths = glob.glob(
-            os.path.join(paths.checkpoint_dir, f"{glob.escape(experiment_name)}-*.ckpt")
-        )
+        checkpoint_paths = find_checkpoints(experiment_name, paths.checkpoint_dir)
 
         # Display size, labels of checkpoints
         if len(checkpoint_paths) > 0:

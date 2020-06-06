@@ -48,16 +48,6 @@ class _BuddyCheckpointing(abc.ABC):
             label = cast(str, label)
             assert not label.isdigit()
 
-            # Warn if hyphen in label name
-            # > This can cause minor issues because a hyphen is used as a separator
-            if "-" in label:
-                warnings.warn(
-                    f"[buddy-{cast('Buddy', self)._experiment_name}] Hyphens are not "
-                    "supported in labels, please use an underscore or space instead!",
-                    category=RuntimeWarning,
-                    stacklevel=2,
-                )
-
             path = "{}/{}-{}.ckpt".format(
                 self._checkpoint_dir, cast("Buddy", self)._experiment_name, label
             )
@@ -267,7 +257,15 @@ class _BuddyCheckpointing(abc.ABC):
         checkpoint_dir = self._checkpoint_dir
 
         # Find all matching checkpoint files
-        path_choices = glob.glob("{}/{}-*.ckpt".format(checkpoint_dir, experiment_name))
+        path_choices = glob.glob(
+            os.path.join(checkpoint_dir, f"{glob.escape(experiment_name)}-*.ckpt")
+        )
+        path_choices = list(
+            filter(
+                lambda path: path.rpartition("-")[0].endswith(experiment_name),
+                path_choices,
+            )
+        )
         if len(path_choices) == 0:
             return []
 
@@ -390,7 +388,15 @@ class _BuddyCheckpointing(abc.ABC):
         """
 
         # Find all matching checkpoint files
-        path_choices = glob.glob("{}/{}-*.ckpt".format(checkpoint_dir, experiment_name))
+        path_choices = glob.glob(
+            os.path.join(checkpoint_dir, f"{glob.escape(experiment_name)}-*.ckpt")
+        )
+        path_choices = list(
+            filter(
+                lambda path: path.rpartition("-")[0].endswith(experiment_name),
+                path_choices,
+            )
+        )
         if len(path_choices) == 0:
             return [], {}
 

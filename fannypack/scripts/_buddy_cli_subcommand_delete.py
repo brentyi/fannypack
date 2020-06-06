@@ -1,12 +1,9 @@
 import argparse
-import glob
 import os
 import shutil
 
-import argcomplete
-
-from ._buddy_cli_subcommand import BuddyPaths, Subcommand
-from ._buddy_cli_subcommand_list import find_experiments
+from ._buddy_cli_subcommand import Subcommand
+from ._buddy_cli_utils import BuddyPaths, find_checkpoints, find_experiments
 
 _TRASH_DIR = "./_trash/"
 
@@ -68,12 +65,8 @@ class DeleteSubcommand(Subcommand):
 
         # If we're just moving an experiment, check that it doesn't exist already
         if not args.forever:
-            new_checkpoint_files = glob.glob(
-                os.path.join(
-                    _TRASH_DIR,
-                    paths.checkpoint_dir,
-                    f"{glob.escape(experiment_name)}-*.ckpt",
-                )
+            new_checkpoint_files = find_checkpoints(
+                experiment_name, path=os.path.join(_TRASH_DIR, paths.checkpoint_dir)
             )
             if len(new_checkpoint_files) != 0:
                 raise RuntimeError(
@@ -96,9 +89,7 @@ class DeleteSubcommand(Subcommand):
                 )
 
         # Delete checkpoint files
-        checkpoint_paths = glob.glob(
-            os.path.join(paths.checkpoint_dir, f"{glob.escape(experiment_name)}-*.ckpt")
-        )
+        checkpoint_paths = find_checkpoints(experiment_name, paths.checkpoint_dir)
         print(f"Found {len(checkpoint_paths)} checkpoint files")
         for path in checkpoint_paths:
             _delete(path, args.forever)

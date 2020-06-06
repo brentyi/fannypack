@@ -4,8 +4,8 @@ import os
 
 import argcomplete
 
-from ._buddy_cli_subcommand import BuddyPaths, Subcommand
-from ._buddy_cli_subcommand_list import find_experiments
+from ._buddy_cli_subcommand import Subcommand
+from ._buddy_cli_utils import BuddyPaths, find_experiments
 
 
 class RenameSubcommand(Subcommand):
@@ -55,11 +55,15 @@ class RenameSubcommand(Subcommand):
             )
 
         # Move checkpoint files
-        checkpoint_paths = glob.glob(
-            os.path.join(
-                paths.checkpoint_dir, f"{glob.escape(old_experiment_name)}-*.ckpt"
+        checkpoint_paths = [
+            path
+            for path in glob.glob(
+                os.path.join(
+                    paths.checkpoint_dir, f"{glob.escape(old_experiment_name)}-*.ckpt"
+                )
             )
-        )
+            if path.rpartition("-")[2].endswith(old_experiment_name)
+        ]
         print(f"Found {len(checkpoint_paths)} checkpoint files")
         for path in checkpoint_paths:
             # Get new checkpoint path
