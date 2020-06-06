@@ -60,11 +60,10 @@ def find_experiments(paths: BuddyPaths, verbose: bool = False) -> FindOutput:
         trimmed = file[:-5]
 
         # Get experiment name
-        parts = trimmed.split("-")
-        if len(parts) != 2:
+        name, hyphen, _label = trimmed.rpartition("-")
+        if hyphen != "-":
             _print(f"Skipping malformed checkpoint filename: {file}")
             continue
-        name = parts[0]
 
         # Update tracker
         if name not in checkpoint_counts.keys():

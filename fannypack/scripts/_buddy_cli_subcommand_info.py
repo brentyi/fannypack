@@ -58,6 +58,7 @@ class InfoSubcommand(Subcommand):
     def main(cls, *, args: argparse.Namespace, paths: BuddyPaths) -> None:
         # Get experiment name
         experiment_name = args.experiment_name
+        print(experiment_name)
 
         # Generate dynamic-width table
         try:
@@ -130,5 +131,4 @@ class InfoSubcommand(Subcommand):
             add_table_row("Metadata", NA)
 
         # Print table
-        print(experiment_name)
         print(table)
