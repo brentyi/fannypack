@@ -1,9 +1,8 @@
-[run]
+[report]
 omit =
-    # Don't compute coverage for scripts (temporary?)
+    # Don't compute coverage for scripts
     fannypack/scripts/*
 
-[report]
 exclude_lines =
     # Have to re-enable the standard pragma
     pragma: no cover

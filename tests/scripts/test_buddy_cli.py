@@ -17,7 +17,13 @@ def _run_command(command: Union[str, List[str]]) -> Tuple[AnyStr, AnyStr, int]:
         cwd=os.path.join(os.path.dirname(__file__), "../assets"),
     )
     out, err = proc.communicate()
-    return out, err, proc.returncode
+
+    def convert(x: AnyStr):
+        if isinstance(x, bytes):
+            x = x.decode("utf8")
+        return x
+
+    return convert(out), convert(err), proc.returncode
 
 
 def test_buddy_no_args():
@@ -46,7 +52,7 @@ def test_buddy_list():
     """
     out, err, exitcode = _run_command(["buddy", "list"])
     assert exitcode == 0
-    assert out.startswith(b"Found 3 experiments")
+    assert out.startswith("Found 2 experiments")
     assert out
 
 
@@ -63,7 +69,7 @@ def test_buddy_info():
 
     out, err, exitcode = _run_command(["buddy", "info", "simple_net"])
     assert exitcode == 0
-    assert b"(steps: 200)" in out
+    assert "(steps: 200)" in out
 
 
 def test_buddy_rename():
@@ -72,8 +78,8 @@ def test_buddy_rename():
     # Pre-condition
     out, err, exitcode = _run_command(["buddy", "list"])
     assert exitcode == 0
-    assert out.startswith(b"Found 3 experiments")
-    assert b"simple_net" in out
+    assert out.startswith("Found 2 experiments")
+    assert "simple_net" in out
 
     # Rename experiment
     out, err, exitcode = _run_command(["buddy", "rename", "simple_net", "blah"])
@@ -82,8 +88,8 @@ def test_buddy_rename():
     # Post-condition
     out, err, exitcode = _run_command(["buddy", "list"])
     assert exitcode == 0
-    assert out.startswith(b"Found 3 experiments")
-    assert b"simple_net" not in out
+    assert out.startswith("Found 2 experiments")
+    assert "simple_net" not in out
 
     # Revert changes
     out, err, exitcode = _run_command(["buddy", "rename", "blah", "simple_net"])
@@ -113,8 +119,8 @@ def test_buddy_rename():
     # Pre-condition
     out, err, exitcode = _run_command(["buddy", "list"])
     assert exitcode == 0
-    assert out.startswith(b"Found 3 experiments")
-    assert b"temporary_net" not in out
+    assert out.startswith("Found 2 experiments")
+    assert "temporary_net" not in out
 
     # Save some files
     buddy.add_metadata({"blah": "blah"})
@@ -123,8 +129,8 @@ def test_buddy_rename():
     # Pre-condition
     out, err, exitcode = _run_command(["buddy", "list"])
     assert exitcode == 0
-    assert out.startswith(b"Found 4 experiments")
-    assert b"temporary_net" in out
+    assert out.startswith("Found 3 experiments")
+    assert "temporary_net" in out
 
     # Delete buddy
     del buddy
@@ -136,5 +142,5 @@ def test_buddy_rename():
     # Post-condition
     out, err, exitcode = _run_command(["buddy", "list"])
     assert exitcode == 0
-    assert out.startswith(b"Found 3 experiments")
-    assert b"temporary_net" not in out
+    assert out.startswith("Found 2 experiments")
+    assert "temporary_net" not in out
