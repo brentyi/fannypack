@@ -14,13 +14,24 @@ class ListSubcommand(Subcommand):
     """
 
     subcommand: str = "list"
+    table_column_headers = [
+        "Name",
+        "Checkpoints",
+        "Logs",
+        "Metadata",
+        "Last Modified",
+    ]
 
     @classmethod
     def add_arguments(
         cls, *, parser: argparse.ArgumentParser, paths: BuddyPaths
     ) -> None:
-        # No arguments
-        pass
+        parser.add_argument(
+            "--sort-by",
+            type=str,
+            choices=[h.lower() for h in cls.table_column_headers[:-1]],
+            help="Sort experiment table by column. Defaults to timestamp.",
+        )
 
     @classmethod
     def main(cls, *, args: argparse.Namespace, paths: BuddyPaths) -> None:
@@ -37,18 +48,15 @@ class ListSubcommand(Subcommand):
         table.row_separator_char = ""
 
         # Add bolded headers
-        column_headers = [
-            "Name",
-            "Checkpoints",
-            "Logs",
-            "Metadata",
-            "Last Modified",
-        ]
         table.column_headers = [
-            termcolor.colored(h, attrs=["bold"]) for h in column_headers
+            termcolor.colored(h, attrs=["bold"]) for h in cls.table_column_headers
         ]
 
-        for name in results.experiment_names:
+        # Add experiment rows, oldest to newest
+        sorted_experiment_names = sorted(
+            results.experiment_names, key=lambda n: results.timestamps.get(n, 0.0),
+        )
+        for name in sorted_experiment_names:
             # Get checkpoint count
             checkpoint_count = 0
             if name in results.checkpoint_counts:
@@ -80,5 +88,11 @@ class ListSubcommand(Subcommand):
 
         # Print table, sorted by name
         print(f"Found {len(results.experiment_names)} experiments!")
-        table.sort(table.column_headers[0])
+        if args.sort_by != None:
+            # Sort-by field: lowercase -> index
+            table.sort(
+                list(map(lambda s: s.lower(), cls.table_column_headers)).index(
+                    args.sort_by
+                )
+            )
         print(table)
