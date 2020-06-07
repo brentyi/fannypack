@@ -85,7 +85,7 @@ def simple_buddy():
         # Use directories relative to this fixture
         checkpoint_dir=os.path.join(os.path.dirname(__file__), "assets/checkpoints/"),
         metadata_dir=os.path.join(os.path.dirname(__file__), "assets/metadata/"),
-        log_dir=os.path.join(os.path.dirname(__file__), "assets/log/"),
+        log_dir=os.path.join(os.path.dirname(__file__), "assets/logs/"),
         verbose=True,
         cpu_only=True,
     )
@@ -117,7 +117,7 @@ def simple_buddy_temporary_data():
             os.path.dirname(__file__), "tmp/assets/checkpoints/"
         ),
         metadata_dir=os.path.join(os.path.dirname(__file__), "tmp/assets/metadata/"),
-        log_dir=os.path.join(os.path.dirname(__file__), "tmp/assets/log/"),
+        log_dir=os.path.join(os.path.dirname(__file__), "tmp/assets/logs/"),
         verbose=True,
         # Disable auto-checkpointing
         optimizer_checkpoint_interval=0,
@@ -160,7 +160,7 @@ def resblock_buddy_temporary_data():
             os.path.dirname(__file__), "tmp/assets/checkpoints/"
         ),
         metadata_dir=os.path.join(os.path.dirname(__file__), "tmp/assets/metadata/"),
-        log_dir=os.path.join(os.path.dirname(__file__), "tmp/assets/log/"),
+        log_dir=os.path.join(os.path.dirname(__file__), "tmp/assets/logs/"),
         verbose=True,
         cpu_only=True,
     )
