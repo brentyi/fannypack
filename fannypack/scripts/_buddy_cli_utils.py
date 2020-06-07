@@ -14,9 +14,12 @@ def find_checkpoints(experiment_name: str, path: str) -> List[str]:
     )
 
     # Filter further with rpartition (for handling experiment names with hyphens)
-    return list(filter(
-        lambda path: path.rpartition("-")[0].endswith(experiment_name), checkpoint_files
-    ))
+    return list(
+        filter(
+            lambda path: path.rpartition("-")[0].endswith(experiment_name),
+            checkpoint_files,
+        )
+    )
 
 
 @dataclass
@@ -113,7 +116,15 @@ def find_experiments(paths: BuddyPaths, verbose: bool = False) -> FindOutput:
             timestamps[name] = mtime
 
     # Get experiment names from log directories
-    log_experiments = set(_listdir(paths.log_dir))
+    log_experiments = set()
+    for experiment_name in _listdir(paths.log_dir):
+        path = os.path.join(paths.log_dir, experiment_name)
+        if len(_listdir(path)) > 0:
+            # Log files exist
+            log_experiments.add(experiment_name)
+        else:
+            # Clean up empty directory
+            os.rmdir(path)
 
     # Get all experiments
     experiment_names = (
