@@ -1,8 +1,9 @@
 from __future__ import annotations
 
 import abc
+import contextlib
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, List, Optional, Union, cast
+from typing import TYPE_CHECKING, Generator, List, Optional, Union, cast
 
 import numpy as np
 import torch.utils.tensorboard
@@ -12,20 +13,6 @@ from ._optimizer import _BuddyOptimizer
 
 if TYPE_CHECKING:
     from .._buddy import Buddy
-
-
-@dataclass
-class _LogNamespace:
-    buddy: _BuddyLogging
-    scope: str
-
-    def __enter__(self) -> _LogNamespace:
-        self.buddy.log_scope_push(self.scope)
-        return self
-
-    def __exit__(self, *unused) -> None:
-        self.buddy.log_scope_pop(self.scope)
-        return
 
 
 class _BuddyLogging(abc.ABC):
@@ -50,8 +37,9 @@ class _BuddyLogging(abc.ABC):
         self._log_writer: Optional[torch.utils.tensorboard.SummaryWriter] = None
         self._log_scopes: List[str] = []
 
-    def log_scope(self, scope: str) -> _LogNamespace:
-        """Returns a scope to log tensors in.
+    @contextlib.contextmanager
+    def log_scope(self, scope: str) -> Generator[None, None, None]:
+        """Returns a context manager that scopes log names.
 
         Example usage:
 
@@ -63,11 +51,10 @@ class _BuddyLogging(abc.ABC):
 
         Args:
             scope (str): Name of scope.
-
-        Returns:
-            _LogNamespace: Object for automatically pushing/popping scope.
         """
-        return _LogNamespace(buddy=self, scope=scope)
+        self.log_scope_push(scope)
+        yield
+        self.log_scope_pop(scope)
 
     def log_scope_push(self, scope: str) -> None:
         """Push a scope to log tensors into.
