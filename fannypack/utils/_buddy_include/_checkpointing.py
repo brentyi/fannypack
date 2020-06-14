@@ -233,11 +233,9 @@ class _BuddyCheckpointing(abc.ABC):
         self._load_checkpoint_optimizers(checkpoint)
 
         # Load model parameters
-        missing, unexpected = cast(
-            "nn.Module", cast("Buddy", self)._model
-        ).load_state_dict(checkpoint["state_dict"])
-        assert len(missing) == 0
-        assert len(unexpected) == 0
+        cast("nn.Module", cast("Buddy", self)._model).load_state_dict(
+            checkpoint["state_dict"], strict=True
+        )
 
         optimizer_steps = cast("_BuddyOptimizer", self).optimizer_steps
         cast("Buddy", self)._print("Loaded checkpoint at step:", optimizer_steps)
