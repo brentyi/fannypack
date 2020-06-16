@@ -24,6 +24,7 @@ setup(
         "h5py",
         "numpy",
         # "numpy-stubs @ https://github.com/numpy/numpy-stubs/tarball/master",
+        "pygments",
         "pyyaml",
         "tensorboard",
         "termcolor",
