@@ -124,6 +124,12 @@ class Buddy(
 
     # Shared functions
     @property
+    def model(self) -> Optional[nn.Module]:
+        """Read-only interface for the attached model.
+        """
+        return self._model
+
+    @property
     def device(self) -> torch.device:
         """Read-only interface for the active torch device. Auto-detected in the
         constructor based on CUDA support.

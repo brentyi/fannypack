@@ -14,6 +14,7 @@ def test_buddy_no_model():
     """Check that errors are raised if a Buddy is used without a model attached.
     """
     buddy = fannypack.utils.Buddy("no_model")
+    assert buddy.model == None
 
     with pytest.raises(AssertionError):
         buddy.save_checkpoint()
