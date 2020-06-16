@@ -1,9 +1,10 @@
 import argparse
+import dataclasses
 import os
 import shutil
 
 from ._buddy_cli_subcommand import Subcommand
-from ._buddy_cli_utils import BuddyPaths, find_checkpoints, find_experiments
+from ._buddy_cli_utils import BuddyPaths
 
 _TRASH_DIR = "./_trash/"
 
@@ -50,7 +51,7 @@ class DeleteSubcommand(Subcommand):
             type=str,
             help="Name of experiment, as printed by `$ buddy list`.",
             metavar="EXPERIMENT_NAME",  # Set metavar => don't show choices in help menu
-            choices=find_experiments(paths).experiment_names,
+            choices=paths.find_experiments().experiment_names,
         )
         parser.add_argument(
             "--forever",
@@ -65,9 +66,9 @@ class DeleteSubcommand(Subcommand):
 
         # If we're just moving an experiment, check that it doesn't exist already
         if not args.forever:
-            new_checkpoint_files = find_checkpoints(
-                experiment_name, path=os.path.join(_TRASH_DIR, paths.checkpoint_dir)
-            )
+            new_checkpoint_files = dataclasses.replace(
+                paths, checkpoint_dir=os.path.join(_TRASH_DIR, paths.checkpoint_dir)
+            ).find_checkpoints(experiment_name)
             if len(new_checkpoint_files) != 0:
                 raise RuntimeError(
                     "Checkpoints for matching experiment name already exist in trash; "
@@ -89,7 +90,7 @@ class DeleteSubcommand(Subcommand):
                 )
 
         # Delete checkpoint files
-        checkpoint_paths = find_checkpoints(experiment_name, paths.checkpoint_dir)
+        checkpoint_paths = paths.find_checkpoints(experiment_name)
         print(f"Found {len(checkpoint_paths)} checkpoint files")
         for path in checkpoint_paths:
             _delete(path, args.forever)
