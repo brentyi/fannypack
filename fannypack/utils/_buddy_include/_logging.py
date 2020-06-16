@@ -141,6 +141,46 @@ class _BuddyLogging(abc.ABC):
         optimizer_steps = cast("_BuddyOptimizer", self).optimizer_steps
         self.log_writer.add_scalar(name, value, global_step=optimizer_steps)
 
+    def log_model_weights_hist(self, name: str = "") -> None:
+        """Logging model weights into histogram.
+
+
+        Args:
+            name (str, optional): Name to prepend a prefix to. Defaults to an empty string.
+        """
+        optimizer_steps = cast(_BuddyOptimizer, self).optimizer_steps
+
+        for layer_name, p in self._model.named_parameters():
+            if p.grad is None:
+                continue
+
+            layer_name = layer_name.replace(".", "/")
+            self.log_writer.add_histogram(
+                tag="{}weights/{}".format(self.log_scope_prefix(name), layer_name),
+                values=p.data.detach().cpu().numpy(),
+                global_step=optimizer_steps,
+            )
+
+    def log_model_grad_hist(self, name: str = "") -> None:
+        """Logging model gradients into histogram.
+
+
+        Args:
+            name (str, optional): Name to prepend a prefix to. Defaults to an empty string.
+        """
+        optimizer_steps = cast(_BuddyOptimizer, self).optimizer_steps
+
+        for layer_name, p in self._model.named_parameters():
+            if p.grad is None:
+                continue
+
+            layer_name = layer_name.replace(".", "/")
+            self.log_writer.add_histogram(
+                tag="{}weights/{}".format(self.log_scope_prefix(name), layer_name),
+                values=p.grad.detach().cpu().numpy(),
+                global_step=optimizer_steps,
+            )
+
     def log_scope_prefix(self, name: str = "") -> str:
         """Get or apply the current log scope prefix.
 
