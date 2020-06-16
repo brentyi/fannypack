@@ -297,7 +297,11 @@ class _BuddyCheckpointing(abc.ABC):
             )
 
     def _read_checkpoint_file(
-        self, label: str = None, path: str = None, experiment_name: str = None
+        self,
+        label: str = None,
+        path: str = None,
+        experiment_name: str = None,
+        verbose: bool = True,
     ) -> Dict[str, Any]:
         """Find a checkpoint to load.
 
@@ -375,7 +379,8 @@ class _BuddyCheckpointing(abc.ABC):
         ):
             warnings.warn("Checkpoint loading: overriding optimizer type.")
 
-        cast("Buddy", self)._print("Read checkpoint from path:", path)
+        if verbose:
+            cast("Buddy", self)._print("Read checkpoint from path:", path)
         return checkpoint
 
     def _find_checkpoints(
@@ -424,9 +429,9 @@ class _BuddyCheckpointing(abc.ABC):
                 # This condition should never be hit
                 assert False
 
-            steps = self._read_checkpoint_file(path=path)["optimizer_config"][
-                "global_steps"
-            ]
+            steps = self._read_checkpoint_file(path=path, verbose=False)[
+                "optimizer_config"
+            ]["global_steps"]
             step_counts[path] = steps
 
         # Sort output by steps
