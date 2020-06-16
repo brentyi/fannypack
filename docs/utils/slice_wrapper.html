@@ -159,7 +159,7 @@
 <h1>SliceWrapper<a class="headerlink" href="#slicewrapper" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
 <dt id="fannypack.utils.SliceWrapper">
-<em class="property">class </em><code class="sig-prename descclassname">fannypack.utils.</code><code class="sig-name descname">SliceWrapper</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n">WrappedType</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils.SliceWrapper" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">fannypack.utils.</code><code class="sig-name descname">SliceWrapper</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwds</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils.SliceWrapper" title="Permalink to this definition">¶</a></dt>
 <dd><p>A thin wrapper class for creating a unified interface for…</p>
 <ul class="simple">
 <li><p>Lists</p></li>
@@ -198,7 +198,7 @@ Behavior example…</p>
 
 <dl class="py attribute">
 <dt id="fannypack.utils.SliceWrapper.data">
-<code class="sig-name descname">data</code><em class="property">: WrappedType</em><em class="property"> = None</em><a class="headerlink" href="#fannypack.utils.SliceWrapper.data" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">data</code><em class="property">: WrappedType</em><a class="headerlink" href="#fannypack.utils.SliceWrapper.data" title="Permalink to this definition">¶</a></dt>
 <dd><p>Wrapped data.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -234,7 +234,11 @@ Behavior example…</p>
 
 <dl class="py method">
 <dt id="fannypack.utils.SliceWrapper.map">
-<code class="sig-name descname">map</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">function</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils.SliceWrapper.map" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">map</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">function</span><span class="p">:</span> <span class="n">Callable<span class="p">[</span><span class="p">[</span>Any<span class="p">]</span><span class="p">, </span>MapOutputType<span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; Dict<span class="p">[</span>Any<span class="p">, </span>MapOutputType<span class="p">]</span><a class="headerlink" href="#fannypack.utils.SliceWrapper.map" title="Permalink to this definition">¶</a></dt>
+<dt>
+<code class="sig-name descname">map</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">function</span><span class="p">:</span> <span class="n">Callable<span class="p">[</span><span class="p">[</span>Any<span class="p">]</span><span class="p">, </span>MapOutputType<span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; MapOutputType</dt>
+<dt>
+<code class="sig-name descname">map</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">function</span><span class="p">:</span> <span class="n">Callable<span class="p">[</span><span class="p">[</span>Any<span class="p">]</span><span class="p">, </span>MapOutputType<span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; Union<span class="p">[</span>MapOutputType<span class="p">, </span>Dict<span class="p">[</span>Any<span class="p">, </span>MapOutputType<span class="p">]</span><span class="p">]</span></dt>
 <dd><p>Apply a function to all iterables within our wrapped data object.</p>
 <p>For iterables that are directly wrapped (eg lists), this is equivalent to
 evaluating:</p>

@@ -220,6 +220,12 @@ happens.</p>
 constructor based on CUDA support.</p>
 </dd></dl>
 
+<dl class="py method">
+<dt id="fannypack.utils.Buddy.model">
+<em class="property">property </em><code class="sig-name descname">model</code><a class="headerlink" href="#fannypack.utils.Buddy.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read-only interface for the attached model.</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="py class">
@@ -371,8 +377,8 @@ TensorBoard.</p>
 
 <dl class="py method">
 <dt id="fannypack.utils._buddy_include._logging._BuddyLogging.log_scope">
-<code class="sig-name descname">log_scope</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">scope</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span> &#x2192; fannypack.utils._buddy_include._logging._LogNamespace<a class="headerlink" href="#fannypack.utils._buddy_include._logging._BuddyLogging.log_scope" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a scope to log tensors in.</p>
+<code class="sig-name descname">log_scope</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">scope</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span> &#x2192; Generator[(None, None, None)]<a class="headerlink" href="#fannypack.utils._buddy_include._logging._BuddyLogging.log_scope" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a context manager that scopes log names.</p>
 <p>Example usage:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">buddy</span><span class="o">.</span><span class="n">log_scope</span><span class="p">(</span><span class="s2">&quot;scope&quot;</span><span class="p">):</span>
     <span class="c1"># Logs to scope/loss</span>
@@ -382,9 +388,6 @@ TensorBoard.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>scope</strong> (<em>str</em>) – Name of scope.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><em>_LogNamespace</em> – Object for automatically pushing/popping scope.</p>
 </dd>
 </dl>
 </dd></dl>
