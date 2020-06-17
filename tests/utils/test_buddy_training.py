@@ -43,6 +43,19 @@ def test_buddy_log_scopes(simple_buddy_temporary_data):
         buddy.log_scope_pop("scope1")
 
 
+def test_buddy_log_histograms_no_grads(simple_buddy_temporary_data):
+    """Check behavior of histogram logging when no gradients exist.
+    """
+    model, buddy, data, labels = simple_buddy_temporary_data
+
+    # If we log parameters with no gradients, nothing should happen
+    buddy.log_parameters_histogram(ignore_zero_grad=True)
+
+    # If we log gradients with no gradients... throw an error
+    with pytest.raises(AssertionError):
+        buddy.log_grad_histogram()
+
+
 def test_buddy_learning_rates(simple_buddy_temporary_data):
     """Check that we can set learning rates. (scalar)
     """
@@ -71,7 +84,7 @@ def test_buddy_learning_rates_lambda(simple_buddy_temporary_data):
 
 
 def test_buddy_train(simple_buddy_temporary_data):
-    """Make sure Buddy losses go down.
+    """Make sure Buddy losses go down, and that we can write log files without errors.
     """
     model, buddy, data, labels = simple_buddy_temporary_data
     assert buddy.optimizer_steps == 0
@@ -90,6 +103,11 @@ def test_buddy_train(simple_buddy_temporary_data):
         # Log for tensorboard
         with buddy.log_scope("scope"):
             buddy.log_scalar("loss", loss)
+        buddy.log_parameters_histogram()
+        buddy.log_grad_histogram()
+
+    # Flush logs
+    buddy.log_writer.flush()
 
     assert buddy.get_learning_rate() == 1e-3
     assert buddy.optimizer_steps == 200
