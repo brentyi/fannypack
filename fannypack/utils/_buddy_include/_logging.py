@@ -30,6 +30,16 @@ class _BuddyLogging(abc.ABC):
         self.log = _deprecation.new_name_wrapper(
             "Buddy.log()", "Buddy.log_scalar()", self.log_scalar
         )
+        self.log_model_grad_hist = _deprecation.new_name_wrapper(
+            "Buddy.log_model_grad_hist()",
+            "Buddy.log_grad_histogram()",
+            self.log_grad_histogram,
+        )
+        self.log_model_weight_hist = _deprecation.new_name_wrapper(
+            "Buddy.log_model_weight_hist()",
+            "Buddy.log_parameter_histogram()",
+            self.log_parameter_histogram,
+        )
 
         # State variables for TensorBoard
         # Note that the writer is lazily instantiated; see below
@@ -141,7 +151,7 @@ class _BuddyLogging(abc.ABC):
         optimizer_steps = cast("_BuddyOptimizer", self).optimizer_steps
         self.log_writer.add_scalar(name, value, global_step=optimizer_steps)
 
-    def log_model_weights_hist(self, scope: str = "weights") -> None:
+    def log_parameter_histogram(self, scope: str = "weights") -> None:
         """Log model weights into a histogram.
 
         Naming: with `scope` set to "weights", a parameter name "model.Linear.bias" will be
@@ -164,7 +174,7 @@ class _BuddyLogging(abc.ABC):
                     global_step=optimizer_steps,
                 )
 
-    def log_model_grad_hist(self, scope: str = "grad") -> None:
+    def log_grad_histogram(self, scope: str = "grad") -> None:
         """Log model gradients into a histogram. Should be called after
         `buddy.minimize()`.
 
