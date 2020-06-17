@@ -160,10 +160,10 @@ class _BuddyLogging(abc.ABC):
         Args:
             scope (str, optional): Scope to log gradients into. Defaults to "weights".
         """
-        optimizer_steps = cast(_BuddyOptimizer, self).optimizer_steps
+        optimizer_steps = cast("_BuddyOptimizer", self).optimizer_steps
 
         with self.log_scope(scope):
-            for param_name, p in self._model.named_parameters():
+            for param_name, p in cast("Buddy", self).model.named_parameters():
                 if p.grad is None:
                     continue
 
@@ -184,10 +184,10 @@ class _BuddyLogging(abc.ABC):
         Args:
             scope (str, optional): Scope to log gradients into. Defaults to "grad".
         """
-        optimizer_steps = cast(_BuddyOptimizer, self).optimizer_steps
+        optimizer_steps = cast("_BuddyOptimizer", self).optimizer_steps
 
         with self.log_scope(scope):
-            for param_name, p in self._model.named_parameters():
+            for param_name, p in cast("Buddy", self).model.named_parameters():
                 if p.grad is None:
                     continue
 
