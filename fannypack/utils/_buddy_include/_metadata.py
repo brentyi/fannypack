@@ -4,8 +4,6 @@ from typing import TYPE_CHECKING, Any, Dict, cast
 
 import yaml
 
-from .. import _deprecation
-
 if TYPE_CHECKING:
     from .._buddy import Buddy
 

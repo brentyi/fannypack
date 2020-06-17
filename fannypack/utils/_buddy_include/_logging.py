@@ -2,17 +2,16 @@ from __future__ import annotations
 
 import abc
 import contextlib
-from dataclasses import dataclass
 from typing import TYPE_CHECKING, Generator, List, Optional, Union, cast
 
 import numpy as np
 import torch.utils.tensorboard
 
 from .. import _deprecation
-from ._optimizer import _BuddyOptimizer
 
 if TYPE_CHECKING:
     from .._buddy import Buddy
+    from ._optimizer import _BuddyOptimizer
 
 
 class _BuddyLogging(abc.ABC):
@@ -112,7 +111,7 @@ class _BuddyLogging(abc.ABC):
         name = self.log_scope_prefix(name)
 
         # Log scalar
-        optimizer_steps = cast(_BuddyOptimizer, self).optimizer_steps
+        optimizer_steps = cast("_BuddyOptimizer", self).optimizer_steps
         self.log_writer.add_image(
             name, image, global_step=optimizer_steps, dataformats=dataformats
         )
@@ -139,7 +138,7 @@ class _BuddyLogging(abc.ABC):
         name = self.log_scope_prefix(name)
 
         # Log scalar
-        optimizer_steps = cast(_BuddyOptimizer, self).optimizer_steps
+        optimizer_steps = cast("_BuddyOptimizer", self).optimizer_steps
         self.log_writer.add_scalar(name, value, global_step=optimizer_steps)
 
     def log_scope_prefix(self, name: str = "") -> str:
@@ -164,8 +163,7 @@ class _BuddyLogging(abc.ABC):
         """
         if len(self._log_scopes) == 0:
             return name
-        else:
-            return "{}/{}".format("/".join(self._log_scopes), name)
+        return "{}/{}".format("/".join(self._log_scopes), name)
 
     @property
     def log_writer(self) -> torch.utils.tensorboard.SummaryWriter:

@@ -131,7 +131,7 @@ class _BuddyOptimizer(abc.ABC):
         assert cast("Buddy", self)._model is not None, "No model attached!"
         schedulers = self._optimizer_config["learning_rate_schedulers"]
         if callable(value):
-            assert type(value(0)) == float
+            assert isinstance(value(0), float)
 
             # Make sure optimizer is instantiated: if not, learning rate will be
             # overriden when it is
@@ -141,7 +141,7 @@ class _BuddyOptimizer(abc.ABC):
             schedulers[optimizer_name] = value
         else:
             # Set learning rate to a float
-            assert type(value) == float
+            assert isinstance(value, float)
             # Delete scheduler
             if optimizer_name in schedulers.keys():
                 schedulers.pop(optimizer_name)
@@ -189,11 +189,11 @@ class _BuddyOptimizer(abc.ABC):
         assert optimizer_type in self._OPTIMIZER_TYPES
 
         # Parameters
-        Optimizer = self._OPTIMIZER_TYPES[optimizer_type]
+        optimizer_class = self._OPTIMIZER_TYPES[optimizer_type]
 
         # Construct optimizer
-        self._optimizer_dict[optimizer_name] = Optimizer(
-            cast("nn.Module", cast("Buddy", self)._model).parameters()
+        self._optimizer_dict[optimizer_name] = optimizer_class(
+            cast("Buddy", self).model.parameters()
         )
         self.set_learning_rate(
             self._optimizer_default_learning_rate, optimizer_name=optimizer_name

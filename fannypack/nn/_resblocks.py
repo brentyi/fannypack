@@ -25,7 +25,7 @@ class Base(nn.Module, abc.ABC):
             inplace=activations_inplace
         )
 
-    def forward(self, x: torch.Tensor) -> torch.Tensor:
+    def forward(self, x: torch.Tensor) -> torch.Tensor:  # type: ignore
         """ResBlock forward pass.
         """
         residual = x

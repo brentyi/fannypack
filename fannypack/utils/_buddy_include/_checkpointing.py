@@ -15,7 +15,6 @@ import torch
 if TYPE_CHECKING:
     from ._optimizer import _BuddyOptimizer
     from .._buddy import Buddy
-    import torch.nn as nn
 
 
 class _BuddyCheckpointing(abc.ABC):
@@ -38,8 +37,6 @@ class _BuddyCheckpointing(abc.ABC):
     def save_checkpoint(self, label: str = None) -> None:
         """Saves a checkpoint, which can optionally be labeled.
         """
-        assert cast("Buddy", self)._model is not None, "No model attached!"
-
         # Determine path to checkpoint file
         if label is not None:
             # Label explicitly specified!
@@ -85,7 +82,7 @@ class _BuddyCheckpointing(abc.ABC):
         state = {
             "optimizer_config": cast("_BuddyOptimizer", self)._optimizer_config,
             "optimizer_states": optimizer_states,
-            "state_dict": cast("nn.Module", cast("Buddy", self)._model).state_dict(),
+            "state_dict": cast("Buddy", self).model.state_dict(),
         }
 
         # Ignore SIGINT (eg ctrl+c) events while we save to disk...
@@ -140,9 +137,7 @@ class _BuddyCheckpointing(abc.ABC):
         checkpoint = self._read_checkpoint_file(label, path, experiment_name)
 
         # Get possible target modules
-        module_dict = dict(
-            cast("nn.Module", cast("Buddy", self)._model).named_modules()
-        )
+        module_dict = dict(cast("Buddy", self).model.named_modules())
         assert target in module_dict.keys(), "Nonexistent target module!"
 
         # Build a state dict for this module only
@@ -233,9 +228,7 @@ class _BuddyCheckpointing(abc.ABC):
         self._load_checkpoint_optimizers(checkpoint)
 
         # Load model parameters
-        cast("nn.Module", cast("Buddy", self)._model).load_state_dict(
-            checkpoint["state_dict"], strict=True
-        )
+        cast("Buddy", self).model.load_state_dict(checkpoint["state_dict"], strict=True)
 
         optimizer_steps = cast("_BuddyOptimizer", self).optimizer_steps
         cast("Buddy", self)._print("Loaded checkpoint at step:", optimizer_steps)
@@ -425,7 +418,7 @@ class _BuddyCheckpointing(abc.ABC):
         for path in paths:
             if path in step_counts:
                 continue
-            elif unlabeled_only:
+            if unlabeled_only:
                 # This condition should never be hit
                 assert False
 
