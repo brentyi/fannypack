@@ -176,7 +176,7 @@ class _BuddyLogging(abc.ABC):
 
             layer_name = layer_name.replace(".", "/")
             self.log_writer.add_histogram(
-                tag="{}weights/{}".format(self.log_scope_prefix(name), layer_name),
+                tag="{}grad/{}".format(self.log_scope_prefix(name), layer_name),
                 values=p.grad.detach().cpu().numpy(),
                 global_step=optimizer_steps,
             )
