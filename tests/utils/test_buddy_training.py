@@ -71,7 +71,7 @@ def test_buddy_learning_rates_lambda(simple_buddy_temporary_data):
 
 
 def test_buddy_train(simple_buddy_temporary_data):
-    """Make sure Buddy losses go down.
+    """Make sure Buddy losses go down, and that we can write log files without errors.
     """
     model, buddy, data, labels = simple_buddy_temporary_data
     assert buddy.optimizer_steps == 0
@@ -90,6 +90,11 @@ def test_buddy_train(simple_buddy_temporary_data):
         # Log for tensorboard
         with buddy.log_scope("scope"):
             buddy.log_scalar("loss", loss)
+        buddy.log_parameter_histogram()
+        buddy.log_grad_histogram()
+
+    # Flush logs
+    buddy.log_writer.flush()
 
     assert buddy.get_learning_rate() == 1e-3
     assert buddy.optimizer_steps == 200
