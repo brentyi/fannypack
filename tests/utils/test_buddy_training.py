@@ -43,6 +43,19 @@ def test_buddy_log_scopes(simple_buddy_temporary_data):
         buddy.log_scope_pop("scope1")
 
 
+def test_buddy_log_histograms_no_grads(simple_buddy_temporary_data):
+    """Check behavior of histogram logging when no gradients exist.
+    """
+    model, buddy, data, labels = simple_buddy_temporary_data
+
+    # If we log parameters with no gradients, nothing should happen
+    buddy.log_parameter_histogram(ignore_zero_grad=True)
+
+    # If we log gradients with no gradients... throw an error
+    with pytest.raises(AssertionError):
+        buddy.log_grad_histogram()
+
+
 def test_buddy_learning_rates(simple_buddy_temporary_data):
     """Check that we can set learning rates. (scalar)
     """

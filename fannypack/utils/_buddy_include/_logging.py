@@ -151,7 +151,9 @@ class _BuddyLogging(abc.ABC):
         optimizer_steps = cast("_BuddyOptimizer", self).optimizer_steps
         self.log_writer.add_scalar(name, value, global_step=optimizer_steps)
 
-    def log_parameter_histogram(self, scope: str = "weights") -> None:
+    def log_parameter_histogram(
+        self, scope: str = "weights", *, ignore_zero_grad: bool = True
+    ) -> None:
         """Log model weights into a histogram.
 
         Naming: with `scope` set to "weights", a parameter name "model.Linear.bias" will be
@@ -159,12 +161,15 @@ class _BuddyLogging(abc.ABC):
 
         Args:
             scope (str, optional): Scope to log gradients into. Defaults to "weights".
+            ignore_zero_grad (bool, optional): Ignore parameters without gradients:
+                decreases log sizes when only parts of models are being trained.
+                Defaults to True.
         """
         optimizer_steps = cast("_BuddyOptimizer", self).optimizer_steps
 
         with self.log_scope(scope):
             for param_name, p in cast("Buddy", self).model.named_parameters():
-                if p.grad is None:
+                if ignore_zero_grad and p.grad is None:
                     continue
 
                 param_name = param_name.replace(".", "/")
@@ -186,17 +191,20 @@ class _BuddyLogging(abc.ABC):
         """
         optimizer_steps = cast("_BuddyOptimizer", self).optimizer_steps
 
+        found_gradients = False
         with self.log_scope(scope):
             for param_name, p in cast("Buddy", self).model.named_parameters():
                 if p.grad is None:
                     continue
-
                 param_name = param_name.replace(".", "/")
                 self.log_writer.add_histogram(
                     tag=self.log_scope_prefix(param_name),
                     values=p.grad.detach().cpu().numpy(),
                     global_step=optimizer_steps,
                 )
+                found_gradients = True
+
+        assert found_gradients, "No gradients found!"
 
     def log_scope_prefix(self, name: str = "") -> str:
         """Get or apply the current log scope prefix.
