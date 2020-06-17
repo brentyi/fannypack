@@ -49,7 +49,7 @@ def test_buddy_log_histograms_no_grads(simple_buddy_temporary_data):
     model, buddy, data, labels = simple_buddy_temporary_data
 
     # If we log parameters with no gradients, nothing should happen
-    buddy.log_parameter_histogram(ignore_zero_grad=True)
+    buddy.log_parameters_histogram(ignore_zero_grad=True)
 
     # If we log gradients with no gradients... throw an error
     with pytest.raises(AssertionError):
@@ -103,7 +103,7 @@ def test_buddy_train(simple_buddy_temporary_data):
         # Log for tensorboard
         with buddy.log_scope("scope"):
             buddy.log_scalar("loss", loss)
-        buddy.log_parameter_histogram()
+        buddy.log_parameters_histogram()
         buddy.log_grad_histogram()
 
     # Flush logs

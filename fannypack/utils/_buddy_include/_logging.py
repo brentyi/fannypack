@@ -37,8 +37,8 @@ class _BuddyLogging(abc.ABC):
         )
         self.log_model_weight_hist = _deprecation.new_name_wrapper(
             "Buddy.log_model_weight_hist()",
-            "Buddy.log_parameter_histogram()",
-            self.log_parameter_histogram,
+            "Buddy.log_parameters_histogram()",
+            self.log_parameters_histogram,
         )
 
         # State variables for TensorBoard
@@ -151,7 +151,7 @@ class _BuddyLogging(abc.ABC):
         optimizer_steps = cast("_BuddyOptimizer", self).optimizer_steps
         self.log_writer.add_scalar(name, value, global_step=optimizer_steps)
 
-    def log_parameter_histogram(
+    def log_parameters_histogram(
         self, scope: str = "weights", *, ignore_zero_grad: bool = True
     ) -> None:
         """Log model weights into a histogram.
