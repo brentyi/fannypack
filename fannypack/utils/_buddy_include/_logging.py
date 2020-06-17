@@ -141,45 +141,52 @@ class _BuddyLogging(abc.ABC):
         optimizer_steps = cast("_BuddyOptimizer", self).optimizer_steps
         self.log_writer.add_scalar(name, value, global_step=optimizer_steps)
 
-    def log_model_weights_hist(self, name: str = "") -> None:
-        """Logging model weights into histogram.
+    def log_model_weights_hist(self, scope: str = "weights") -> None:
+        """Log model weights into a histogram.
 
+        Naming: with `scope` set to "weights", a parameter name "model.Linear.bias" will be
+        logged to the tag `buddy.log_scope_prefix("weights/model/Linear/bias")`.
 
         Args:
-            name (str, optional): Name to prepend a prefix to. Defaults to an empty string.
+            scope (str, optional): Scope to log gradients into. Defaults to "weights".
         """
         optimizer_steps = cast(_BuddyOptimizer, self).optimizer_steps
 
-        for layer_name, p in self._model.named_parameters():
-            if p.grad is None:
-                continue
+        with self.log_scope(scope):
+            for param_name, p in self._model.named_parameters():
+                if p.grad is None:
+                    continue
 
-            layer_name = layer_name.replace(".", "/")
-            self.log_writer.add_histogram(
-                tag="{}weights/{}".format(self.log_scope_prefix(name), layer_name),
-                values=p.data.detach().cpu().numpy(),
-                global_step=optimizer_steps,
-            )
+                param_name = param_name.replace(".", "/")
+                self.log_writer.add_histogram(
+                    tag=self.log_scope_prefix(param_name),
+                    values=p.data.detach().cpu().numpy(),
+                    global_step=optimizer_steps,
+                )
 
-    def log_model_grad_hist(self, name: str = "") -> None:
-        """Logging model gradients into histogram.
+    def log_model_grad_hist(self, scope: str = "grad") -> None:
+        """Log model gradients into a histogram. Should be called after
+        `buddy.minimize()`.
 
+        Naming: with `scope` set to "grad", a parameter name "model.Linear.bias" will be
+        logged to the tag `buddy.log_scope_prefix("grad/model/Linear/bias")`.
 
         Args:
-            name (str, optional): Name to prepend a prefix to. Defaults to an empty string.
+            scope (str, optional): Scope to log gradients into. Defaults to "grad".
         """
         optimizer_steps = cast(_BuddyOptimizer, self).optimizer_steps
 
-        for layer_name, p in self._model.named_parameters():
-            if p.grad is None:
-                continue
+        with self.log_scope(scope):
+            for param_name, p in self._model.named_parameters():
+                if p.grad is None:
+                    continue
 
-            layer_name = layer_name.replace(".", "/")
-            self.log_writer.add_histogram(
-                tag="{}grad/{}".format(self.log_scope_prefix(name), layer_name),
-                values=p.grad.detach().cpu().numpy(),
-                global_step=optimizer_steps,
-            )
+                param_name = param_name.replace(".", "/")
+                self.log_writer.add_histogram(
+                    tag=self.log_scope_prefix(param_name),
+                    values=p.grad.detach().cpu().numpy(),
+                    global_step=optimizer_steps,
+                )
 
     def log_scope_prefix(self, name: str = "") -> str:
         """Get or apply the current log scope prefix.
