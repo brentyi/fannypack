@@ -223,7 +223,8 @@ constructor based on CUDA support.</p>
 <dl class="py method">
 <dt id="fannypack.utils.Buddy.model">
 <em class="property">property </em><code class="sig-name descname">model</code><a class="headerlink" href="#fannypack.utils.Buddy.model" title="Permalink to this definition">¶</a></dt>
-<dd><p>Read-only interface for the attached model.</p>
+<dd><p>Read-only interface for the attached model. Raises an error if no model is
+attached.</p>
 </dd></dl>
 
 </dd></dl>
@@ -329,6 +330,20 @@ the checkpoint with the highest number of training iterations.</p>
 <em class="property">class </em><code class="sig-prename descclassname">fannypack.utils._buddy_include._logging.</code><code class="sig-name descname">_BuddyLogging</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">log_dir</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils._buddy_include._logging._BuddyLogging" title="Permalink to this definition">¶</a></dt>
 <dd><p>Buddy’s TensorBoard logging interface.</p>
 <dl class="py method">
+<dt id="fannypack.utils._buddy_include._logging._BuddyLogging.log_grad_histogram">
+<code class="sig-name descname">log_grad_histogram</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">scope</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'grad'</span></em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#fannypack.utils._buddy_include._logging._BuddyLogging.log_grad_histogram" title="Permalink to this definition">¶</a></dt>
+<dd><p>Log model gradients into a histogram. Should be called after
+<code class="docutils literal notranslate"><span class="pre">buddy.minimize()</span></code>.</p>
+<p>Naming: with <code class="docutils literal notranslate"><span class="pre">scope</span></code> set to “grad”, a parameter name “model.Linear.bias” will be
+logged to the tag <code class="docutils literal notranslate"><span class="pre">buddy.log_scope_prefix(&quot;grad/model/Linear/bias&quot;)</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>scope</strong> (<em>str</em><em>, </em><em>optional</em>) – Scope to log gradients into. Defaults to “grad”.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt id="fannypack.utils._buddy_include._logging._BuddyLogging.log_image">
 <code class="sig-name descname">log_image</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">image</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>torch.Tensor<span class="p">, </span>numpy.ndarray<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">dataformats</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'CHW'</span></em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#fannypack.utils._buddy_include._logging._BuddyLogging.log_image" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convenience function for logging an image tensor for visualization in
@@ -348,6 +363,24 @@ TensorBoard.</p>
 <li><p><strong>name</strong> (<em>str</em>) – Identifier for Tensorboard.</p></li>
 <li><p><strong>image</strong> (<em>torch.Tensor</em><em> or </em><em>np.ndarray</em>) – Image to log.</p></li>
 <li><p><strong>dataformats</strong> (<em>str</em><em>, </em><em>optional</em>) – Dimension ordering. Defaults to “CHW”.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="fannypack.utils._buddy_include._logging._BuddyLogging.log_parameters_histogram">
+<code class="sig-name descname">log_parameters_histogram</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">scope</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'weights'</span></em>, <em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">ignore_zero_grad</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#fannypack.utils._buddy_include._logging._BuddyLogging.log_parameters_histogram" title="Permalink to this definition">¶</a></dt>
+<dd><p>Log model weights into a histogram.</p>
+<p>Naming: with <code class="docutils literal notranslate"><span class="pre">scope</span></code> set to “weights”, a parameter name “model.Linear.bias” will be
+logged to the tag <code class="docutils literal notranslate"><span class="pre">buddy.log_scope_prefix(&quot;weights/model/Linear/bias&quot;)</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>scope</strong> (<em>str</em><em>, </em><em>optional</em>) – Scope to log gradients into. Defaults to “weights”.</p></li>
+<li><p><strong>ignore_zero_grad</strong> (<em>bool</em><em>, </em><em>optional</em>) – Ignore parameters without gradients:
+decreases log sizes when only parts of models are being trained.
+Defaults to True.</p></li>
 </ul>
 </dd>
 </dl>
@@ -377,7 +410,7 @@ TensorBoard.</p>
 
 <dl class="py method">
 <dt id="fannypack.utils._buddy_include._logging._BuddyLogging.log_scope">
-<code class="sig-name descname">log_scope</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">scope</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span> &#x2192; Generator[(None, None, None)]<a class="headerlink" href="#fannypack.utils._buddy_include._logging._BuddyLogging.log_scope" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">log_scope</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">scope</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span> &#x2192; Generator[None, None, None]<a class="headerlink" href="#fannypack.utils._buddy_include._logging._BuddyLogging.log_scope" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a context manager that scopes log names.</p>
 <p>Example usage:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">buddy</span><span class="o">.</span><span class="n">log_scope</span><span class="p">(</span><span class="s2">&quot;scope&quot;</span><span class="p">):</span>

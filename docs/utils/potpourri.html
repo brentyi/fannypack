@@ -158,65 +158,6 @@
   <div class="section" id="module-fannypack.utils">
 <span id="potpourri"></span><h1>Potpourri<a class="headerlink" href="#module-fannypack.utils" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
-<dt id="fannypack.utils.deprecation_wrapper">
-<code class="sig-prename descclassname">fannypack.utils.</code><code class="sig-name descname">deprecation_wrapper</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">message</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">function_or_class</span><span class="p">:</span> <span class="n">Callable</span></em><span class="sig-paren">)</span> &#x2192; Callable<a class="headerlink" href="#fannypack.utils.deprecation_wrapper" title="Permalink to this definition">¶</a></dt>
-<dd><p>Creates a wrapper for a deprecated function or class. Prints a warning
-the first time a function or class is called.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>message</strong> (<em>str</em>) – Warning message.</p></li>
-<li><p><strong>function_or_class</strong> (<em>Callable</em>) – Function or class to wrap.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><em>Callable</em> – Wrapped function/class.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt id="fannypack.utils.freeze_module">
-<code class="sig-prename descclassname">fannypack.utils.</code><code class="sig-name descname">freeze_module</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">module</span><span class="p">:</span> <span class="n">torch.nn.modules.module.Module</span></em>, <em class="sig-param"><span class="n">recurse</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#fannypack.utils.freeze_module" title="Permalink to this definition">¶</a></dt>
-<dd><p>Freeze the weights of a PyTorch module.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>module</strong> (<em>torch.nn.Module</em>) – Module to freeze.</p></li>
-<li><p><strong>recurse</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, then recursively freezes children.
-Otherwise, only freezes immediate parameters.</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt id="fannypack.utils.new_name_wrapper">
-<code class="sig-prename descclassname">fannypack.utils.</code><code class="sig-name descname">new_name_wrapper</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">old_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">new_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">function_or_class</span><span class="p">:</span> <span class="n">Callable</span></em><span class="sig-paren">)</span> &#x2192; Callable<a class="headerlink" href="#fannypack.utils.new_name_wrapper" title="Permalink to this definition">¶</a></dt>
-<dd><p>Creates a wrapper for a renamed function or class. Prints a warning the first
-time a function or class is called with the old name.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>old_name</strong> (<em>str</em>) – Old name of function or class. Printed in warning.</p></li>
-<li><p><strong>new_name</strong> (<em>str</em>) – New name of function or class. Printed in warning.</p></li>
-<li><p><strong>function_or_class</strong> (<em>Callable</em>) – Function or class to wrap.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><em>Callable</em> – Wrapped function/class.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt id="fannypack.utils.pdb_safety_net">
-<code class="sig-prename descclassname">fannypack.utils.</code><code class="sig-name descname">pdb_safety_net</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils.pdb_safety_net" title="Permalink to this definition">¶</a></dt>
-<dd><p>Helper for opening PDB when either (a) the user hits Ctrl+C or (b) we encounter
-an uncaught exception.</p>
-</dd></dl>
-
-<dl class="py function">
 <dt id="fannypack.utils.squeeze">
 <code class="sig-prename descclassname">fannypack.utils.</code><code class="sig-name descname">squeeze</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span><span class="p">:</span> <span class="n">Any</span></em>, <em class="sig-param"><span class="n">axis</span><span class="p">:</span> <span class="n">Union[int, Tuple[int, …]]</span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; Any<a class="headerlink" href="#fannypack.utils.squeeze" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generic squeeze function.</p>
@@ -295,6 +236,21 @@ convert to torch tensors.</p></li>
 </dd></dl>
 
 <dl class="py function">
+<dt id="fannypack.utils.freeze_module">
+<code class="sig-prename descclassname">fannypack.utils.</code><code class="sig-name descname">freeze_module</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">module</span><span class="p">:</span> <span class="n">torch.nn.modules.module.Module</span></em>, <em class="sig-param"><span class="n">recurse</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#fannypack.utils.freeze_module" title="Permalink to this definition">¶</a></dt>
+<dd><p>Freeze the weights of a PyTorch module.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>module</strong> (<em>torch.nn.Module</em>) – Module to freeze.</p></li>
+<li><p><strong>recurse</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, then recursively freezes children.
+Otherwise, only freezes immediate parameters.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt id="fannypack.utils.unfreeze_module">
 <code class="sig-prename descclassname">fannypack.utils.</code><code class="sig-name descname">unfreeze_module</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">module</span><span class="p">:</span> <span class="n">torch.nn.modules.module.Module</span></em>, <em class="sig-param"><span class="n">recurse</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#fannypack.utils.unfreeze_module" title="Permalink to this definition">¶</a></dt>
 <dd><p>Unfreeze the weights of a PyTorch module, which needs to have been
@@ -308,6 +264,50 @@ Otherwise, only unfreezes immediate parameters.</p></li>
 </ul>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="fannypack.utils.deprecation_wrapper">
+<code class="sig-prename descclassname">fannypack.utils.</code><code class="sig-name descname">deprecation_wrapper</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">message</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">function_or_class</span><span class="p">:</span> <span class="n">Callable</span></em><span class="sig-paren">)</span> &#x2192; Callable<a class="headerlink" href="#fannypack.utils.deprecation_wrapper" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a wrapper for a deprecated function or class. Prints a warning
+the first time a function or class is called.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>message</strong> (<em>str</em>) – Warning message.</p></li>
+<li><p><strong>function_or_class</strong> (<em>Callable</em>) – Function or class to wrap.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>Callable</em> – Wrapped function/class.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="fannypack.utils.new_name_wrapper">
+<code class="sig-prename descclassname">fannypack.utils.</code><code class="sig-name descname">new_name_wrapper</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">old_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">new_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">function_or_class</span><span class="p">:</span> <span class="n">Callable</span></em><span class="sig-paren">)</span> &#x2192; Callable<a class="headerlink" href="#fannypack.utils.new_name_wrapper" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a wrapper for a renamed function or class. Prints a warning the first
+time a function or class is called with the old name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>old_name</strong> (<em>str</em>) – Old name of function or class. Printed in warning.</p></li>
+<li><p><strong>new_name</strong> (<em>str</em>) – New name of function or class. Printed in warning.</p></li>
+<li><p><strong>function_or_class</strong> (<em>Callable</em>) – Function or class to wrap.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>Callable</em> – Wrapped function/class.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="fannypack.utils.pdb_safety_net">
+<code class="sig-prename descclassname">fannypack.utils.</code><code class="sig-name descname">pdb_safety_net</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils.pdb_safety_net" title="Permalink to this definition">¶</a></dt>
+<dd><p>Helper for opening PDB when either (a) the user hits Ctrl+C or (b) we encounter
+an uncaught exception.</p>
 </dd></dl>
 
 </div>
