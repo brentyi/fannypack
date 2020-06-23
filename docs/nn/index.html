@@ -164,13 +164,58 @@
 <dl class="py class">
 <dt id="fannypack.nn.resblocks.Conv2d">
 <em class="property">class </em><code class="sig-prename descclassname">fannypack.nn.resblocks.</code><code class="sig-name descname">Conv2d</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">channels</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">bottleneck_channels</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">kernel_size</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">3</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">resblock_base_args</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.nn.resblocks.Conv2d" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">fannypack.nn._resblocks.Base</span></code></p>
+<dd><p>Bases: <a class="reference internal" href="#fannypack.nn.resblocks.Base" title="fannypack.nn.resblocks.Base"><code class="xref py py-class docutils literal notranslate"><span class="pre">fannypack.nn.resblocks.Base</span></code></a></p>
 </dd></dl>
 
 <dl class="py class">
 <dt id="fannypack.nn.resblocks.Linear">
 <em class="property">class </em><code class="sig-prename descclassname">fannypack.nn.resblocks.</code><code class="sig-name descname">Linear</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">units</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">bottleneck_units</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">resblock_base_args</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.nn.resblocks.Linear" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">fannypack.nn._resblocks.Base</span></code></p>
+<dd><p>Bases: <a class="reference internal" href="#fannypack.nn.resblocks.Base" title="fannypack.nn.resblocks.Base"><code class="xref py py-class docutils literal notranslate"><span class="pre">fannypack.nn.resblocks.Base</span></code></a></p>
+</dd></dl>
+
+<span class="target" id="module-fannypack.nn.functional"></span><dl class="py function">
+<dt id="fannypack.nn.functional.gaussian_log_prob">
+<code class="sig-prename descclassname">fannypack.nn.functional.</code><code class="sig-name descname">gaussian_log_prob</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mean</span><span class="p">:</span> <span class="n">torch.Tensor</span></em>, <em class="sig-param"><span class="n">covariance</span><span class="p">:</span> <span class="n">torch.Tensor</span></em>, <em class="sig-param"><span class="n">value</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="headerlink" href="#fannypack.nn.functional.gaussian_log_prob" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes log probabilities under multivariate Gaussian distributions, with
+support for arbitrary batch axes.</p>
+<p>Equivalent to…</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">torch</span><span class="o">.</span><span class="n">distributions</span><span class="o">.</span><span class="n">MultivariateNormal</span><span class="p">(</span>
+    <span class="n">mean</span><span class="p">,</span> <span class="n">covariance</span>
+<span class="p">)</span><span class="o">.</span><span class="n">log_prob</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>but avoids some CUDA errors (<a class="reference external" href="https://discuss.pytorch.org/t/cuda-illegal-memory-access-when-using-batched-torch-cholesky/51624">https://discuss.pytorch.org/t/cuda-illegal-memory-access-when-using-batched-torch-cholesky/51624</a>).</p>
+<p>Stolen from &#64;alberthli/&#64;wuphilipp.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mean</strong> (<em>torch.Tensor</em>) – Means vectors. Shape should be <code class="docutils literal notranslate"><span class="pre">(*,</span> <span class="pre">D)</span></code>.</p></li>
+<li><p><strong>covariance</strong> (<em>torch.Tensor</em>) – Covariances matrices. Shape should be <code class="docutils literal notranslate"><span class="pre">(*,</span> <span class="pre">D,</span> <span class="pre">D)</span></code>.</p></li>
+<li><p><strong>value</strong> (<em>torch.Tensor</em>) – State vectors. Shape should be <code class="docutils literal notranslate"><span class="pre">(*,</span> <span class="pre">D)</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>torch.Tensor</em> – Batched log probabilities. Shape should be <code class="docutils literal notranslate"><span class="pre">(*)</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="fannypack.nn.functional.quadratic_matmul">
+<code class="sig-prename descclassname">fannypack.nn.functional.</code><code class="sig-name descname">quadratic_matmul</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span><span class="p">:</span> <span class="n">torch.Tensor</span></em>, <em class="sig-param"><span class="n">A</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="headerlink" href="#fannypack.nn.functional.quadratic_matmul" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes $x^    op A x$, with support for arbitrary batch axes.</p>
+<p>Stolen from &#64;alberthli/&#64;wuphilipp.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>torch.Tensor</em>) – Vectors. Shape should be <code class="docutils literal notranslate"><span class="pre">(*,</span> <span class="pre">D)</span></code>.</p></li>
+<li><p><strong>A</strong> (<em>torch.Tensor</em>) – Matrices. Shape should be <code class="docutils literal notranslate"><span class="pre">(*,</span> <span class="pre">D,</span> <span class="pre">D)</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>torch.Tensor</em> – Batched output of multiplication. Shape should be <code class="docutils literal notranslate"><span class="pre">(...)</span></code>.</p>
+</dd>
+</dl>
 </dd></dl>
 
 </div>
