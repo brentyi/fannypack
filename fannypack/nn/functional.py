@@ -3,7 +3,7 @@ import torch
 
 
 def quadratic_matmul(x: torch.Tensor, A: torch.Tensor) -> torch.Tensor:
-    """Computes $x^\top A x$, with support for arbitrary batch axes.
+    r"""Computes $x^\top A x$, with support for arbitrary batch axes.
 
     Stolen from @alberthli/@wuphilipp.
 
@@ -12,7 +12,7 @@ def quadratic_matmul(x: torch.Tensor, A: torch.Tensor) -> torch.Tensor:
         A (torch.Tensor): Matrices. Shape should be `(*, D, D)`.
 
     Returns:
-        torch.Tensor: Batched output of multiplication. Shape should be `(...)`.
+        torch.Tensor: Batched output of multiplication. Shape should be `(*)`.
     """
     assert x.shape[-1] == A.shape[-1] == A.shape[-2]
 
@@ -28,13 +28,14 @@ def gaussian_log_prob(
     """Computes log probabilities under multivariate Gaussian distributions, with
     support for arbitrary batch axes.
 
-    Equivalent to...
+    Naive version of...
     ```
     torch.distributions.MultivariateNormal(
         mean, covariance
     ).log_prob(value)
     ```
-    but avoids some CUDA errors (https://discuss.pytorch.org/t/cuda-illegal-memory-access-when-using-batched-torch-cholesky/51624).
+    that avoids some Cholesky-related CUDA errors.
+    https://discuss.pytorch.org/t/cuda-illegal-memory-access-when-using-batched-torch-cholesky/51624
 
     Stolen from @alberthli/@wuphilipp.
 
