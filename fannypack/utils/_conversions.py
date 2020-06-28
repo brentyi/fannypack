@@ -6,9 +6,10 @@ import numpy as np
 import torch
 
 # Type aliases, variables
-# > We'd ideally be able to use a TypeVar for Container, but this causes an overlapping
-#   function signatures error in mypy
-Container = Any
+# > We'd ideally be able to use a TypeVar for ContainerOut, but the handling the wrapped
+#   types is very hard
+ContainerIn = TypeVar("ContainerIn", Dict, List, Tuple)
+ContainerOut = Any
 InputType = TypeVar("InputType", np.ndarray, torch.Tensor)
 OutputType = TypeVar("OutputType", np.ndarray, torch.Tensor)
 
@@ -22,8 +23,8 @@ def _convert_recursive(
 
 @overload
 def _convert_recursive(
-    x: Container, convert: Callable[[InputType], OutputType], input_type: type,
-) -> Container:
+    x: ContainerIn, convert: Callable[[InputType], OutputType], input_type: type,
+) -> ContainerOut:
     pass
 
 
@@ -33,7 +34,7 @@ def _convert_recursive(x, convert, input_type):
     """
 
     # Conversion base case
-    if type(x) == input_type:
+    if isinstance(x, input_type):
         x = cast(InputType, x)
         return convert(x)
 
@@ -43,22 +44,22 @@ def _convert_recursive(x, convert, input_type):
     )
 
     # Convert dictionaries of values
-    if type(x) == dict:
+    if isinstance(x, dict):
         x = cast(dict, x)
         return {k: convert_recursive(v) for k, v in x.items()}
 
     # Convert lists of values
-    elif type(x) == list:
+    if isinstance(x, list):
         x = cast(list, x)
         return list(map(convert_recursive, x))
 
     # Convert tuples of values
-    elif type(x) == tuple:
+    if isinstance(x, tuple):
         x = cast(tuple, x)
         return tuple(map(convert_recursive, x))
 
     # Convert dataclass containing values
-    elif dataclasses.is_dataclass(x):
+    if dataclasses.is_dataclass(x):
         changes = {}
         for field in dataclasses.fields(x):
             value = getattr(x, field.name)
@@ -71,8 +72,7 @@ def _convert_recursive(x, convert, input_type):
         return dataclasses.replace(x, **changes)
 
     # Unsupported input types
-    else:
-        assert False, f"Unsupported datatype {type(x)}!"
+    assert False, f"Unsupported datatype {type(x)}!"
 
 
 @overload
@@ -83,13 +83,15 @@ def to_device(
 
 
 @overload
-def to_device(x: Container, device: torch.device, detach: bool = False) -> Container:
+def to_device(
+    x: ContainerIn, device: torch.device, detach: bool = False
+) -> ContainerOut:
     pass
 
 
 def to_device(
-    x: Union[Container, torch.Tensor], device: torch.device, detach: bool = False
-) -> Union[Container, torch.Tensor]:
+    x: Union[ContainerIn, torch.Tensor], device: torch.device, detach: bool = False
+) -> Union[ContainerIn, torch.Tensor]:
     """Move a torch tensor, list of tensors, dict, or dataclass of tensors to a
     different device.
 
@@ -121,8 +123,8 @@ def to_torch(
 
 @overload
 def to_torch(
-    x: Container, device: str = "cpu", convert_doubles_to_floats: bool = True,
-) -> Container:
+    x: ContainerIn, device: str = "cpu", convert_doubles_to_floats: bool = True,
+) -> ContainerOut:
     pass
 
 
@@ -160,7 +162,7 @@ def to_numpy(x: torch.Tensor) -> np.ndarray:
 
 
 @overload
-def to_numpy(x: Container) -> Container:
+def to_numpy(x: ContainerIn) -> ContainerOut:
     pass
 
 
