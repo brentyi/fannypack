@@ -63,3 +63,38 @@ def test_gaussian_log_prob():
         rtol=1e-3,
         atol=1e10,
     )
+
+
+def test_tril_count_simple():
+    """Basic counting utility check.
+    """
+    assert fannypack.utils.matrix_dim_from_tril_count(6) == 3
+    assert fannypack.utils.tril_count_from_matrix_dim(3) == 6
+
+
+def test_tril_count_bijective():
+    """Check bijectivity of our counting utilities.
+    """
+
+    for matrix_dim in range(1, 100):
+        assert (
+            fannypack.utils.matrix_dim_from_tril_count(
+                fannypack.utils.tril_count_from_matrix_dim(matrix_dim)
+            )
+            == matrix_dim
+        )
+
+
+def test_tril_vector_conversions():
+    """Check that our `tril_to_vector` and `vector_to_tril` functions return the correct
+    shapes + bijectivity.
+    """
+
+    for batch_dims in ((), (3, 2, 5), (7,)):
+        for matrix_dim in range(1, 10):
+            tril_count = fannypack.utils.tril_count_from_matrix_dim(matrix_dim)
+            vectors = torch.randn(batch_dims + (tril_count,))
+            trils = fannypack.utils.tril_from_vector(vectors)
+
+            assert trils.shape == batch_dims + (matrix_dim, matrix_dim)
+            assert torch.all(fannypack.utils.vector_from_tril(trils) == vectors)

@@ -78,11 +78,11 @@ def tril_count_from_matrix_dim(matrix_dim: int):
     Returns:
         int: Count of lower-triangular terms.
     """
-    tril_count = (matrix_dim ** 2 - matrix_dim) // 2
+    tril_count = (matrix_dim ** 2 - matrix_dim) // 2 + matrix_dim
     return tril_count
 
 
-def vector_to_tril(lower_vector: torch.Tensor) -> torch.Tensor:
+def tril_from_vector(lower_vector: torch.Tensor) -> torch.Tensor:
     """Computes lower-triangular square matrices from a flattened vector of nonzero
     terms. Supports arbitrary batch dimensions.
 
@@ -102,7 +102,7 @@ def vector_to_tril(lower_vector: torch.Tensor) -> torch.Tensor:
     return output
 
 
-def tril_to_vector(tril_matrix: torch.Tensor) -> torch.Tensor:
+def vector_from_tril(tril_matrix: torch.Tensor) -> torch.Tensor:
     """Retrieves the lower triangular terms of square matrices as vectors. Supports
     arbitrary batch dimensions.
 

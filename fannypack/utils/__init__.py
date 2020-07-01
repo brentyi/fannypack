@@ -10,8 +10,8 @@ from ._psd_helpers import (
     matrix_dim_from_tril_count,
     quadratic_matmul,
     tril_count_from_matrix_dim,
-    tril_to_vector,
-    vector_to_tril,
+    tril_from_vector,
+    vector_from_tril,
 )
 from ._slice_wrapper import SliceWrapper
 from ._squeeze import squeeze
