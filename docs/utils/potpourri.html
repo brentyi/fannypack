@@ -178,7 +178,8 @@
 <dl class="py function">
 <dt id="fannypack.utils.freeze_module">
 <code class="sig-prename descclassname">fannypack.utils.</code><code class="sig-name descname">freeze_module</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">module</span><span class="p">:</span> <span class="n">torch.nn.modules.module.Module</span></em>, <em class="sig-param"><span class="n">recurse</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#fannypack.utils.freeze_module" title="Permalink to this definition">¶</a></dt>
-<dd><p>Freeze the weights of a PyTorch module.</p>
+<dd><p>Freeze the weights of a PyTorch module by setting the <code class="docutils literal notranslate"><span class="pre">requires_grad</span></code> attributes
+of enclosed parameters to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -194,7 +195,8 @@ Otherwise, only freezes immediate parameters.</p></li>
 <dt id="fannypack.utils.unfreeze_module">
 <code class="sig-prename descclassname">fannypack.utils.</code><code class="sig-name descname">unfreeze_module</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">module</span><span class="p">:</span> <span class="n">torch.nn.modules.module.Module</span></em>, <em class="sig-param"><span class="n">recurse</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#fannypack.utils.unfreeze_module" title="Permalink to this definition">¶</a></dt>
 <dd><p>Unfreeze the weights of a PyTorch module, which needs to have been
-frozen with <a class="reference internal" href="#fannypack.utils.freeze_module" title="fannypack.utils.freeze_module"><code class="xref py py-func docutils literal notranslate"><span class="pre">fannypack.utils.freeze_module()</span></code></a>.</p>
+frozen with <a class="reference internal" href="#fannypack.utils.freeze_module" title="fannypack.utils.freeze_module"><code class="xref py py-func docutils literal notranslate"><span class="pre">fannypack.utils.freeze_module()</span></code></a>. Restores all original values
+<code class="docutils literal notranslate"><span class="pre">requires_grad</span></code> values.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">

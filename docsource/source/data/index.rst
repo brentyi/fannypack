@@ -16,3 +16,4 @@ HDF5 for Trajectories
 ******************************************
 
 .. autoclass:: fannypack.data.TrajectoriesFile
+   :members:

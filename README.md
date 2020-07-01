@@ -12,7 +12,7 @@ Contents include helpers for:
 - Experiment management, Tensorboard logging, and checkpointing (Python + CLI)
 - Reading and manipulating arrays and tensors stored in containers: converting
   between types, moving across (Torch) devices, slicing across shared dimensions
-- Freezing and unfreezing portions of Python modules
+- Freezing and unfreezing portions of PyTorch modules
 - Reading and writing time series data/trajectory files via hdf5
 - and a lot more!
 
