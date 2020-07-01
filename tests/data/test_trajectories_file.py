@@ -106,7 +106,7 @@ def test_write(trajectories_file_write):
 
 
 def test_read(trajectories_file_read):
-    """Read an existing trajectories file, and check that its content match
+    """Read an existing trajectories file, and check that its content matches
     what we wrote to it.
     """
     traj_file = trajectories_file_read
@@ -117,6 +117,26 @@ def test_read(trajectories_file_read):
         # Iterate over each trajectory
         counter = 0
         for i, traj in enumerate(traj_file):
+            assert type(traj) == dict
+            assert traj["trajectory_index"] == i
+            assert traj["trajectory_index_string"] == str(i)
+            assert len(traj["five"]) == i * 2 + 1
+            assert len(traj["timestep"]) == i * 2 + 1
+            counter += 1
+        assert len(traj_file) == counter
+
+def test_read_slice(trajectories_file_read):
+    """Read an existing trajectories file using slice indexing, and check that its
+    content matches what we wrote to it.
+    """
+    traj_file = trajectories_file_read
+    with traj_file:
+        # We should have added 5 trajectories
+        assert len(traj_file) == 5
+
+        # Iterate over each trajectory
+        counter = 0
+        for i, traj in enumerate(traj_file[0:5]):
             assert type(traj) == dict
             assert traj["trajectory_index"] == i
             assert traj["trajectory_index_string"] == str(i)
