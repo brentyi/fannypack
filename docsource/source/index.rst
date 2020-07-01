@@ -1,7 +1,7 @@
 fannypack
 ==========================================
 
-A loose collection of helpers for training neural networks in PyTorch.
+A loose collection of helpers for training PyTorch models.
 
 Fannypack is separated into three submodules:
 

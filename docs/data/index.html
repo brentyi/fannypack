@@ -84,7 +84,11 @@
             
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../utils/index.html">fannypack.utils</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">fannypack.data</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">fannypack.data</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#google-drive-downloads">Google Drive Downloads</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#hdf5-for-trajectories">HDF5 for Trajectories</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="../nn/index.html">fannypack.nn</a></li>
 </ul>
 
@@ -150,8 +154,68 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="module-fannypack.data">
-<span id="fannypack-data"></span><h1>fannypack.data<a class="headerlink" href="#module-fannypack.data" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="fannypack-data">
+<h1>fannypack.data<a class="headerlink" href="#fannypack-data" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="google-drive-downloads">
+<h2>Google Drive Downloads<a class="headerlink" href="#google-drive-downloads" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="fannypack.data.download_drive_file">
+<code class="sig-prename descclassname">fannypack.data.</code><code class="sig-name descname">download_drive_file</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">url</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">target_path</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">chunk_size</span><span class="o">=</span><span class="default_value">32768</span></em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#fannypack.data.download_drive_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Download a file via a public Google Drive url.</p>
+<p>Example usage:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">download_file_from_google_drive</span><span class="p">(</span>
+    <span class="s2">&quot;https://drive.google.com/file/d/1AsY9Cs3xE0RSlr0FKlnSKHp6zIwFSvXe/view&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;/home/brent/Downloads/test.pdf&quot;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>url</strong> (<em>str</em>) – Google Drive url.</p></li>
+<li><p><strong>target_path</strong> (<em>str</em>) – Destination to write to.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="fannypack.data.cached_drive_file">
+<code class="sig-prename descclassname">fannypack.data.</code><code class="sig-name descname">cached_drive_file</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">url</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span> &#x2192; str<a class="headerlink" href="#fannypack.data.cached_drive_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a local path to a file from Google Drive. Downloads the file if it doesn’t
+exist yet locally.</p>
+<p>By default, cached files live in <code class="docutils literal notranslate"><span class="pre">~/.cache/fannypack-drive-files/</span></code>. It often makes
+sense to move this directory (eg to an NFS): see
+<a class="reference internal" href="#fannypack.data.set_cache_path" title="fannypack.data.set_cache_path"><code class="xref py py-func docutils literal notranslate"><span class="pre">fannypack.data.set_cache_path()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – Name of path, eg <code class="docutils literal notranslate"><span class="pre">secret_key.pem</span></code>.</p></li>
+<li><p><strong>url</strong> (<em>str</em>) – URL, eg
+<code class="docutils literal notranslate"><span class="pre">https://drive.google.com/file/d/1AsY9Cs3xE0RSlr0FKlnSKHp6zIwFSvXe/view</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>str</em> – Local path to file.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="fannypack.data.set_cache_path">
+<code class="sig-prename descclassname">fannypack.data.</code><code class="sig-name descname">set_cache_path</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.data.set_cache_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the cache location for <a class="reference internal" href="#fannypack.data.cached_drive_file" title="fannypack.data.cached_drive_file"><code class="xref py py-func docutils literal notranslate"><span class="pre">fannypack.data.cached_drive_file()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>_cache_path</strong> (<em>str</em>) – New location for cached files. Defaults to
+<code class="docutils literal notranslate"><span class="pre">~/.cache/fannypack-drive-files/</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="hdf5-for-trajectories">
+<h2>HDF5 for Trajectories<a class="headerlink" href="#hdf5-for-trajectories" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="fannypack.data.TrajectoriesFile">
 <em class="property">class </em><code class="sig-prename descclassname">fannypack.data.</code><code class="sig-name descname">TrajectoriesFile</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwds</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.data.TrajectoriesFile" title="Permalink to this definition">¶</a></dt>
@@ -198,126 +262,9 @@ need to be called within a <code class="docutils literal notranslate"><span clas
 </ul>
 </dd>
 </dl>
-<dl class="py method">
-<dt id="fannypack.data.TrajectoriesFile.abandon_trajectory">
-<code class="sig-name descname">abandon_trajectory</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#fannypack.data.TrajectoriesFile.abandon_trajectory" title="Permalink to this definition">¶</a></dt>
-<dd><p>Abandon the current trajectory.</p>
 </dd></dl>
 
-<dl class="py method">
-<dt id="fannypack.data.TrajectoriesFile.add_meta">
-<code class="sig-name descname">add_meta</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">content</span><span class="p">:</span> <span class="n">Dict<span class="p">[</span>str<span class="p">, </span>numpy.ndarray<span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#fannypack.data.TrajectoriesFile.add_meta" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add some metadata to the current trajectory.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>content</strong> (<em>dict</em>) – Map from metadata keys (str) to values (np.ndarray).</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="fannypack.data.TrajectoriesFile.add_timestep">
-<code class="sig-name descname">add_timestep</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">content</span><span class="p">:</span> <span class="n">Dict<span class="p">[</span>str<span class="p">, </span>numpy.ndarray<span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#fannypack.data.TrajectoriesFile.add_timestep" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add a timestep to the current trajectory.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>content</strong> (<em>dict</em>) – Map from timestep keys (str) to values (np.ndarray).</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="fannypack.data.TrajectoriesFile.clear">
-<code class="sig-name descname">clear</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#fannypack.data.TrajectoriesFile.clear" title="Permalink to this definition">¶</a></dt>
-<dd><p>Clear the contents of the TrajectoriesFile.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="fannypack.data.TrajectoriesFile.complete_trajectory">
-<code class="sig-name descname">complete_trajectory</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#fannypack.data.TrajectoriesFile.complete_trajectory" title="Permalink to this definition">¶</a></dt>
-<dd><p>Write the current trajectory to disk, and mark the start of a new
-trajectory.
-Must be called with the TrajectoriesFile object in a <code class="docutils literal notranslate"><span class="pre">with</span></code> statement.</p>
-<p>The next call to <code class="docutils literal notranslate"><span class="pre">add_timestep()</span></code> will be time 0 of the next trajectory.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="fannypack.data.TrajectoriesFile.get_all">
-<code class="sig-name descname">get_all</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">key</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span> &#x2192; list<a class="headerlink" href="#fannypack.data.TrajectoriesFile.get_all" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get contents associated with a key from all trajectories.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>key</strong> (<em>str</em>) – Content identifier.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><em>list</em> – List of contents. First index is trajectory #.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="fannypack.data.TrajectoriesFile.resize">
-<code class="sig-name descname">resize</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">count</span><span class="p">:</span> <span class="n">int</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.data.TrajectoriesFile.resize" title="Permalink to this definition">¶</a></dt>
-<dd><p>Expand or contract our TrajectoriesFile.</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py function">
-<dt id="fannypack.data.cached_drive_file">
-<code class="sig-prename descclassname">fannypack.data.</code><code class="sig-name descname">cached_drive_file</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">url</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span> &#x2192; str<a class="headerlink" href="#fannypack.data.cached_drive_file" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return a local path to a file from Google Drive. Downloads the file if it doesn’t
-exist yet locally.</p>
-<p>By default, cached files live in <code class="docutils literal notranslate"><span class="pre">~/.cache/fannypack-drive-files/</span></code>. It often makes
-sense to move this directory (eg to an NFS): see
-<a class="reference internal" href="#fannypack.data.set_cache_path" title="fannypack.data.set_cache_path"><code class="xref py py-func docutils literal notranslate"><span class="pre">fannypack.data.set_cache_path()</span></code></a>.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>name</strong> (<em>str</em>) – Name of path, eg <code class="docutils literal notranslate"><span class="pre">secret_key.pem</span></code>.</p></li>
-<li><p><strong>url</strong> (<em>str</em>) – URL, eg
-<code class="docutils literal notranslate"><span class="pre">https://drive.google.com/file/d/1AsY9Cs3xE0RSlr0FKlnSKHp6zIwFSvXe/view</span></code>.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><em>str</em> – Local path to file.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt id="fannypack.data.download_drive_file">
-<code class="sig-prename descclassname">fannypack.data.</code><code class="sig-name descname">download_drive_file</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">url</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">target_path</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">chunk_size</span><span class="o">=</span><span class="default_value">32768</span></em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#fannypack.data.download_drive_file" title="Permalink to this definition">¶</a></dt>
-<dd><p>Download a file via a public Google Drive url.</p>
-<p>Example usage:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">download_file_from_google_drive</span><span class="p">(</span>
-    <span class="s2">&quot;https://drive.google.com/file/d/1AsY9Cs3xE0RSlr0FKlnSKHp6zIwFSvXe/view&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;/home/brent/Downloads/test.pdf&quot;</span>
-<span class="p">)</span>
-</pre></div>
 </div>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>url</strong> (<em>str</em>) – Google Drive url.</p></li>
-<li><p><strong>target_path</strong> (<em>str</em>) – Destination to write to.</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt id="fannypack.data.set_cache_path">
-<code class="sig-prename descclassname">fannypack.data.</code><code class="sig-name descname">set_cache_path</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.data.set_cache_path" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set the cache location for <a class="reference internal" href="#fannypack.data.cached_drive_file" title="fannypack.data.cached_drive_file"><code class="xref py py-func docutils literal notranslate"><span class="pre">fannypack.data.cached_drive_file()</span></code></a>.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>_cache_path</strong> (<em>str</em>) – New location for cached files. Defaults to
-<code class="docutils literal notranslate"><span class="pre">~/.cache/fannypack-drive-files/</span></code>.</p>
-</dd>
-</dl>
-</dd></dl>
-
 </div>
 
 

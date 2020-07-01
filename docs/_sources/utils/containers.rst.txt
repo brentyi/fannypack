@@ -21,7 +21,7 @@ Grouped Slicing
    :special-members: __getitem__, __len__, __iter__, __next__
 
 ******************************************
-Generic Squeezing
+Generic Squeeze
 ******************************************
 
 .. autofunction:: fannypack.utils.squeeze

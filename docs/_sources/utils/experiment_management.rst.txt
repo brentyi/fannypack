@@ -1,6 +1,8 @@
 Experiment Management
 ==========================================
 
+.. contents:: :local:
+
 ******************************************
 Overview
 ******************************************
@@ -48,7 +50,7 @@ Buddy's CLI currently supports four primary functions:
 - ``buddy list``: Print table of existing experiments + basic information.
 - ``buddy rename {source} {dest}``: Rename an existing experiment.
 
-For more details and a full list of options, run `buddy {subcommand} --help`.
+For more details and a full list of options, run ``buddy {subcommand} --help``.
 
 ---
 
