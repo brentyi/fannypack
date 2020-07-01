@@ -88,9 +88,9 @@ def tril_from_vector(lower_vector: torch.Tensor) -> torch.Tensor:
 
     Args:
         lower_vector (torch.Tensor): Vectors containing the nonzero terms of a
-            square lower-triangular matrix. Shape should be (*, tril_count).
+            square lower-triangular matrix. Shape should be `(*, tril_count)`.
     Returns:
-        torch.Tensor: Square matrices. Shape should be (*, matrix_dim, matrix_dim)
+        torch.Tensor: Square matrices. Shape should be `(*, matrix_dim, matrix_dim)`.
     """
     batch_dims = lower_vector.shape[:-1]
     tril_count = lower_vector.shape[-1]
@@ -108,9 +108,9 @@ def vector_from_tril(tril_matrix: torch.Tensor) -> torch.Tensor:
 
     Args:
         tril_matrix (torch.Tensor): Square matrices. Shape should be
-            (*, matrix_dim, matrix_dim)
+            `(*, matrix_dim, matrix_dim)`
     Returns:
-        torch.Tensor: Flattened vectors. Shape should be (*, tril_count).
+        torch.Tensor: Flattened vectors. Shape should be `(*, tril_count)`.
     """
     matrix_dim = tril_matrix.shape[-1]
     assert tril_matrix.shape[-2] == matrix_dim
