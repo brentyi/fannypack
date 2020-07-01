@@ -1,7 +1,7 @@
 import numpy as np
 import torch
 
-import fannypack.nn.functional
+import fannypack.utils
 
 
 def test_quadratic_matmul():
@@ -16,7 +16,7 @@ def test_quadratic_matmul():
     # Compute quadratic
     x = torch.randn((N, D), requires_grad=True)
     A = torch.randn((N, D, D))
-    xTAx = fannypack.nn.functional.quadratic_matmul(x, A)
+    xTAx = fannypack.utils.quadratic_matmul(x, A)
 
     # Check shape
     assert xTAx.shape == (N,)
@@ -55,7 +55,7 @@ def test_gaussian_log_prob():
                 torch.distributions.MultivariateNormal(
                     loc=mean, covariance_matrix=covariance
                 ).log_prob(value=value),
-                fannypack.nn.functional.gaussian_log_prob(
+                fannypack.utils.gaussian_log_prob(
                     mean=mean, covariance=covariance, value=value,
                 ),
             ]
