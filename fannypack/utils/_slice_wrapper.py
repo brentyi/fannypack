@@ -42,16 +42,49 @@ WrappedType = TypeVar(
 
 
 class SliceWrapper(Iterable, Generic[WrappedType]):
-    """A thin wrapper class for creating a unified interface for...
+    """A wrapper class for creating a unified interface for slicing and manipulating:
     - Lists
     - Tuples
     - Torch tensors
     - Numpy arrays
     - Dictionaries containing a same-length group of any of the above
 
-    This is primarily to make it easier to read, slice, and index into aligned blocks of
-    time-series data organized as dictionaries, but we also expose an interface for
-    calling `append` and `extend` on wrapped lists.
+    This makes it easy to read, slice, and index into blocks of data organized into
+    dictionaries.
+
+    Nominally:
+    ```
+    dataset = SliceWrapper({
+        "features": features,
+        "labels": labels,
+    })
+
+    train_count = 100
+    train_dataset = dataset[:train_count]
+    val_dataset = dataset[train_count:]
+    ```
+    would be equivalent to:
+    ```
+    train_count = 100
+    train_dataset = {
+        "features": features[:train_count],
+        "labels": b[:train_count],
+    }
+    val_dataset = {
+        "features": features[train_count:],
+        "labels": b[train_count:],
+    }
+    ```
+
+    For convenience, a transparent interface is provided for iterables that are directly
+    wrapped. Thus:
+    ```
+    SliceWrapper([1, 2, 3])[::-1]
+    ```
+    would return:
+    ```
+    [1, 2, 3][::-1]
+    ```
     """
 
     def __init__(self, data: WrappedType):
@@ -90,24 +123,32 @@ class SliceWrapper(Iterable, Generic[WrappedType]):
         """Unified interface for indexing into our wrapped object; shorthand for
         `SliceWrapper.map(lambda v: v[index])`.
 
-        For iterables that are directly wrapped, this is equivalent to evaluating
-        `data[index]`.
-
         For wrapped dictionaries, this returns a new (un-wrapped) dictionary with the
         index applied value-wise.
-        Thus, an input of...
+        Thus:
         ```
         SliceWrapper({
             "a": a,
             "b": b,
-        })
+        })[index]
         ```
-        would return...
+        would return:
         ```
         {
             "a": a[index],
             "b": b[index],
         }
+        ```
+
+        For iterables that are directly wrapped, this is equivalent to evaluating
+        `data[index]`.
+        Thus..
+        ```
+        SliceWrapper([1, 2, 3])[::-1]
+        ```
+        would return:
+        ```
+        [1, 2, 3][::-1]
         ```
 
         Args:
@@ -153,7 +194,7 @@ class SliceWrapper(Iterable, Generic[WrappedType]):
         For wrapped lists, this is equivalent to `data.append(other)`.
 
         For dictionaries, `other` should be a dictionary.
-        Behavior example...
+        Behavior example:
         ```
         # Data before append
         {"a": [1, 2, 3, 4], "b": [5, 6, 7, 8]}
@@ -196,7 +237,7 @@ class SliceWrapper(Iterable, Generic[WrappedType]):
         For wrapped lists, this is equivalent to `data.extend(other)`.
 
         For dictionaries, `other` should be a dictionary.
-        Behavior example...
+        Behavior example:
         ```
         # Data before extend
         {"a": [1, 2, 3, 4], "b": [5, 6, 7, 8]}
@@ -272,14 +313,14 @@ class SliceWrapper(Iterable, Generic[WrappedType]):
         ```
 
         For dictionaries, `function` is applied value-wise.
-        Thus, an input of...
+        Thus, an input of:
         ```
         SliceWrapper({
             "a": [1, 2, 3],
             "b": [2, 4, 5],
         })
         ```
-        would return...
+        would return:
         ```
         {
             "a": function([1, 2, 3]),

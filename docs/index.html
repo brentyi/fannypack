@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Fannypack Documentation &mdash; fannypack  documentation</title>
+  <title>fannypack &mdash; fannypack  documentation</title>
   
 
   
@@ -25,7 +25,7 @@
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/language_data.js"></script>
-        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
         <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]]}})</script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
@@ -130,7 +130,7 @@
     
       <li><a href="#">Docs</a> &raquo;</li>
         
-      <li>Fannypack Documentation</li>
+      <li>fannypack</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -149,15 +149,35 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="fannypack-documentation">
-<h1>Fannypack Documentation<a class="headerlink" href="#fannypack-documentation" title="Permalink to this headline">¶</a></h1>
-<p><a class="reference external" href="https://github.com/brentyi/fannypack">Github</a></p>
+  <div class="section" id="fannypack">
+<h1>fannypack<a class="headerlink" href="#fannypack" title="Permalink to this headline">¶</a></h1>
+<p>A loose collection of helpers for training neural networks in PyTorch.</p>
+<p>Fannypack is separated into three submodules:</p>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="utils/index.html">fannypack.utils</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="utils/buddy.html">Buddy</a></li>
-<li class="toctree-l2"><a class="reference internal" href="utils/slice_wrapper.html">SliceWrapper</a></li>
-<li class="toctree-l2"><a class="reference internal" href="utils/potpourri.html">Potpourri</a></li>
+<li class="toctree-l2"><a class="reference internal" href="utils/experiment_management.html">Experiment Management</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="utils/experiment_management.html#overview">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="utils/experiment_management.html#checkpointing">Checkpointing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="utils/experiment_management.html#optimization">Optimization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="utils/experiment_management.html#tensorboard-logging">Tensorboard Logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="utils/experiment_management.html#experiment-metadata">Experiment Metadata</a></li>
+<li class="toctree-l3"><a class="reference internal" href="utils/experiment_management.html#command-line-interface">Command-line Interface</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="utils/containers.html">Working With Containers</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="utils/containers.html#recursive-conversions">Recursive Conversions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="utils/containers.html#grouped-slicing">Grouped Slicing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="utils/containers.html#generic-squeezing">Generic Squeezing</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="utils/potpourri.html">Potpourri</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="utils/potpourri.html#module-freezing">Module Freezing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="utils/potpourri.html#deprecation-helpers">Deprecation Helpers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="utils/potpourri.html#debugging">Debugging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="utils/potpourri.html#psd-matrices">PSD Matrices</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="data/index.html">fannypack.data</a></li>

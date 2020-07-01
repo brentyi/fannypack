@@ -22,7 +22,7 @@ class RenameSubcommand(Subcommand):
             "source",
             type=str,
             help="Current name of experiment, as printed by `$ buddy list`.",
-            metavar="SOURCE",  # Set metavar => don't show choices in help menu
+            metavar="source",  # Set metavar => don't show choices in help menu
             choices=paths.find_experiments().experiment_names,
         )
         parser.add_argument("dest", type=str, help="New name of experiment.")

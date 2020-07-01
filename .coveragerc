@@ -16,6 +16,7 @@ exclude_lines =
 
     # or empty function bodies
     pass
+    ...
 
     # or cuda stuff
     cuda

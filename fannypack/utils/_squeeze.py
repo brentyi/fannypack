@@ -2,7 +2,10 @@ from typing import Any, List, Tuple, Union, cast
 
 
 def squeeze(x: Any, axis: Union[int, Tuple[int, ...]] = None) -> Any:
-    """Generic squeeze function.
+    """Generic squeeze function, for all sliceable objects with a `shape` field.
+
+    Designed for :class:`fannypack.utils.SliceWrapper`, but should also work with NumPy
+    arrays, torch Tensors, etc.
 
     Args:
         x (Any): Object to squeeze. Must have a `shape` attribute and be indexable with

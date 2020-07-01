@@ -1,12 +1,12 @@
-Fannypack Documentation
+fannypack
 ==========================================
 
-Github_
+A loose collection of helpers for training neural networks in PyTorch.
 
-.. _Github: https://github.com/brentyi/fannypack
+Fannypack is separated into three submodules:
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 5
 
    utils/index
    data/index

@@ -28,7 +28,7 @@ class InfoSubcommand(Subcommand):
             "experiment_name",
             type=str,
             help="Name of experiment, as printed by `$ buddy list`.",
-            metavar="EXPERIMENT_NAME",  # Set metavar => don't show choices in help menu
+            metavar="experiment_name",  # Set metavar => don't show choices in help menu
             choices=paths.find_experiments().experiment_names,
         )
 

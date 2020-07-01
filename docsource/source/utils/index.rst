@@ -4,6 +4,6 @@ fannypack.utils
 .. toctree::
    :maxdepth: 2
 
-   buddy
-   slice_wrapper
+   experiment_management
+   containers
    potpourri

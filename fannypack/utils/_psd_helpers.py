@@ -57,8 +57,8 @@ def gaussian_log_prob(
 
 
 def matrix_dim_from_tril_count(tril_count: int):
-    """Computes the dimension of a square matrix given its number of lower-triangular
-    components.
+    """Computes the dimension of a lower triangular square matrix given a count of its
+    lower-triangular components.
 
     Args:
         tril_count (int): Count of lower-triangular terms.

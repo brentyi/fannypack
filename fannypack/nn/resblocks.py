@@ -7,6 +7,10 @@ import torch.nn as nn
 
 
 class Base(nn.Module, abc.ABC):
+    """Base class for a generic residual block, with support for `"relu"`,
+    `"leaky_relu"`, `"selu"`, and `"none"` activations.
+    """
+
     _activation_types: Dict[str, Callable[..., nn.Module]] = {
         "relu": nn.ReLU,
         "leaky_relu": nn.LeakyReLU,
@@ -39,6 +43,9 @@ class Base(nn.Module, abc.ABC):
 
 
 class Linear(Base):
+    """Standard linear residual block.
+    """
+
     def __init__(self, units: int, bottleneck_units: int = None, **resblock_base_args):
         super().__init__(**resblock_base_args)
 
@@ -49,6 +56,9 @@ class Linear(Base):
 
 
 class Conv2d(Base):
+    """Standard convolutional residual block.
+    """
+
     def __init__(
         self,
         channels: int,
@@ -73,3 +83,5 @@ class Conv2d(Base):
             kernel_size=kernel_size,
             padding=kernel_size // 2,
         )
+
+__all__ = ["Base", "Linear", "Conv2d"]

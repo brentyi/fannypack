@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Buddy &mdash; fannypack  documentation</title>
+  <title>Experiment Management &mdash; fannypack  documentation</title>
   
 
   
@@ -25,7 +25,7 @@
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
         <script src="../_static/language_data.js"></script>
-        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
         <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]]}})</script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
@@ -37,7 +37,7 @@
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="SliceWrapper" href="slice_wrapper.html" />
+    <link rel="next" title="Working With Containers" href="containers.html" />
     <link rel="prev" title="fannypack.utils" href="index.html" /> 
 </head>
 
@@ -84,8 +84,16 @@
             
               <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">fannypack.utils</a><ul class="current">
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Buddy</a></li>
-<li class="toctree-l2"><a class="reference internal" href="slice_wrapper.html">SliceWrapper</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Experiment Management</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#checkpointing">Checkpointing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#optimization">Optimization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#tensorboard-logging">Tensorboard Logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#experiment-metadata">Experiment Metadata</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#command-line-interface">Command-line Interface</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="containers.html">Working With Containers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="potpourri.html">Potpourri</a></li>
 </ul>
 </li>
@@ -138,13 +146,13 @@
         
           <li><a href="index.html">fannypack.utils</a> &raquo;</li>
         
-      <li>Buddy</li>
+      <li>Experiment Management</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="../_sources/utils/buddy.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/utils/experiment_management.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -157,8 +165,10 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="buddy">
-<h1>Buddy<a class="headerlink" href="#buddy" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="experiment-management">
+<h1>Experiment Management<a class="headerlink" href="#experiment-management" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="fannypack.utils.Buddy">
 <em class="property">class </em><code class="sig-prename descclassname">fannypack.utils.</code><code class="sig-name descname">Buddy</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">experiment_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">model</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>torch.nn.modules.module.Module<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">checkpoint_dir</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'checkpoints'</span></em>, <em class="sig-param"><span class="n">checkpoint_max_to_keep</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">5</span></em>, <em class="sig-param"><span class="n">metadata_dir</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'metadata'</span></em>, <em class="sig-param"><span class="n">log_dir</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'logs'</span></em>, <em class="sig-param"><span class="n">optimizer_type</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'adam'</span></em>, <em class="sig-param"><span class="n">optimizer_checkpoint_interval</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="default_value">300</span></em>, <em class="sig-param"><span class="n">optimizer_names</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>List<span class="p">[</span>str<span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em>, <em class="sig-param"><span class="n">cpu_only</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils.Buddy" title="Permalink to this definition">¶</a></dt>
@@ -231,47 +241,14 @@ attached.</p>
 
 </dd></dl>
 
-<dl class="py class">
-<dt id="fannypack.utils._buddy_include._optimizer._BuddyOptimizer">
-<em class="property">class </em><code class="sig-prename descclassname">fannypack.utils._buddy_include._optimizer.</code><code class="sig-name descname">_BuddyOptimizer</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">optimizer_type</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">optimizer_checkpoint_interval</span><span class="p">:</span> <span class="n">float</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils._buddy_include._optimizer._BuddyOptimizer" title="Permalink to this definition">¶</a></dt>
-<dd><p>Buddy’s optimization interface.</p>
-<dl class="py method">
-<dt id="fannypack.utils._buddy_include._optimizer._BuddyOptimizer.get_learning_rate">
-<code class="sig-name descname">get_learning_rate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">optimizer_name</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'primary'</span></em><span class="sig-paren">)</span> &#x2192; float<a class="headerlink" href="#fannypack.utils._buddy_include._optimizer._BuddyOptimizer.get_learning_rate" title="Permalink to this definition">¶</a></dt>
-<dd><p>Gets an optimizer learning rate.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="fannypack.utils._buddy_include._optimizer._BuddyOptimizer.minimize">
-<code class="sig-name descname">minimize</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">loss</span><span class="p">:</span> <span class="n">torch.Tensor</span></em>, <em class="sig-param"><span class="n">optimizer_name</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'primary'</span></em>, <em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">retain_graph</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="n">checkpoint_interval</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>float<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#fannypack.utils._buddy_include._optimizer._BuddyOptimizer.minimize" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute gradients and use them to minimize a loss function.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="fannypack.utils._buddy_include._optimizer._BuddyOptimizer.optimizer_steps">
-<em class="property">property </em><code class="sig-name descname">optimizer_steps</code><a class="headerlink" href="#fannypack.utils._buddy_include._optimizer._BuddyOptimizer.optimizer_steps" title="Permalink to this definition">¶</a></dt>
-<dd><p>Read-only interface for # of steps taken by optimizer.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="fannypack.utils._buddy_include._optimizer._BuddyOptimizer.set_default_learning_rate">
-<code class="sig-name descname">set_default_learning_rate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>float<span class="p">, </span>Callable<span class="p">[</span><span class="p">[</span>int<span class="p">]</span><span class="p">, </span>float<span class="p">]</span><span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#fannypack.utils._buddy_include._optimizer._BuddyOptimizer.set_default_learning_rate" title="Permalink to this definition">¶</a></dt>
-<dd><p>Sets a default learning rate for new optimizers.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="fannypack.utils._buddy_include._optimizer._BuddyOptimizer.set_learning_rate">
-<code class="sig-name descname">set_learning_rate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>float<span class="p">, </span>Callable<span class="p">[</span><span class="p">[</span>int<span class="p">]</span><span class="p">, </span>float<span class="p">]</span><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">optimizer_name</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'primary'</span></em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#fannypack.utils._buddy_include._optimizer._BuddyOptimizer.set_learning_rate" title="Permalink to this definition">¶</a></dt>
-<dd><p>Sets an optimizer learning rate. Accepts either a floating point
-learning rate or a schedule function (int steps -&gt; float LR).</p>
-</dd></dl>
-
-</dd></dl>
-
+</div>
+<div class="section" id="checkpointing">
+<h2>Checkpointing<a class="headerlink" href="#checkpointing" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="fannypack.utils._buddy_include._checkpointing._BuddyCheckpointing">
 <em class="property">class </em><code class="sig-prename descclassname">fannypack.utils._buddy_include._checkpointing.</code><code class="sig-name descname">_BuddyCheckpointing</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">checkpoint_dir</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">checkpoint_max_to_keep</span><span class="p">:</span> <span class="n">int</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils._buddy_include._checkpointing._BuddyCheckpointing" title="Permalink to this definition">¶</a></dt>
-<dd><p>Buddy’s model checkpointing interface.</p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
+<p>Buddy’s model checkpointing interface.</p>
 <dl class="py method">
 <dt id="fannypack.utils._buddy_include._checkpointing._BuddyCheckpointing.checkpoint_labels">
 <em class="property">property </em><code class="sig-name descname">checkpoint_labels</code><a class="headerlink" href="#fannypack.utils._buddy_include._checkpointing._BuddyCheckpointing.checkpoint_labels" title="Permalink to this definition">¶</a></dt>
@@ -327,10 +304,55 @@ the checkpoint with the highest number of training iterations.</p>
 
 </dd></dl>
 
+</div>
+<div class="section" id="optimization">
+<h2>Optimization<a class="headerlink" href="#optimization" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="fannypack.utils._buddy_include._optimizer._BuddyOptimizer">
+<em class="property">class </em><code class="sig-prename descclassname">fannypack.utils._buddy_include._optimizer.</code><code class="sig-name descname">_BuddyOptimizer</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">optimizer_type</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">optimizer_checkpoint_interval</span><span class="p">:</span> <span class="n">float</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils._buddy_include._optimizer._BuddyOptimizer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
+<p>Buddy’s optimization interface.</p>
+<dl class="py method">
+<dt id="fannypack.utils._buddy_include._optimizer._BuddyOptimizer.get_learning_rate">
+<code class="sig-name descname">get_learning_rate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">optimizer_name</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'primary'</span></em><span class="sig-paren">)</span> &#x2192; float<a class="headerlink" href="#fannypack.utils._buddy_include._optimizer._BuddyOptimizer.get_learning_rate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets an optimizer learning rate.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="fannypack.utils._buddy_include._optimizer._BuddyOptimizer.minimize">
+<code class="sig-name descname">minimize</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">loss</span><span class="p">:</span> <span class="n">torch.Tensor</span></em>, <em class="sig-param"><span class="n">optimizer_name</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'primary'</span></em>, <em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">retain_graph</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="n">checkpoint_interval</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>float<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#fannypack.utils._buddy_include._optimizer._BuddyOptimizer.minimize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute gradients and use them to minimize a loss function.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="fannypack.utils._buddy_include._optimizer._BuddyOptimizer.optimizer_steps">
+<em class="property">property </em><code class="sig-name descname">optimizer_steps</code><a class="headerlink" href="#fannypack.utils._buddy_include._optimizer._BuddyOptimizer.optimizer_steps" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read-only interface for # of steps taken by optimizer.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="fannypack.utils._buddy_include._optimizer._BuddyOptimizer.set_default_learning_rate">
+<code class="sig-name descname">set_default_learning_rate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>float<span class="p">, </span>Callable<span class="p">[</span><span class="p">[</span>int<span class="p">]</span><span class="p">, </span>float<span class="p">]</span><span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#fannypack.utils._buddy_include._optimizer._BuddyOptimizer.set_default_learning_rate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets a default learning rate for new optimizers.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="fannypack.utils._buddy_include._optimizer._BuddyOptimizer.set_learning_rate">
+<code class="sig-name descname">set_learning_rate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>float<span class="p">, </span>Callable<span class="p">[</span><span class="p">[</span>int<span class="p">]</span><span class="p">, </span>float<span class="p">]</span><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">optimizer_name</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'primary'</span></em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#fannypack.utils._buddy_include._optimizer._BuddyOptimizer.set_learning_rate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets an optimizer learning rate. Accepts either a floating point
+learning rate or a schedule function (int steps -&gt; float LR).</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="tensorboard-logging">
+<h2>Tensorboard Logging<a class="headerlink" href="#tensorboard-logging" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="fannypack.utils._buddy_include._logging._BuddyLogging">
 <em class="property">class </em><code class="sig-prename descclassname">fannypack.utils._buddy_include._logging.</code><code class="sig-name descname">_BuddyLogging</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">log_dir</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils._buddy_include._logging._BuddyLogging" title="Permalink to this definition">¶</a></dt>
-<dd><p>Buddy’s TensorBoard logging interface.</p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
+<p>Buddy’s TensorBoard logging interface.</p>
 <dl class="py method">
 <dt id="fannypack.utils._buddy_include._logging._BuddyLogging.log_grad_histogram">
 <code class="sig-name descname">log_grad_histogram</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">scope</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'grad'</span></em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#fannypack.utils._buddy_include._logging._BuddyLogging.log_grad_histogram" title="Permalink to this definition">¶</a></dt>
@@ -488,10 +510,14 @@ Defaults to True.</p></li>
 
 </dd></dl>
 
+</div>
+<div class="section" id="experiment-metadata">
+<h2>Experiment Metadata<a class="headerlink" href="#experiment-metadata" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="fannypack.utils._buddy_include._metadata._BuddyMetadata">
 <em class="property">class </em><code class="sig-prename descclassname">fannypack.utils._buddy_include._metadata.</code><code class="sig-name descname">_BuddyMetadata</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">metadata_dir</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils._buddy_include._metadata._BuddyMetadata" title="Permalink to this definition">¶</a></dt>
-<dd><p>Buddy’s experiment metadata management interface.</p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
+<p>Buddy’s experiment metadata management interface.</p>
 <dl class="py method">
 <dt id="fannypack.utils._buddy_include._metadata._BuddyMetadata.add_metadata">
 <code class="sig-name descname">add_metadata</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">content</span><span class="p">:</span> <span class="n">Dict<span class="p">[</span>str<span class="p">, </span>Any<span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#fannypack.utils._buddy_include._metadata._BuddyMetadata.add_metadata" title="Permalink to this definition">¶</a></dt>
@@ -528,6 +554,33 @@ a dictionary that replaces existing metadata.</p>
 </dd></dl>
 
 </div>
+<div class="section" id="command-line-interface">
+<h2>Command-line Interface<a class="headerlink" href="#command-line-interface" title="Permalink to this headline">¶</a></h2>
+<p>Buddy’s CLI currently supports four primary functions:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">buddy</span> <span class="pre">delete</span> <span class="pre">{experiment_name}</span></code>: Delete an existing experiment.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">buddy</span> <span class="pre">info</span> <span class="pre">{experiment_name}</span></code>: Print summary + metadata of an existing
+experiment.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">buddy</span> <span class="pre">list</span></code>: Print table of existing experiments + basic information.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">buddy</span> <span class="pre">rename</span> <span class="pre">{source}</span> <span class="pre">{dest}</span></code>: Rename an existing experiment.</p></li>
+</ul>
+<p>For more details and a full list of options, run <cite>buddy {subcommand} –help</cite>.</p>
+<p>—</p>
+<p>The Buddy CLI also has full support for autcompleting experiment names. This
+needs to be registered in your <cite>.bashrc</cite> to be enabled:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Append to .bashrc</span>
+<span class="nb">eval</span> <span class="s2">&quot;</span><span class="k">$(</span>register-python-argcomplete buddy<span class="k">)</span><span class="s2">&quot;</span>
+</pre></div>
+</div>
+<p>Alternatively, for zsh:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Append to .zshrc</span>
+autoload -U +X compinit <span class="o">&amp;&amp;</span> compinit
+autoload -U +X bashcompinit <span class="o">&amp;&amp;</span> bashcompinit
+<span class="nb">eval</span> <span class="s2">&quot;</span><span class="k">$(</span>register-python-argcomplete buddy<span class="k">)</span><span class="s2">&quot;</span>
+</pre></div>
+</div>
+</div>
+</div>
 
 
            </div>
@@ -537,7 +590,7 @@ a dictionary that replaces existing metadata.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="slice_wrapper.html" class="btn btn-neutral float-right" title="SliceWrapper" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="containers.html" class="btn btn-neutral float-right" title="Working With Containers" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="index.html" class="btn btn-neutral float-left" title="fannypack.utils" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
