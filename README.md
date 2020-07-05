@@ -37,5 +37,3 @@ cd fannypack && pip install -e .
 ---
 
 Github: https://github.com/brentyi/fannypack
-
-Documentation (work-in-progress):

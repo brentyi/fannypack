@@ -3,9 +3,7 @@ from ._buddy import Buddy
 from ._conversions import to_device, to_numpy, to_torch
 from ._deprecation import deprecation_wrapper, new_name_wrapper
 from ._git import get_git_commit_hash
-from ._module_freezing import freeze_module, unfreeze_module
-from ._pdb_safety_net import pdb_safety_net
-from ._psd_helpers import (
+from ._math import (
     gaussian_log_prob,
     matrix_dim_from_tril_count,
     quadratic_matmul,
@@ -13,6 +11,8 @@ from ._psd_helpers import (
     tril_from_vector,
     vector_from_tril,
 )
+from ._module_freezing import freeze_module, unfreeze_module
+from ._pdb_safety_net import pdb_safety_net
 from ._slice_wrapper import SliceWrapper
 from ._squeeze import squeeze
 
