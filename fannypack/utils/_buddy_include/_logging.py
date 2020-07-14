@@ -177,7 +177,7 @@ class _BuddyLogging(abc.ABC):
 
             layer_name = layer_name.replace(".", "/")
             self.log_writer.add_scalar(
-                name="{}grad_norm/{}".format(self.log_scope_prefix(name), layer_name),
+                "{}grad_norm/{}".format(self.log_scope_prefix(name), layer_name),
                 values=p.grad.data.norm(2).item(),
                 global_step=optimizer_steps,
             )
