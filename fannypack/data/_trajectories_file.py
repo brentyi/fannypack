@@ -8,7 +8,7 @@ class TrajectoriesFile(Iterable):
     """An interface for reading/writing trajectories via h5py.
 
     Each TrajectoriesFile represents an iterable list of trajectories, where trajectores
-    are stored as dictionaries that maps `str` keys to `np.ndarray` contents.
+    are stored as dictionaries that map `str` keys to `np.ndarray` contents.
 
     Example usage (read):
     ```
