@@ -162,6 +162,27 @@ class _BuddyLogging(abc.ABC):
                 global_step=optimizer_steps,
             )
 
+    def log_model_grad_norm(self, name: str = "") -> None:
+        """Logging model gradient norm
+
+
+                Args:
+                    name (str, optional): Name to prepend a prefix to. Defaults to an empty string.
+                """
+        optimizer_steps = cast(_BuddyOptimizer, self).optimizer_steps
+
+        for layer_name, p in self._model.named_parameters():
+            if p.grad is None:
+                continue
+
+            layer_name = layer_name.replace(".", "/")
+            self.log_writer.add_scalar(
+                name="{}grad_norm/{}".format(self.log_scope_prefix(name), layer_name),
+                values=p.grad.data.norm(2).item(),
+                global_step=optimizer_steps,
+            )
+
+
     def log_model_grad_hist(self, name: str = "") -> None:
         """Logging model gradients into histogram.
 
