@@ -1,4 +1,4 @@
-from typing import Any, Dict, Iterable, Optional, Union
+from typing import Any, Dict, Iterable, List, Optional, Union, overload
 
 import h5py
 import numpy as np
@@ -8,7 +8,7 @@ class TrajectoriesFile(Iterable):
     """An interface for reading/writing trajectories via h5py.
 
     Each TrajectoriesFile represents an iterable list of trajectories, where trajectores
-    are stored as dictionaries that maps `str` keys to `np.ndarray` contents.
+    are stored as dictionaries that map `str` keys to `np.ndarray` contents.
 
     Example usage (read):
     ```
@@ -106,21 +106,34 @@ class TrajectoriesFile(Iterable):
             self._file.close()
             self._file = None
 
+    @overload
+    def __getitem__(self, index: slice) -> List[Dict[str, Union[np.ndarray, str]]]:
+        ...
+
+    @overload
     def __getitem__(self, index: int) -> Dict[str, Union[np.ndarray, str]]:
-        """Accessor for individual trajectories held by this file.
+        ...
+
+    def __getitem__(self, index):
+        """Accessor for reading trajectories held by this file.
         Must be called with the TrajectoriesFile object in a `with` statement.
 
         Args:
-            index (int): Trajectory #.
+            index (int or slice): Trajectory or trajectories to read.
 
         Returns:
-            dict: A (str->value) map containing data collected at each timestep of our
-            trajectory.
+            dict or list: If indexing with an int, returns a (str->value) dict
+            containing data collected at each timestep of our trajectory. If indexing
+            with a slice, returns a list of these dictionaries.
         """
         assert self._file is not None, "Not called in with statement!"
 
+        # Slice into file
+        if isinstance(index, slice):
+            return [self[i] for i in range(*index.indices(len(self)))]
+
         # Index checks
-        assert type(index) == int
+        assert isinstance(index, int)
         if index < 0 and index >= -len(self):
             # Negative indexing
             index = index % len(self)

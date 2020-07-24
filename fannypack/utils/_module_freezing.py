@@ -6,7 +6,8 @@ _freeze_restore_values: Dict[nn.Module, Dict] = {}
 
 
 def freeze_module(module: nn.Module, recurse: bool = True) -> None:
-    """Freeze the weights of a PyTorch module.
+    """Freeze the weights of a PyTorch module by setting the `requires_grad` attributes
+    of enclosed parameters to `False`.
 
     Args:
         module (torch.nn.Module): Module to freeze.
@@ -35,7 +36,8 @@ def freeze_module(module: nn.Module, recurse: bool = True) -> None:
 
 def unfreeze_module(module: nn.Module, recurse: bool = True) -> None:
     """Unfreeze the weights of a PyTorch module, which needs to have been
-    frozen with :func:`fannypack.utils.freeze_module`.
+    frozen with :func:`fannypack.utils.freeze_module`. Restores all original values
+    `requires_grad` values.
 
     Args:
         module (torch.nn.Module): Module to unfreeze.

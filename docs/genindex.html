@@ -1,6 +1,5 @@
 
 
-
 <!DOCTYPE html>
 <!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
@@ -26,6 +25,8 @@
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]]}})</script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
@@ -162,24 +163,34 @@
  | <a href="#N"><strong>N</strong></a>
  | <a href="#O"><strong>O</strong></a>
  | <a href="#P"><strong>P</strong></a>
+ | <a href="#Q"><strong>Q</strong></a>
  | <a href="#R"><strong>R</strong></a>
  | <a href="#S"><strong>S</strong></a>
  | <a href="#T"><strong>T</strong></a>
  | <a href="#U"><strong>U</strong></a>
+ | <a href="#V"><strong>V</strong></a>
  
 </div>
 <h2 id="_">_</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="utils/buddy.html#fannypack.utils._buddy_include._checkpointing._BuddyCheckpointing">_BuddyCheckpointing (class in fannypack.utils._buddy_include._checkpointing)</a>
+      <li><a href="utils/containers.html#fannypack.utils.SliceWrapper.__getitem__">__getitem__() (fannypack.utils.SliceWrapper method)</a>
 </li>
-      <li><a href="utils/buddy.html#fannypack.utils._buddy_include._logging._BuddyLogging">_BuddyLogging (class in fannypack.utils._buddy_include._logging)</a>
+      <li><a href="utils/containers.html#fannypack.utils.SliceWrapper.__iter__">__iter__() (fannypack.utils.SliceWrapper method)</a>
+</li>
+      <li><a href="utils/containers.html#fannypack.utils.SliceWrapper.__len__">__len__() (fannypack.utils.SliceWrapper method)</a>
+</li>
+      <li><a href="utils/containers.html#fannypack.utils.SliceWrapper.__next__">__next__() (fannypack.utils.SliceWrapper method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="utils/buddy.html#fannypack.utils._buddy_include._metadata._BuddyMetadata">_BuddyMetadata (class in fannypack.utils._buddy_include._metadata)</a>
+      <li><a href="utils/experiment_management.html#fannypack.utils._buddy_include._checkpointing._BuddyCheckpointing">_BuddyCheckpointing (class in fannypack.utils._buddy_include._checkpointing)</a>
 </li>
-      <li><a href="utils/buddy.html#fannypack.utils._buddy_include._optimizer._BuddyOptimizer">_BuddyOptimizer (class in fannypack.utils._buddy_include._optimizer)</a>
+      <li><a href="utils/experiment_management.html#fannypack.utils._buddy_include._logging._BuddyLogging">_BuddyLogging (class in fannypack.utils._buddy_include._logging)</a>
+</li>
+      <li><a href="utils/experiment_management.html#fannypack.utils._buddy_include._metadata._BuddyMetadata">_BuddyMetadata (class in fannypack.utils._buddy_include._metadata)</a>
+</li>
+      <li><a href="utils/experiment_management.html#fannypack.utils._buddy_include._optimizer._BuddyOptimizer">_BuddyOptimizer (class in fannypack.utils._buddy_include._optimizer)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -191,15 +202,15 @@
 </li>
       <li><a href="data/index.html#fannypack.data.TrajectoriesFile.add_meta">add_meta() (fannypack.data.TrajectoriesFile method)</a>
 </li>
-      <li><a href="utils/buddy.html#fannypack.utils._buddy_include._metadata._BuddyMetadata.add_metadata">add_metadata() (fannypack.utils._buddy_include._metadata._BuddyMetadata method)</a>
+      <li><a href="utils/experiment_management.html#fannypack.utils._buddy_include._metadata._BuddyMetadata.add_metadata">add_metadata() (fannypack.utils._buddy_include._metadata._BuddyMetadata method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="data/index.html#fannypack.data.TrajectoriesFile.add_timestep">add_timestep() (fannypack.data.TrajectoriesFile method)</a>
 </li>
-      <li><a href="utils/slice_wrapper.html#fannypack.utils.SliceWrapper.append">append() (fannypack.utils.SliceWrapper method)</a>
+      <li><a href="utils/containers.html#fannypack.utils.SliceWrapper.append">append() (fannypack.utils.SliceWrapper method)</a>
 </li>
-      <li><a href="utils/buddy.html#fannypack.utils.Buddy.attach_model">attach_model() (fannypack.utils.Buddy method)</a>
+      <li><a href="utils/experiment_management.html#fannypack.utils.Buddy.attach_model">attach_model() (fannypack.utils.Buddy method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -211,7 +222,7 @@
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="utils/buddy.html#fannypack.utils.Buddy">Buddy (class in fannypack.utils)</a>
+      <li><a href="utils/experiment_management.html#fannypack.utils.Buddy">Buddy (class in fannypack.utils)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -221,7 +232,7 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="data/index.html#fannypack.data.cached_drive_file">cached_drive_file() (in module fannypack.data)</a>
 </li>
-      <li><a href="utils/buddy.html#fannypack.utils._buddy_include._checkpointing._BuddyCheckpointing.checkpoint_labels">checkpoint_labels() (fannypack.utils._buddy_include._checkpointing._BuddyCheckpointing property)</a>
+      <li><a href="utils/experiment_management.html#fannypack.utils._buddy_include._checkpointing._BuddyCheckpointing.checkpoint_labels">checkpoint_labels() (fannypack.utils._buddy_include._checkpointing._BuddyCheckpointing property)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -237,13 +248,13 @@
 <h2 id="D">D</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="utils/slice_wrapper.html#fannypack.utils.SliceWrapper.data">data (fannypack.utils.SliceWrapper attribute)</a>
+      <li><a href="utils/containers.html#fannypack.utils.SliceWrapper.data">data (fannypack.utils.SliceWrapper attribute)</a>
 </li>
       <li><a href="utils/potpourri.html#fannypack.utils.deprecation_wrapper">deprecation_wrapper() (in module fannypack.utils)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="utils/buddy.html#fannypack.utils.Buddy.device">device() (fannypack.utils.Buddy property)</a>
+      <li><a href="utils/experiment_management.html#fannypack.utils.Buddy.device">device() (fannypack.utils.Buddy property)</a>
 </li>
       <li><a href="data/index.html#fannypack.data.download_drive_file">download_drive_file() (in module fannypack.data)</a>
 </li>
@@ -253,7 +264,7 @@
 <h2 id="E">E</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="utils/slice_wrapper.html#fannypack.utils.SliceWrapper.extend">extend() (fannypack.utils.SliceWrapper method)</a>
+      <li><a href="utils/containers.html#fannypack.utils.SliceWrapper.extend">extend() (fannypack.utils.SliceWrapper method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -261,13 +272,6 @@
 <h2 id="F">F</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li>
-    fannypack.data
-
-      <ul>
-        <li><a href="data/index.html#module-fannypack.data">module</a>
-</li>
-      </ul></li>
       <li>
     fannypack.nn.resblocks
 
@@ -277,13 +281,6 @@
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li>
-    fannypack.utils
-
-      <ul>
-        <li><a href="utils/potpourri.html#module-fannypack.utils">module</a>
-</li>
-      </ul></li>
       <li><a href="nn/index.html#fannypack.nn.resblocks.Base.forward">forward() (fannypack.nn.resblocks.Base method)</a>
 </li>
       <li><a href="utils/potpourri.html#fannypack.utils.freeze_module">freeze_module() (in module fannypack.utils)</a>
@@ -294,11 +291,13 @@
 <h2 id="G">G</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="data/index.html#fannypack.data.TrajectoriesFile.get_all">get_all() (fannypack.data.TrajectoriesFile method)</a>
+      <li><a href="utils/potpourri.html#fannypack.utils.gaussian_log_prob">gaussian_log_prob() (in module fannypack.utils)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="utils/buddy.html#fannypack.utils._buddy_include._optimizer._BuddyOptimizer.get_learning_rate">get_learning_rate() (fannypack.utils._buddy_include._optimizer._BuddyOptimizer method)</a>
+      <li><a href="data/index.html#fannypack.data.TrajectoriesFile.get_all">get_all() (fannypack.data.TrajectoriesFile method)</a>
+</li>
+      <li><a href="utils/experiment_management.html#fannypack.utils._buddy_include._optimizer._BuddyOptimizer.get_learning_rate">get_learning_rate() (fannypack.utils._buddy_include._optimizer._BuddyOptimizer method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -308,31 +307,35 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="nn/index.html#fannypack.nn.resblocks.Linear">Linear (class in fannypack.nn.resblocks)</a>
 </li>
-      <li><a href="utils/buddy.html#fannypack.utils._buddy_include._checkpointing._BuddyCheckpointing.load_checkpoint">load_checkpoint() (fannypack.utils._buddy_include._checkpointing._BuddyCheckpointing method)</a>
+      <li><a href="utils/experiment_management.html#fannypack.utils._buddy_include._checkpointing._BuddyCheckpointing.load_checkpoint">load_checkpoint() (fannypack.utils._buddy_include._checkpointing._BuddyCheckpointing method)</a>
 </li>
-      <li><a href="utils/buddy.html#fannypack.utils._buddy_include._checkpointing._BuddyCheckpointing.load_checkpoint_module">load_checkpoint_module() (fannypack.utils._buddy_include._checkpointing._BuddyCheckpointing method)</a>
+      <li><a href="utils/experiment_management.html#fannypack.utils._buddy_include._checkpointing._BuddyCheckpointing.load_checkpoint_module">load_checkpoint_module() (fannypack.utils._buddy_include._checkpointing._BuddyCheckpointing method)</a>
 </li>
-      <li><a href="utils/buddy.html#fannypack.utils._buddy_include._checkpointing._BuddyCheckpointing.load_checkpoint_optimizer">load_checkpoint_optimizer() (fannypack.utils._buddy_include._checkpointing._BuddyCheckpointing method)</a>
+      <li><a href="utils/experiment_management.html#fannypack.utils._buddy_include._checkpointing._BuddyCheckpointing.load_checkpoint_optimizer">load_checkpoint_optimizer() (fannypack.utils._buddy_include._checkpointing._BuddyCheckpointing method)</a>
 </li>
-      <li><a href="utils/buddy.html#fannypack.utils._buddy_include._checkpointing._BuddyCheckpointing.load_checkpoint_optimizers">load_checkpoint_optimizers() (fannypack.utils._buddy_include._checkpointing._BuddyCheckpointing method)</a>
+      <li><a href="utils/experiment_management.html#fannypack.utils._buddy_include._checkpointing._BuddyCheckpointing.load_checkpoint_optimizers">load_checkpoint_optimizers() (fannypack.utils._buddy_include._checkpointing._BuddyCheckpointing method)</a>
 </li>
-      <li><a href="utils/buddy.html#fannypack.utils._buddy_include._metadata._BuddyMetadata.load_metadata">load_metadata() (fannypack.utils._buddy_include._metadata._BuddyMetadata method)</a>
+      <li><a href="utils/experiment_management.html#fannypack.utils._buddy_include._metadata._BuddyMetadata.load_metadata">load_metadata() (fannypack.utils._buddy_include._metadata._BuddyMetadata method)</a>
+</li>
+      <li><a href="utils/experiment_management.html#fannypack.utils._buddy_include._logging._BuddyLogging.log_grad_histogram">log_grad_histogram() (fannypack.utils._buddy_include._logging._BuddyLogging method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="utils/buddy.html#fannypack.utils._buddy_include._logging._BuddyLogging.log_image">log_image() (fannypack.utils._buddy_include._logging._BuddyLogging method)</a>
+      <li><a href="utils/experiment_management.html#fannypack.utils._buddy_include._logging._BuddyLogging.log_image">log_image() (fannypack.utils._buddy_include._logging._BuddyLogging method)</a>
 </li>
-      <li><a href="utils/buddy.html#fannypack.utils._buddy_include._logging._BuddyLogging.log_scalar">log_scalar() (fannypack.utils._buddy_include._logging._BuddyLogging method)</a>
+      <li><a href="utils/experiment_management.html#fannypack.utils._buddy_include._logging._BuddyLogging.log_parameters_histogram">log_parameters_histogram() (fannypack.utils._buddy_include._logging._BuddyLogging method)</a>
 </li>
-      <li><a href="utils/buddy.html#fannypack.utils._buddy_include._logging._BuddyLogging.log_scope">log_scope() (fannypack.utils._buddy_include._logging._BuddyLogging method)</a>
+      <li><a href="utils/experiment_management.html#fannypack.utils._buddy_include._logging._BuddyLogging.log_scalar">log_scalar() (fannypack.utils._buddy_include._logging._BuddyLogging method)</a>
 </li>
-      <li><a href="utils/buddy.html#fannypack.utils._buddy_include._logging._BuddyLogging.log_scope_pop">log_scope_pop() (fannypack.utils._buddy_include._logging._BuddyLogging method)</a>
+      <li><a href="utils/experiment_management.html#fannypack.utils._buddy_include._logging._BuddyLogging.log_scope">log_scope() (fannypack.utils._buddy_include._logging._BuddyLogging method)</a>
 </li>
-      <li><a href="utils/buddy.html#fannypack.utils._buddy_include._logging._BuddyLogging.log_scope_prefix">log_scope_prefix() (fannypack.utils._buddy_include._logging._BuddyLogging method)</a>
+      <li><a href="utils/experiment_management.html#fannypack.utils._buddy_include._logging._BuddyLogging.log_scope_pop">log_scope_pop() (fannypack.utils._buddy_include._logging._BuddyLogging method)</a>
 </li>
-      <li><a href="utils/buddy.html#fannypack.utils._buddy_include._logging._BuddyLogging.log_scope_push">log_scope_push() (fannypack.utils._buddy_include._logging._BuddyLogging method)</a>
+      <li><a href="utils/experiment_management.html#fannypack.utils._buddy_include._logging._BuddyLogging.log_scope_prefix">log_scope_prefix() (fannypack.utils._buddy_include._logging._BuddyLogging method)</a>
 </li>
-      <li><a href="utils/buddy.html#fannypack.utils._buddy_include._logging._BuddyLogging.log_writer">log_writer() (fannypack.utils._buddy_include._logging._BuddyLogging property)</a>
+      <li><a href="utils/experiment_management.html#fannypack.utils._buddy_include._logging._BuddyLogging.log_scope_push">log_scope_push() (fannypack.utils._buddy_include._logging._BuddyLogging method)</a>
+</li>
+      <li><a href="utils/experiment_management.html#fannypack.utils._buddy_include._logging._BuddyLogging.log_writer">log_writer() (fannypack.utils._buddy_include._logging._BuddyLogging property)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -340,25 +343,25 @@
 <h2 id="M">M</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="utils/slice_wrapper.html#fannypack.utils.SliceWrapper.map">map() (fannypack.utils.SliceWrapper method)</a>
+      <li><a href="utils/containers.html#fannypack.utils.SliceWrapper.map">map() (fannypack.utils.SliceWrapper method)</a>
 </li>
-      <li><a href="utils/buddy.html#fannypack.utils._buddy_include._metadata._BuddyMetadata.metadata">metadata() (fannypack.utils._buddy_include._metadata._BuddyMetadata property)</a>
+      <li><a href="utils/potpourri.html#fannypack.utils.matrix_dim_from_tril_count">matrix_dim_from_tril_count() (in module fannypack.utils)</a>
 </li>
-      <li><a href="utils/buddy.html#fannypack.utils._buddy_include._metadata._BuddyMetadata.metadata_path">metadata_path() (fannypack.utils._buddy_include._metadata._BuddyMetadata property)</a>
+      <li><a href="utils/experiment_management.html#fannypack.utils._buddy_include._metadata._BuddyMetadata.metadata">metadata() (fannypack.utils._buddy_include._metadata._BuddyMetadata property)</a>
 </li>
-      <li><a href="utils/buddy.html#fannypack.utils._buddy_include._optimizer._BuddyOptimizer.minimize">minimize() (fannypack.utils._buddy_include._optimizer._BuddyOptimizer method)</a>
+      <li><a href="utils/experiment_management.html#fannypack.utils._buddy_include._metadata._BuddyMetadata.metadata_path">metadata_path() (fannypack.utils._buddy_include._metadata._BuddyMetadata property)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="utils/experiment_management.html#fannypack.utils._buddy_include._optimizer._BuddyOptimizer.minimize">minimize() (fannypack.utils._buddy_include._optimizer._BuddyOptimizer method)</a>
+</li>
+      <li><a href="utils/experiment_management.html#fannypack.utils.Buddy.model">model() (fannypack.utils.Buddy property)</a>
+</li>
       <li>
     module
 
       <ul>
-        <li><a href="data/index.html#module-fannypack.data">fannypack.data</a>
-</li>
         <li><a href="nn/index.html#module-fannypack.nn.resblocks">fannypack.nn.resblocks</a>
-</li>
-        <li><a href="utils/potpourri.html#module-fannypack.utils">fannypack.utils</a>
 </li>
       </ul></li>
   </ul></td>
@@ -375,7 +378,7 @@
 <h2 id="O">O</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="utils/buddy.html#fannypack.utils._buddy_include._optimizer._BuddyOptimizer.optimizer_steps">optimizer_steps() (fannypack.utils._buddy_include._optimizer._BuddyOptimizer property)</a>
+      <li><a href="utils/experiment_management.html#fannypack.utils._buddy_include._optimizer._BuddyOptimizer.optimizer_steps">optimizer_steps() (fannypack.utils._buddy_include._optimizer._BuddyOptimizer property)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -384,6 +387,14 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="utils/potpourri.html#fannypack.utils.pdb_safety_net">pdb_safety_net() (in module fannypack.utils)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="Q">Q</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="utils/potpourri.html#fannypack.utils.quadratic_matmul">quadratic_matmul() (in module fannypack.utils)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -399,23 +410,23 @@
 <h2 id="S">S</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="utils/buddy.html#fannypack.utils._buddy_include._checkpointing._BuddyCheckpointing.save_checkpoint">save_checkpoint() (fannypack.utils._buddy_include._checkpointing._BuddyCheckpointing method)</a>
+      <li><a href="utils/experiment_management.html#fannypack.utils._buddy_include._checkpointing._BuddyCheckpointing.save_checkpoint">save_checkpoint() (fannypack.utils._buddy_include._checkpointing._BuddyCheckpointing method)</a>
 </li>
       <li><a href="data/index.html#fannypack.data.set_cache_path">set_cache_path() (in module fannypack.data)</a>
 </li>
-      <li><a href="utils/buddy.html#fannypack.utils._buddy_include._optimizer._BuddyOptimizer.set_default_learning_rate">set_default_learning_rate() (fannypack.utils._buddy_include._optimizer._BuddyOptimizer method)</a>
+      <li><a href="utils/experiment_management.html#fannypack.utils._buddy_include._optimizer._BuddyOptimizer.set_default_learning_rate">set_default_learning_rate() (fannypack.utils._buddy_include._optimizer._BuddyOptimizer method)</a>
 </li>
-      <li><a href="utils/buddy.html#fannypack.utils._buddy_include._optimizer._BuddyOptimizer.set_learning_rate">set_learning_rate() (fannypack.utils._buddy_include._optimizer._BuddyOptimizer method)</a>
+      <li><a href="utils/experiment_management.html#fannypack.utils._buddy_include._optimizer._BuddyOptimizer.set_learning_rate">set_learning_rate() (fannypack.utils._buddy_include._optimizer._BuddyOptimizer method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="utils/buddy.html#fannypack.utils._buddy_include._metadata._BuddyMetadata.set_metadata">set_metadata() (fannypack.utils._buddy_include._metadata._BuddyMetadata method)</a>
+      <li><a href="utils/experiment_management.html#fannypack.utils._buddy_include._metadata._BuddyMetadata.set_metadata">set_metadata() (fannypack.utils._buddy_include._metadata._BuddyMetadata method)</a>
 </li>
-      <li><a href="utils/slice_wrapper.html#fannypack.utils.SliceWrapper.shape">shape() (fannypack.utils.SliceWrapper property)</a>
+      <li><a href="utils/containers.html#fannypack.utils.SliceWrapper.shape">shape() (fannypack.utils.SliceWrapper property)</a>
 </li>
-      <li><a href="utils/slice_wrapper.html#fannypack.utils.SliceWrapper">SliceWrapper (class in fannypack.utils)</a>
+      <li><a href="utils/containers.html#fannypack.utils.SliceWrapper">SliceWrapper (class in fannypack.utils)</a>
 </li>
-      <li><a href="utils/potpourri.html#fannypack.utils.squeeze">squeeze() (in module fannypack.utils)</a>
+      <li><a href="utils/containers.html#fannypack.utils.squeeze">squeeze() (in module fannypack.utils)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -423,15 +434,19 @@
 <h2 id="T">T</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="utils/potpourri.html#fannypack.utils.to_device">to_device() (in module fannypack.utils)</a>
+      <li><a href="utils/containers.html#fannypack.utils.to_device">to_device() (in module fannypack.utils)</a>
 </li>
-      <li><a href="utils/potpourri.html#fannypack.utils.to_numpy">to_numpy() (in module fannypack.utils)</a>
+      <li><a href="utils/containers.html#fannypack.utils.to_numpy">to_numpy() (in module fannypack.utils)</a>
+</li>
+      <li><a href="utils/containers.html#fannypack.utils.to_torch">to_torch() (in module fannypack.utils)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="utils/potpourri.html#fannypack.utils.to_torch">to_torch() (in module fannypack.utils)</a>
-</li>
       <li><a href="data/index.html#fannypack.data.TrajectoriesFile">TrajectoriesFile (class in fannypack.data)</a>
+</li>
+      <li><a href="utils/potpourri.html#fannypack.utils.tril_count_from_matrix_dim">tril_count_from_matrix_dim() (in module fannypack.utils)</a>
+</li>
+      <li><a href="utils/potpourri.html#fannypack.utils.tril_from_vector">tril_from_vector() (in module fannypack.utils)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -440,6 +455,14 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="utils/potpourri.html#fannypack.utils.unfreeze_module">unfreeze_module() (in module fannypack.utils)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="V">V</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="utils/potpourri.html#fannypack.utils.vector_from_tril">vector_from_tril() (in module fannypack.utils)</a>
 </li>
   </ul></td>
 </tr></table>

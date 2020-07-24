@@ -5,7 +5,7 @@ import os
 import argcomplete
 
 from ._buddy_cli_subcommand import Subcommand
-from ._buddy_cli_utils import BuddyPaths, find_experiments, find_checkpoints
+from ._buddy_cli_utils import BuddyPaths
 
 
 class RenameSubcommand(Subcommand):
@@ -22,8 +22,8 @@ class RenameSubcommand(Subcommand):
             "source",
             type=str,
             help="Current name of experiment, as printed by `$ buddy list`.",
-            metavar="SOURCE",  # Set metavar => don't show choices in help menu
-            choices=find_experiments(paths).experiment_names,
+            metavar="source",  # Set metavar => don't show choices in help menu
+            choices=paths.find_experiments().experiment_names,
         )
         parser.add_argument("dest", type=str, help="New name of experiment.")
 
@@ -43,19 +43,17 @@ class RenameSubcommand(Subcommand):
             raise RuntimeError(
                 f"Checkpoints already exist for destination name: {new_experiment_name}"
             )
-        if os.path.exists(os.path.join(paths.log_dir, f"{new_experiment_name}")):
+        if os.path.exists(paths.get_log_dir(new_experiment_name)):
             raise RuntimeError(
                 f"Logs already exist for destination name: {new_experiment_name}"
             )
-        if os.path.exists(
-            os.path.join(paths.metadata_dir, f"{new_experiment_name}.yaml")
-        ):
+        if os.path.exists(paths.get_metadata_file(new_experiment_name)):
             raise RuntimeError(
                 f"Metadata already exist for destination name: {new_experiment_name}"
             )
 
         # Move checkpoint files
-        checkpoint_paths = find_checkpoints(old_experiment_name, paths.checkpoint_dir)
+        checkpoint_paths = paths.find_checkpoints(old_experiment_name)
         print(f"Found {len(checkpoint_paths)} checkpoint files")
         for path in checkpoint_paths:
             # Get new checkpoint path
@@ -73,19 +71,19 @@ class RenameSubcommand(Subcommand):
             os.rename(path, new_path)
 
         # Move metadata
-        metadata_path = os.path.join(paths.metadata_dir, f"{old_experiment_name}.yaml")
+        metadata_path = paths.get_metadata_file(old_experiment_name)
         if os.path.exists(metadata_path):
-            new_path = os.path.join(paths.metadata_dir, f"{new_experiment_name}.yaml")
+            new_path = paths.get_metadata_file(new_experiment_name)
             print(f"Moving {metadata_path} to {new_path}")
             os.rename(metadata_path, new_path)
         else:
             print("No metadata found")
 
         # Move logs
-        metadata_path = os.path.join(paths.log_dir, f"{old_experiment_name}")
+        log_path = paths.get_log_dir(old_experiment_name)
         if os.path.exists(metadata_path):
-            new_path = os.path.join(paths.log_dir, f"{new_experiment_name}")
+            new_path = paths.get_log_dir(new_experiment_name)
             print(f"Moving {metadata_path} to {new_path}")
-            os.rename(metadata_path, new_path)
+            os.rename(log_path, new_path)
         else:
             print("No logs found")

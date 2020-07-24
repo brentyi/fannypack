@@ -1,5 +1,40 @@
 Potpourri
 ==========================================
 
-.. automodule:: fannypack.utils
-    :members: squeeze,to_device,to_numpy,to_torch,freeze_module,unfreeze_module,deprecation_wrapper,new_name_wrapper,pdb_safety_net
+Miscellaneous utilities.
+
+.. contents:: :local:
+
+******************************************
+Math
+******************************************
+
+.. autofunction:: fannypack.utils.tril_count_from_matrix_dim
+.. autofunction:: fannypack.utils.matrix_dim_from_tril_count
+
+.. autofunction:: fannypack.utils.tril_from_vector
+.. autofunction:: fannypack.utils.vector_from_tril
+
+.. autofunction:: fannypack.utils.gaussian_log_prob
+
+.. autofunction:: fannypack.utils.quadratic_matmul
+
+******************************************
+Module Freezing
+******************************************
+
+.. autofunction:: fannypack.utils.freeze_module
+.. autofunction:: fannypack.utils.unfreeze_module
+
+******************************************
+Deprecation Helpers
+******************************************
+
+.. autofunction:: fannypack.utils.new_name_wrapper
+.. autofunction:: fannypack.utils.deprecation_wrapper
+
+******************************************
+Debugging
+******************************************
+
+.. autofunction:: fannypack.utils.pdb_safety_net

@@ -6,7 +6,7 @@ import beautifultable
 import termcolor
 
 from ._buddy_cli_subcommand import Subcommand
-from ._buddy_cli_utils import BuddyPaths, find_experiments
+from ._buddy_cli_utils import BuddyPaths, format_size, get_size
 
 
 class ListSubcommand(Subcommand):
@@ -16,10 +16,10 @@ class ListSubcommand(Subcommand):
     subcommand: str = "list"
     table_column_headers = [
         "Name",
-        "Checkpoints",
+        "Ckpts",
         "Logs",
-        "Metadata",
-        "Last Modified",
+        "Meta",
+        "Timestamp",
     ]
 
     @classmethod
@@ -35,7 +35,7 @@ class ListSubcommand(Subcommand):
 
     @classmethod
     def main(cls, *, args: argparse.Namespace, paths: BuddyPaths) -> None:
-        results = find_experiments(paths, verbose=True)
+        results = paths.find_experiments(verbose=True)
 
         # Generate dynamic-width table
         try:
@@ -51,6 +51,9 @@ class ListSubcommand(Subcommand):
         table.column_headers = [
             termcolor.colored(h, attrs=["bold"]) for h in cls.table_column_headers
         ]
+
+        # Constant for "not applicable" fields
+        NA = termcolor.colored("N/A", "red")
 
         # Add experiment rows, oldest to newest
         sorted_experiment_names = sorted(
@@ -68,20 +71,28 @@ class ListSubcommand(Subcommand):
                 timestamp = datetime.datetime.fromtimestamp(
                     results.timestamps[name]
                 ).strftime(
-                    "%b %d, %Y @ %-H:%M" if terminal_columns > 100 else "%Y-%m-%d"
+                    "%b %d, %y @ %-H:%M" if terminal_columns > 100 else "%y-%m-%d"
                 )
 
             # Add row for experiment
-            yes_no = {
-                True: termcolor.colored("Yes", "green"),
-                False: termcolor.colored("No", "red"),
-            }
             table.append_row(
                 [
                     name,
                     checkpoint_count,
-                    yes_no[name in results.log_experiments],
-                    yes_no[name in results.metadata_experiments],
+                    termcolor.colored(
+                        format_size(get_size(paths.get_log_dir(name)), short=True),
+                        "green",
+                    )
+                    if name in results.log_experiments
+                    else NA,
+                    termcolor.colored(
+                        format_size(
+                            get_size(paths.get_metadata_file(name)), short=True
+                        ),
+                        "green",
+                    )
+                    if name in results.metadata_experiments
+                    else NA,
                     timestamp,
                 ]
             )

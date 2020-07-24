@@ -48,6 +48,7 @@ extensions = [
     "sphinx.ext.mathjax",
     "sphinx.ext.githubpages",
     "sphinx.ext.napoleon",
+    "sphinx_math_dollar",
     # 'sphinx.ext.viewcode',
 ]
 
@@ -173,10 +174,19 @@ texinfo_documents = [
 
 # -- Extension configuration -------------------------------------------------
 
+# This mathjax_config is needed to prevent MathJax from parsing dollar signs which are
+# ignored by the sphinx-math-dollar extension because they should not be parsed as math.
+mathjax_config = {
+    "tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]],},
+}
+
 # -- Options for todo extension ----------------------------------------------
 
 # If true, `todo` and `todoList` produce output, else they produce nothing.
 todo_include_todos = True
+
+# autodoc defaults
+autodoc_default_options = {"show-inheritance": True, "undoc-members": True}
 
 # -- Enable Markdown -> RST conversion ----------------------------------------
 

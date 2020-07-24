@@ -5,7 +5,21 @@
 ![lint](https://github.com/brentyi/fannypack/workflows/lint/badge.svg)
 [![codecov](https://codecov.io/gh/brentyi/fannypack/branch/master/graph/badge.svg)](https://codecov.io/gh/brentyi/fannypack)
 
-Helpers for PyTorch.
+A loose collection of tools for training PyTorch models.
+
+Contents include helpers for:
+
+- Experiment management, Tensorboard logging, and checkpointing (Python + CLI)
+- Reading and manipulating arrays and tensors stored in containers: converting
+  between types, moving across (Torch) devices, slicing across shared dimensions
+- Freezing and unfreezing portions of PyTorch modules
+- Reading and writing time series data/trajectory files via hdf5
+- and a lot more!
+
+See [documentation](https://brentyi.github.io/fannypack) for full overview of
+functionality.
+
+---
 
 Standard installation:
 
@@ -22,25 +36,4 @@ cd fannypack && pip install -e .
 
 ---
 
-To enable autocomplete for the `buddy` commandline tool:
-
-- bash:
-
-  ```sh
-  # Append to .bashrc
-  eval "$(register-python-argcomplete buddy)"
-  ```
-
-- zsh:
-  ```sh
-  # Append to .zshrc
-  autoload -U +X compinit && compinit
-  autoload -U +X bashcompinit && bashcompinit
-  eval "$(register-python-argcomplete buddy)"
-  ```
-
----
-
 Github: https://github.com/brentyi/fannypack
-
-Documentation (work-in-progress): https://brentyi.github.io/fannypack

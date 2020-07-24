@@ -64,8 +64,8 @@ class Buddy(
         """Constructor
         """
         # Validate and assign core parameters.
-        assert type(experiment_name) == str
-        assert type(verbose) == bool
+        assert isinstance(experiment_name, str)
+        assert isinstance(verbose, bool)
 
         self._experiment_name = experiment_name
         self._verbose = verbose
@@ -80,7 +80,7 @@ class Buddy(
 
         # Attach model if available
         self._model: Optional[nn.Module] = None
-        if model != None:
+        if model is not None:
             self.attach_model(cast(nn.Module, model))
 
         # Call constructors for each of our interfaces.
@@ -123,6 +123,14 @@ class Buddy(
         self._model = model
 
     # Shared functions
+    @property
+    def model(self) -> nn.Module:
+        """Read-only interface for the attached model. Raises an error if no model is
+        attached.
+        """
+        assert self._model is not None, "No model attached!"
+        return cast(nn.Module, self._model)
+
     @property
     def device(self) -> torch.device:
         """Read-only interface for the active torch device. Auto-detected in the

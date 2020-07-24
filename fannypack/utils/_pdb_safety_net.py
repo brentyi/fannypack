@@ -5,8 +5,11 @@ import traceback as tb
 
 
 def pdb_safety_net():
-    """Helper for opening PDB when either (a) the user hits Ctrl+C or (b) we encounter
-    an uncaught exception.
+    """Attaches a "safety net" for unexpected errors in a Python script.
+
+    When called, PDB will be automatically opened when either (a) the user hits Ctrl+C
+    or (b) we encounter an uncaught exception. Helpful for bypassing minor errors,
+    diagnosing problems, and rescuing unsaved models.
     """
 
     # Open PDB on Ctrl+C

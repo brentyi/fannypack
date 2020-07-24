@@ -6,34 +6,12 @@ import shutil
 import argcomplete
 import beautifultable
 import termcolor
+from pygments import formatters, highlight, lexers
 
 import fannypack
 
 from ._buddy_cli_subcommand import Subcommand
-from ._buddy_cli_utils import BuddyPaths, find_checkpoints, find_experiments
-
-
-def _get_size(path):
-    if os.path.isfile(path):
-        return os.stat(path).st_size
-    elif os.path.isdir(path):
-        return sum(
-            [
-                os.stat(p).st_size
-                for p in glob.glob(os.path.join(path, "**/*"), recursive=True)
-            ]
-        )
-    else:
-        return 0
-
-
-def _format_size(size):
-    units = ["B", "KiB", "MiB", "GiB", "TiB", "PiB"]
-    unit_index = 0
-    while size > 1024 and unit_index < len(units) - 1:
-        size /= 1024.0
-        unit_index += 1
-    return f"{size:.2f}{units[unit_index]}"
+from ._buddy_cli_utils import BuddyPaths, format_size, get_size
 
 
 class InfoSubcommand(Subcommand):
@@ -50,8 +28,8 @@ class InfoSubcommand(Subcommand):
             "experiment_name",
             type=str,
             help="Name of experiment, as printed by `$ buddy list`.",
-            metavar="EXPERIMENT_NAME",  # Set metavar => don't show choices in help menu
-            choices=find_experiments(paths).experiment_names,
+            metavar="experiment_name",  # Set metavar => don't show choices in help menu
+            choices=paths.find_experiments().experiment_names,
         )
 
     @classmethod
@@ -79,7 +57,7 @@ class InfoSubcommand(Subcommand):
         NA = termcolor.colored("N/A", "red")
 
         # Find checkpoint files
-        checkpoint_paths = find_checkpoints(experiment_name, paths.checkpoint_dir)
+        checkpoint_paths = paths.find_checkpoints(experiment_name)
 
         # Display size, labels of checkpoints
         if len(checkpoint_paths) > 0:
@@ -97,12 +75,17 @@ class InfoSubcommand(Subcommand):
                 label = checkpoint_path[len(prefix) : -len(suffix)]
 
                 checkpoint_labels.append(f"{label} (steps: {steps[checkpoint_path]})")
-                checkpoint_total_size += _get_size(checkpoint_path)
+                checkpoint_total_size += get_size(checkpoint_path)
 
-            add_table_row("Total checkpoint size", _format_size(checkpoint_total_size))
+            add_table_row(
+                "Total checkpoint size",
+                termcolor.colored(format_size(checkpoint_total_size), "green"),
+            )
             add_table_row(
                 "Average checkpoint size",
-                _format_size(checkpoint_total_size / len(checkpoint_paths)),
+                termcolor.colored(
+                    format_size(checkpoint_total_size / len(checkpoint_paths)), "green"
+                ),
             )
             add_table_row("Checkpoint labels", "\n".join(checkpoint_labels))
         else:
@@ -111,19 +94,31 @@ class InfoSubcommand(Subcommand):
             add_table_row("Checkpoint labels", "")
 
         # Display log file size
-        log_path = os.path.join(paths.log_dir, f"{experiment_name}")
+        log_path = paths.get_log_dir(args.experiment_name)
         if os.path.exists(log_path):
             #  _delete(log_path, args.forever)
-            add_table_row("Log size", _format_size(_get_size(log_path)))
+            add_table_row(
+                "Log size", termcolor.colored(format_size(get_size(log_path)), "green")
+            )
         else:
             add_table_row("Log size", NA)
 
         # Display metadata + metadata size
-        metadata_path = os.path.join(paths.metadata_dir, f"{experiment_name}.yaml")
+        metadata_path = paths.get_metadata_file(args.experiment_name)
         if os.path.exists(metadata_path):
-            add_table_row("Metadata size", _format_size(_get_size(metadata_path)))
+            add_table_row(
+                "Metadata size",
+                termcolor.colored(format_size(get_size(metadata_path)), "green"),
+            )
             with open(metadata_path, "r") as f:
-                add_table_row("Metadata", f.read().strip())
+                add_table_row(
+                    "Metadata",
+                    highlight(
+                        f.read().strip(),
+                        lexers.YamlLexer(),
+                        formatters.TerminalFormatter(),
+                    ),
+                )
         else:
             add_table_row("Metadata size", NA)
             add_table_row("Metadata", NA)

@@ -2,17 +2,16 @@ from __future__ import annotations
 
 import abc
 import contextlib
-from dataclasses import dataclass
 from typing import TYPE_CHECKING, Generator, List, Optional, Union, cast
 
 import numpy as np
 import torch.utils.tensorboard
 
 from .. import _deprecation
-from ._optimizer import _BuddyOptimizer
 
 if TYPE_CHECKING:
     from .._buddy import Buddy
+    from ._optimizer import _BuddyOptimizer
 
 
 class _BuddyLogging(abc.ABC):
@@ -30,6 +29,16 @@ class _BuddyLogging(abc.ABC):
         # Backwards-compatibility for deprecated API
         self.log = _deprecation.new_name_wrapper(
             "Buddy.log()", "Buddy.log_scalar()", self.log_scalar
+        )
+        self.log_model_grad_hist = _deprecation.new_name_wrapper(
+            "Buddy.log_model_grad_hist()",
+            "Buddy.log_grad_histogram()",
+            self.log_grad_histogram,
+        )
+        self.log_model_weight_hist = _deprecation.new_name_wrapper(
+            "Buddy.log_model_weight_hist()",
+            "Buddy.log_parameters_histogram()",
+            self.log_parameters_histogram,
         )
 
         # State variables for TensorBoard
@@ -112,7 +121,7 @@ class _BuddyLogging(abc.ABC):
         name = self.log_scope_prefix(name)
 
         # Log scalar
-        optimizer_steps = cast(_BuddyOptimizer, self).optimizer_steps
+        optimizer_steps = cast("_BuddyOptimizer", self).optimizer_steps
         self.log_writer.add_image(
             name, image, global_step=optimizer_steps, dataformats=dataformats
         )
@@ -139,69 +148,86 @@ class _BuddyLogging(abc.ABC):
         name = self.log_scope_prefix(name)
 
         # Log scalar
-        optimizer_steps = cast(_BuddyOptimizer, self).optimizer_steps
+        optimizer_steps = cast("_BuddyOptimizer", self).optimizer_steps
         self.log_writer.add_scalar(name, value, global_step=optimizer_steps)
 
-    def log_model_weights_hist(self, name: str = "") -> None:
-        """Logging model weights into histogram.
-
+    def log_gradient_norm(self, scope: str = "grad_norm") -> None:
+        """Logging model gradient norm
+        
+        Naming: with `scope` set to "grad_norm", a parameter name "model.Linear.bias" will be
+        logged to the tag `buddy.log_scope_prefix("grad_norm/model/Linear/bias")`.
 
         Args:
-            name (str, optional): Name to prepend a prefix to. Defaults to an empty string.
+            scope (str, optional): Scope to log gradients into. Defaults to "grad_norm"
         """
         optimizer_steps = cast(_BuddyOptimizer, self).optimizer_steps
 
-        for layer_name, p in self._model.named_parameters():
+        with self.log_scope(scope):
+        for param_name, p in cast("Buddy", self).model.named_parameters():
             if p.grad is None:
                 continue
 
-            layer_name = layer_name.replace(".", "/")
-            self.log_writer.add_histogram(
-                tag="{}weights/{}".format(self.log_scope_prefix(name), layer_name),
-                values=p.data.detach().cpu().numpy(),
-                global_step=optimizer_steps,
-            )
-
-    def log_model_grad_norm(self, name: str = "") -> None:
-        """Logging model gradient norm
-
-
-                Args:
-                    name (str, optional): Name to prepend a prefix to. Defaults to an empty string.
-                """
-        optimizer_steps = cast(_BuddyOptimizer, self).optimizer_steps
-
-        for layer_name, p in self._model.named_parameters():
-            if p.grad is None:
-                continue
-
-            layer_name = layer_name.replace(".", "/")
+            param_name = param_name.replace(".", "/")
             self.log_writer.add_scalar(
                 "grad_norm/{}/{}".format(self.log_scope_prefix(name), layer_name),
                 p.grad.data.norm(2).item(),
                 optimizer_steps,
             )
 
+    def log_parameters_histogram(
+        self, scope: str = "weights", *, ignore_zero_grad: bool = True
+    ) -> None:
+        """Log model weights into a histogram.
 
-    def log_model_grad_hist(self, name: str = "") -> None:
-        """Logging model gradients into histogram.
-
+        Naming: with `scope` set to "weights", a parameter name "model.Linear.bias" will be
+        logged to the tag `buddy.log_scope_prefix("weights/model/Linear/bias")`.
 
         Args:
-            name (str, optional): Name to prepend a prefix to. Defaults to an empty string.
+            scope (str, optional): Scope to log gradients into. Defaults to "weights".
+            ignore_zero_grad (bool, optional): Ignore parameters without gradients:
+                decreases log sizes when only parts of models are being trained.
+                Defaults to True.
         """
-        optimizer_steps = cast(_BuddyOptimizer, self).optimizer_steps
+        optimizer_steps = cast("_BuddyOptimizer", self).optimizer_steps
 
-        for layer_name, p in self._model.named_parameters():
-            if p.grad is None:
-                continue
+        with self.log_scope(scope):
+            for param_name, p in cast("Buddy", self).model.named_parameters():
+                if ignore_zero_grad and p.grad is None:
+                    continue
 
-            layer_name = layer_name.replace(".", "/")
-            self.log_writer.add_histogram(
-                tag="{}grad/{}".format(self.log_scope_prefix(name), layer_name),
-                values=p.grad.detach().cpu().numpy(),
-                global_step=optimizer_steps,
-            )
+                param_name = param_name.replace(".", "/")
+                self.log_writer.add_histogram(
+                    tag=self.log_scope_prefix(param_name),
+                    values=p.data.detach().cpu().numpy(),
+                    global_step=optimizer_steps,
+                )
+
+    def log_grad_histogram(self, scope: str = "grad") -> None:
+        """Log model gradients into a histogram. Should be called after
+        `buddy.minimize()`.
+
+        Naming: with `scope` set to "grad", a parameter name "model.Linear.bias" will be
+        logged to the tag `buddy.log_scope_prefix("grad/model/Linear/bias")`.
+
+        Args:
+            scope (str, optional): Scope to log gradients into. Defaults to "grad".
+        """
+        optimizer_steps = cast("_BuddyOptimizer", self).optimizer_steps
+
+        found_gradients = False
+        with self.log_scope(scope):
+            for param_name, p in cast("Buddy", self).model.named_parameters():
+                if p.grad is None:
+                    continue
+                param_name = param_name.replace(".", "/")
+                self.log_writer.add_histogram(
+                    tag=self.log_scope_prefix(param_name),
+                    values=p.grad.detach().cpu().numpy(),
+                    global_step=optimizer_steps,
+                )
+                found_gradients = True
+
+        assert found_gradients, "No gradients found!"
 
     def log_scope_prefix(self, name: str = "") -> str:
         """Get or apply the current log scope prefix.
@@ -225,8 +251,7 @@ class _BuddyLogging(abc.ABC):
         """
         if len(self._log_scopes) == 0:
             return name
-        else:
-            return "{}/{}".format("/".join(self._log_scopes), name)
+        return "{}/{}".format("/".join(self._log_scopes), name)
 
     @property
     def log_writer(self) -> torch.utils.tensorboard.SummaryWriter:
