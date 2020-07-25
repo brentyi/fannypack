@@ -39,7 +39,7 @@ class _BuddyMetadata(abc.ABC):
             assert experiment_name is None and metadata_dir is None
 
         with open(path, "r") as file:
-            self._metadata = yaml.load(file, Loader=yaml.SafeLoader)
+            self._metadata = yaml.load(file, Loader=yaml.Loader)
             cast("Buddy", self)._print("Loaded metadata:", self._metadata)
 
     def add_metadata(self, content: Dict[str, Any]) -> None:
