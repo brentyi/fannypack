@@ -30,6 +30,8 @@ class _BuddyOptimizer(abc.ABC):
         "adadelta": 1,
     }
 
+    _OPTIMIZER_DEFAULT_GRADIENT_NORM_MAX: float = 2.0
+
     def __init__(
         self, optimizer_type: str, optimizer_checkpoint_interval: float
     ) -> None:
@@ -55,6 +57,8 @@ class _BuddyOptimizer(abc.ABC):
             float, Callable[[int], float]
         ] = self._OPTIMIZER_DEFAULT_LEARNING_RATES[optimizer_type]
 
+        self.gradient_norm_max = self._OPTIMIZER_DEFAULT_GRADIENT_NORM_MAX
+
     def minimize(
         self,
         loss: torch.Tensor,
@@ -78,7 +82,10 @@ class _BuddyOptimizer(abc.ABC):
 
         # Take gradient step
         self._optimizer_dict[optimizer_name].zero_grad()
-        loss.backward(retain_graph=retain_graph)  # type: ignore
+        loss.backward(retain_graph=retain_graph)  # type:
+        cast("Buddy", self).model.parameters()
+        if self.gradient_norm_max is not None and self.gradient_norm_max > 0:
+            torch.nn.utils.clip_grad_norm_(cast("Buddy", self).model.parameters(), self.gradient_norm_max, norm_type=2)
         self._optimizer_dict[optimizer_name].step()
 
         # Update global step count
@@ -169,6 +176,12 @@ class _BuddyOptimizer(abc.ABC):
         """Sets a default learning rate for new optimizers.
         """
         self._optimizer_default_learning_rate = value
+
+    def set_gradient_norm_max(self, value: float) -> None:
+        """Sets gradient norm max for gradient clipping"""
+
+        # todo: sets it for specific optimizer instead of every one
+        self.gradient_norm_max = value
 
     @property
     def optimizer_steps(self) -> int:
