@@ -120,6 +120,20 @@ class _BuddyOptimizer(abc.ABC):
         assert len(optimizer.param_groups) == 1
         return optimizer.param_groups[0]["lr"]
 
+    def set_regularization_weight(
+        self,
+        value: float,
+        optimizer_name: str = "primary",
+    ) -> None:
+        """Sets an optimizer regularization weight. Accepts either a floating point
+        learning rate
+        """
+        assert cast("Buddy", self)._model is not None, "No model attached!"
+        self._instantiate_optimizer(optimizer_name)
+        assert isinstance(value, float)
+        # Set regularization weight
+        self._set_regularization_weight(value, optimizer_name)
+
     def set_learning_rate(
         self,
         value: Union[float, Callable[[int], float]],
@@ -172,6 +186,18 @@ class _BuddyOptimizer(abc.ABC):
         optimizer = self._optimizer_dict[optimizer_name]
         assert len(optimizer.param_groups) == 1
         optimizer.param_groups[0]["lr"] = value
+
+    def _set_regularization_weight(self, value: float, optimizer_name: str) -> None:
+        """(Private) Sets an optimizer's l2 regularization weight.
+        """
+
+        self._instantiate_optimizer(optimizer_name)
+
+        # Currently, only one parameter group is supported
+        optimizer = self._optimizer_dict[optimizer_name]
+        assert len(optimizer.param_groups) == 1
+        optimizer.param_groups[0]["weight_decay"] = value
+
 
     def _instantiate_optimizer(self, optimizer_name: str) -> None:
         """(Private) Instantiates an optimizer. Returns immediately if
