@@ -163,15 +163,15 @@ class _BuddyLogging(abc.ABC):
         optimizer_steps = cast(_BuddyOptimizer, self).optimizer_steps
 
         with self.log_scope(scope):
-        for param_name, p in cast("Buddy", self).model.named_parameters():
-            if p.grad is None:
-                continue
+            for param_name, p in cast("Buddy", self).model.named_parameters():
+                if p.grad is None:
+                    continue
 
-            param_name = param_name.replace(".", "/")
-            self.log_writer.add_scalar(
-                "grad_norm/{}/{}".format(self.log_scope_prefix(name), layer_name),
-                p.grad.data.norm(2).item(),
-                optimizer_steps,
+                param_name = param_name.replace(".", "/")
+                self.log_writer.add_scalar(
+                    self.log_scope_prefix(param_name),
+                    p.grad.data.norm(2).item(),
+                    optimizer_steps,
             )
 
     def log_parameters_histogram(
