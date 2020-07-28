@@ -81,9 +81,9 @@ class RenameSubcommand(Subcommand):
 
         # Move logs
         log_path = paths.get_log_dir(old_experiment_name)
-        if os.path.exists(metadata_path):
+        if os.path.exists(log_path):
             new_path = paths.get_log_dir(new_experiment_name)
-            print(f"Moving {metadata_path} to {new_path}")
+            print(f"Moving {log_path} to {new_path}")
             os.rename(log_path, new_path)
         else:
             print("No logs found")
