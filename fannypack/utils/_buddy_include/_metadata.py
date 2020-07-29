@@ -19,15 +19,21 @@ class _BuddyMetadata(abc.ABC):
         # Attempt to read existing metadata
         self._metadata_dir = metadata_dir
         try:
-            self.load_metadata()
+            self.load_metadata(_write=True)
         except FileNotFoundError:
             self._metadata: Dict[str, Any] = {}
 
     def load_metadata(
-        self, experiment_name: str = None, metadata_dir: str = None, path: str = None
+        self,
+        experiment_name: str = None,
+        metadata_dir: str = None,
+        path: str = None,
+        _write=True,
     ) -> None:
-        """Read existing metadata file. Metadata is loaded automatically: this function
-        should not need to be called.
+        """Read existing metadata file. Note that metadata is loaded automatically: this
+        only needs to be called if loading across experiments.
+
+        Overwrites existing metadata.
         """
         if path is None:
             if experiment_name is None:
@@ -38,9 +44,14 @@ class _BuddyMetadata(abc.ABC):
         else:
             assert experiment_name is None and metadata_dir is None
 
+        # Read from disk
         with open(path, "r") as file:
             self._metadata = yaml.load(file, Loader=yaml.Loader)
             cast("Buddy", self)._print("Loaded metadata:", self._metadata)
+
+        # Write to disk
+        if _write:
+            self._write_metadata()
 
     def add_metadata(self, content: Dict[str, Any]) -> None:
         """Add human-readable metadata for this experiment. Input should be a
