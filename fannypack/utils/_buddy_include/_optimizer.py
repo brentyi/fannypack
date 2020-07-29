@@ -17,11 +17,11 @@ class _BuddyOptimizer(abc.ABC):
     """
 
     # Supported optimizer types
-    # Note that torch (as of 1.5) has some stub issues with optim.Adadelta,
-    # optim.Optimizer
-    _OPTIMIZER_TYPES: Dict[str, torch.optim.Optimizer] = {  # type: ignore
+    # TODO: improve typing here; Type[torch.optim.Optimizer] would works but the
+    # superclass constructor doesn't match the subclass constructors
+    _OPTIMIZER_TYPES: Dict[str, Any] = {
         "adam": torch.optim.Adam,
-        "adadelta": torch.optim.Adadelta,  # type: ignore
+        "adadelta": torch.optim.Adadelta,
     }
 
     # Default learning rates
