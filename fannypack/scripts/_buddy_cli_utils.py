@@ -177,3 +177,8 @@ class BuddyPaths:
             timestamps=timestamps,
         )
         return self._find_output_cache
+
+    def clear_cache(self):
+        """Clears the experiment list cache.
+        """
+        self._find_output_cache = None

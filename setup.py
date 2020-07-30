@@ -26,6 +26,7 @@ setup(
         # "numpy-stubs @ https://github.com/numpy/numpy-stubs/tarball/master",
         "pygments",
         "pyyaml",
+        "simple_term_menu",
         "tensorboard",
         "termcolor",
         "torch",
