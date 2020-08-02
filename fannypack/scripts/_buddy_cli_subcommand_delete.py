@@ -69,7 +69,7 @@ class DeleteSubcommand(Subcommand):
                 # Show menu
                 menu = simple_term_menu.TerminalMenu(
                     delete_options,
-                    preview_command=cls.get_pretty_metadata,
+                    preview_command=lambda name: cls.get_pretty_metadata(name, paths),
                     preview_size=0.75,
                 )
                 experiment_name = menu.show()
@@ -161,10 +161,9 @@ class DeleteSubcommand(Subcommand):
             os.rename(path, new_path)
 
     @staticmethod
-    def get_pretty_metadata(experiment_name: str) -> str:
-        filepath = f"metadata/{experiment_name}.yaml"
+    def get_pretty_metadata(experiment_name: str, paths: BuddyPaths) -> str:
         try:
-            with open(filepath, "r") as f:
+            with open(paths.get_metadata_file(experiment_name), "r") as f:
                 return highlight(
                     f.read().strip(),
                     lexers.YamlLexer(),
