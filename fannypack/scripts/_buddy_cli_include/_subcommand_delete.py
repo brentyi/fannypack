@@ -7,8 +7,8 @@ import simple_term_menu
 import termcolor
 from pygments import formatters, highlight, lexers
 
-from ._buddy_cli_subcommand import Subcommand
-from ._buddy_cli_utils import BuddyPaths
+from ._subcommand import Subcommand
+from ._utils import BuddyPaths
 
 _TRASH_DIR = "./_trash/"
 

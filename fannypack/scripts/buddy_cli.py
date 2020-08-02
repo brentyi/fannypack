@@ -14,11 +14,7 @@ from typing import Dict, List, Type
 
 import argcomplete
 
-from ._buddy_cli_subcommand import BuddyPaths, Subcommand
-from ._buddy_cli_subcommand_delete import DeleteSubcommand
-from ._buddy_cli_subcommand_info import InfoSubcommand
-from ._buddy_cli_subcommand_list import ListSubcommand
-from ._buddy_cli_subcommand_rename import RenameSubcommand
+from ._buddy_cli_include import BuddyPaths, Subcommand, subcommand_registry
 
 
 def main() -> None:
@@ -44,14 +40,8 @@ def main() -> None:
     )
 
     # Add subcommands
-    subcommand_types: List[Type[Subcommand]] = [
-        DeleteSubcommand,
-        InfoSubcommand,
-        ListSubcommand,
-        RenameSubcommand,
-    ]
     subcommand_map: Dict[str, Type[Subcommand]] = {}
-    for S in subcommand_types:
+    for S in subcommand_registry:
         subparser = subparsers.add_parser(
             S.subcommand, help=S.__doc__, description=S.__doc__
         )

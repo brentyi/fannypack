@@ -1,7 +1,10 @@
 import abc
 import argparse
+from typing import List, Type
 
-from ._buddy_cli_utils import BuddyPaths
+from ._utils import BuddyPaths
+
+subcommand_registry: List[Type["Subcommand"]] = []
 
 
 class Subcommand(abc.ABC):
@@ -10,6 +13,13 @@ class Subcommand(abc.ABC):
 
     subcommand: str
     helptext: str
+
+    @classmethod
+    def __init_subclass__(cls, **kwargs):
+        """Registers a subcommand.
+        """
+        super().__init_subclass__(**kwargs)
+        subcommand_registry.append(cls)
 
     @classmethod
     @abc.abstractclassmethod

@@ -4,8 +4,8 @@ import os
 
 import argcomplete
 
-from ._buddy_cli_subcommand import Subcommand
-from ._buddy_cli_utils import BuddyPaths
+from ._subcommand import Subcommand
+from ._utils import BuddyPaths
 
 
 class RenameSubcommand(Subcommand):

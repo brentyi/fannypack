@@ -19,7 +19,7 @@ setup(
     python_requires=">=3.7",
     install_requires=[
         "argcomplete",
-        "beautifultable",
+        "beautifultable >= 1.0.0",
         "dill",
         "h5py",
         "numpy",

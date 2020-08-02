@@ -10,8 +10,8 @@ from pygments import formatters, highlight, lexers
 
 import fannypack
 
-from ._buddy_cli_subcommand import Subcommand
-from ._buddy_cli_utils import BuddyPaths, format_size, get_size
+from ._subcommand import Subcommand
+from ._utils import BuddyPaths, format_size, get_size
 
 
 class InfoSubcommand(Subcommand):
@@ -45,13 +45,13 @@ class InfoSubcommand(Subcommand):
             # stty size fails when run from outside proper terminal (eg in tests)
             terminal_columns = 100
         table = beautifultable.BeautifulTable(
-            max_width=min(100, terminal_columns),
+            maxwidth=min(100, terminal_columns),
             default_alignment=beautifultable.ALIGN_LEFT,
         )
         table.set_style(beautifultable.STYLE_BOX_ROUNDED)
 
         def add_table_row(label, value):
-            table.append_row([termcolor.colored(label, attrs=["bold"]), value])
+            table.rows.append([termcolor.colored(label, attrs=["bold"]), value])
 
         # Constant for "not applicable" fields
         NA = termcolor.colored("N/A", "red")

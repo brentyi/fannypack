@@ -5,8 +5,8 @@ import os
 import beautifultable
 import termcolor
 
-from ._buddy_cli_subcommand import Subcommand
-from ._buddy_cli_utils import BuddyPaths, format_size, get_size
+from ._subcommand import Subcommand
+from ._utils import BuddyPaths, format_size, get_size
 
 
 class ListSubcommand(Subcommand):
@@ -43,12 +43,12 @@ class ListSubcommand(Subcommand):
         except IndexError:
             # stty size fails when run from outside proper terminal (eg in tests)
             terminal_columns = 100
-        table = beautifultable.BeautifulTable(max_width=min(100, terminal_columns))
+        table = beautifultable.BeautifulTable(maxwidth=min(100, terminal_columns))
         table.set_style(beautifultable.STYLE_BOX_ROUNDED)
-        table.row_separator_char = ""
+        table.rows.separator = ""
 
         # Add bolded headers
-        table.column_headers = [
+        table.columns.header = [
             termcolor.colored(h, attrs=["bold"]) for h in cls.table_column_headers
         ]
 
@@ -75,7 +75,7 @@ class ListSubcommand(Subcommand):
                 )
 
             # Add row for experiment
-            table.append_row(
+            table.rows.append(
                 [
                     name,
                     checkpoint_count,
