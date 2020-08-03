@@ -1,9 +1,45 @@
+from typing import Dict
+
+import numpy as np
 import pytest
 import torch
+import torch.nn.functional as F
 
 import fannypack
 
-from ..fixtures import simple_net
+from ..fixtures import simple_buddy_temporary_data, simple_net
+
+
+def test_freeze_integration(simple_buddy_temporary_data):
+    """Integration test for module freezing + minimizing with Buddy.
+    """
+    model, buddy, data, labels = simple_buddy_temporary_data
+
+    # Minimize loss
+    loss = F.mse_loss(model(data), labels)
+    buddy.minimize(loss)
+
+    # Get NumPy representation of parameters, then copy
+    layer4_params_before: Dict[str, np.ndarray] = fannypack.utils.SliceWrapper(
+        fannypack.utils.to_numpy(dict(model.layer4.named_parameters()))
+    ).map(np.array)
+
+    print(layer4_params_before)
+
+    # Freeze layer4, then minimize
+    fannypack.utils.freeze_module(model.layer4)
+    for _ in range(20):
+        loss = F.mse_loss(model(data), labels)
+        buddy.minimize(loss)
+
+    layer4_params_after: Dict[str, np.ndarray] = fannypack.utils.to_numpy(
+        dict(model.layer4.named_parameters())
+    )
+
+    # Compare (frozen) layer 1 parameters before/after second minimize
+    assert set(layer4_params_before.keys()) == set(layer4_params_after.keys())
+    for key in layer4_params_after.keys():
+        np.testing.assert_allclose(layer4_params_before[key], layer4_params_after[key])
 
 
 def test_freeze_unfreeze(simple_net):
