@@ -36,7 +36,7 @@ def test_freeze_integration(simple_buddy_temporary_data):
         dict(model.layer4.named_parameters())
     )
 
-    # Compare (frozen) layer 1 parameters before/after second minimize
+    # Compare (frozen) layer4 parameters before/after second minimize
     assert set(layer4_params_before.keys()) == set(layer4_params_after.keys())
     for key in layer4_params_after.keys():
         np.testing.assert_allclose(layer4_params_before[key], layer4_params_after[key])
