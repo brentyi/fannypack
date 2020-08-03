@@ -9,14 +9,14 @@ exclude_lines =
 
     # Don't compute coverage for abstract methods, properties
     @abstract
-    @abc.abstract
+    @abc\.abstract
 
     # or warnings
     warnings
 
     # or empty function bodies
     pass
-    ...
+    \.\.\.
 
     # or cuda stuff
     cuda
