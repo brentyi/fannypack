@@ -31,6 +31,12 @@ def freeze_module(module: nn.Module, recurse: bool = True) -> None:
     for name, parameter in module.named_parameters(recurse=False):
         restore_values[name] = parameter.requires_grad
         parameter.requires_grad = False
+
+        # We need to reset the gradient value to None: otherwise, the gradient will just
+        # be set to zero when we call zero_grad(), and the optimizer will still update
+        # it via momentum, weight decay, etc.
+        parameter.grad = None
+
     _freeze_restore_values[module] = restore_values
 
 
