@@ -22,13 +22,13 @@ class Subcommand(abc.ABC):
         subcommand_registry.append(cls)
 
     @classmethod
-    @abc.abstractclassmethod
+    @abc.abstractmethod
     def add_arguments(
         cls, *, parser: argparse.ArgumentParser, paths: BuddyPaths
     ) -> None:
         raise NotImplementedError
 
     @classmethod
-    @abc.abstractclassmethod
+    @abc.abstractmethod
     def main(cls, *, args: argparse.Namespace, paths: BuddyPaths) -> None:
         raise NotImplementedError
