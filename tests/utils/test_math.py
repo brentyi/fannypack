@@ -25,7 +25,7 @@ def test_quadratic_matmul():
     torch.sum(xTAx).backward()
     np.testing.assert_allclose(
         *fannypack.utils.to_numpy(
-            [x.grad, ((A.transpose(-1, -2) + A) @ x[:, :, None]).squeeze(),]
+            [x.grad, ((A.transpose(-1, -2) + A) @ x[:, :, None]).squeeze()]
         ),
         rtol=1e-4,
         atol=1e-6,

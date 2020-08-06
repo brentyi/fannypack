@@ -75,7 +75,7 @@ class DeleteSubcommand(Subcommand):
                 experiment_name = menu.show()
 
                 # Quit on Ctrl+C, Esc, etc
-                if experiment_name == None:
+                if experiment_name is None:
                     return
 
                 # Delete experiments

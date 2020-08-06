@@ -1,11 +1,8 @@
 import os
 
-import numpy as np
 import pytest
 import torch
 import torch.nn.functional as F
-
-import fannypack
 
 from ..fixtures import resblock_buddy_temporary_data, simple_buddy
 

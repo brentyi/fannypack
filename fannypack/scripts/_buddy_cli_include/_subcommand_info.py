@@ -1,9 +1,6 @@
 import argparse
-import glob
 import os
-import shutil
 
-import argcomplete
 import beautifultable
 import termcolor
 from pygments import formatters, highlight, lexers

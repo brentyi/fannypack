@@ -1,8 +1,6 @@
 import os
 import signal
 
-import pytest
-
 import fannypack
 
 

@@ -80,7 +80,6 @@ def download_drive_file(url: str, target_path: str, chunk_size=32768) -> None:
         headers={"Accept-Encoding": None},
     )
 
-    token = None
     for key, value in response.cookies.items():
         if key.startswith("download_warning"):  # pragma: no cover
             params = {"id": drive_id, "confirm": value}

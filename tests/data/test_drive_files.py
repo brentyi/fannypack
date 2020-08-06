@@ -2,8 +2,6 @@ import os
 import shutil
 import time
 
-import pytest
-
 import fannypack
 
 

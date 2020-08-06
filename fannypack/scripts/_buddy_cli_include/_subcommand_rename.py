@@ -2,8 +2,6 @@ import argparse
 import glob
 import os
 
-import argcomplete
-
 from ._subcommand import Subcommand
 from ._utils import BuddyPaths
 

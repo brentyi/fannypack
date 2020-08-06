@@ -1,6 +1,5 @@
 import os
 
-import numpy as np
 import pytest
 
 import fannypack
@@ -124,6 +123,7 @@ def test_read(trajectories_file_read):
             assert len(traj["timestep"]) == i * 2 + 1
             counter += 1
         assert len(traj_file) == counter
+
 
 def test_read_slice(trajectories_file_read):
     """Read an existing trajectories file using slice indexing, and check that its

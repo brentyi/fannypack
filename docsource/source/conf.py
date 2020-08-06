@@ -12,9 +12,6 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-import os
-import sys
-
 import m2r
 
 # -- Project information -----------------------------------------------------
@@ -177,7 +174,7 @@ texinfo_documents = [
 # This mathjax_config is needed to prevent MathJax from parsing dollar signs which are
 # ignored by the sphinx-math-dollar extension because they should not be parsed as math.
 mathjax_config = {
-    "tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]],},
+    "tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]]}
 }
 
 # -- Options for todo extension ----------------------------------------------

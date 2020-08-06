@@ -65,7 +65,7 @@ def _convert_recursive(x, convert, input_type):
             value = getattr(x, field.name)
             try:
                 changes[field.name] = convert_recursive(value)
-            except AssertionError as e:
+            except AssertionError:
                 # For dataclasses, we leave unsupported types alone
                 # May want to rethink this?
                 pass

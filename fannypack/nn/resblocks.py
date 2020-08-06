@@ -1,5 +1,4 @@
 import abc
-import functools
 from typing import Callable, Dict
 
 import torch
@@ -83,5 +82,6 @@ class Conv2d(Base):
             kernel_size=kernel_size,
             padding=kernel_size // 2,
         )
+
 
 __all__ = ["Base", "Linear", "Conv2d"]

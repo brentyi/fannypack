@@ -10,7 +10,7 @@ BUDDY_LOG_DIR, and BUDDY_METADATA_DIR environment variables.
 """
 import argparse
 import os
-from typing import Dict, List, Type
+from typing import Dict, Type
 
 import argcomplete
 

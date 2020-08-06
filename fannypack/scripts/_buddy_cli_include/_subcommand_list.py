@@ -99,7 +99,7 @@ class ListSubcommand(Subcommand):
 
         # Print table, sorted by name
         print(f"Found {len(results.experiment_names)} experiments!")
-        if args.sort_by != None:
+        if args.sort_by is not None:
             # Sort-by field: lowercase -> index
             table.sort(
                 list(map(lambda s: s.lower(), cls.table_column_headers)).index(

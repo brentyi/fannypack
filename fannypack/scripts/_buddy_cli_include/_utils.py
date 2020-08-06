@@ -1,7 +1,7 @@
 import glob
 import os
 from dataclasses import dataclass
-from typing import Dict, List, Optional, Set, Tuple, cast
+from typing import Dict, List, Optional, Set, cast
 
 
 def _listdir(path: str) -> List[str]:
@@ -41,7 +41,7 @@ def get_size(path: str) -> int:
         return 0
 
 
-def format_size(size: float, short: bool=False):
+def format_size(size: float, short: bool = False):
     """Converts a size in bytes to a human-readable string.
     """
     units = ["B", "KiB", "MiB", "GiB", "TiB", "PiB"]

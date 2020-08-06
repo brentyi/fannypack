@@ -9,7 +9,6 @@ import torch
 if TYPE_CHECKING:
     from ._checkpointing import _BuddyCheckpointing
     from .._buddy import Buddy
-    import torch.nn as nn
 
 
 class _BuddyOptimizer(abc.ABC):
