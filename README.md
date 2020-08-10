@@ -21,6 +21,8 @@ functionality.
 
 ---
 
+### Installation
+
 Standard installation:
 
 ```
@@ -36,4 +38,19 @@ cd fannypack && pip install -e .
 
 ---
 
-Github: https://github.com/brentyi/fannypack
+### Development
+
+Tests can be run with `pytest`, and documentation can be built by running
+`make github` in the `docsource/` directory.
+
+Tooling: [black](https://github.com/psf/black) and
+[isort](https://github.com/timothycrosley/isort) for formatting,
+[flake8](https://flake8.pycqa.org/en/latest/) for linting, and
+[mypy](https://github.com/python/mypy) for static type-checking.
+
+Until `numpy 1.20.0` [is released](https://github.com/numpy/numpy/pull/16515),
+type-checking also requires that NumPy stubs are installed manually:
+
+```
+pip install https://github.com/numpy/numpy-stubs/tarball/master
+```

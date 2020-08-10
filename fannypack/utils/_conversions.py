@@ -1,15 +1,12 @@
 import dataclasses
 import functools
-from typing import Any, Callable, Dict, List, Tuple, TypeVar, Union, cast, overload
+from typing import Callable, Dict, List, Tuple, TypeVar, Union, cast, overload
 
 import numpy as np
 import torch
 
 # Type aliases, variables
-# > We'd ideally be able to use a TypeVar for ContainerOut, but handling the wrapped
-#   types is very hard
-ContainerIn = TypeVar("ContainerIn", Dict, List, Tuple)
-ContainerOut = Any
+Container = TypeVar("Container", Dict, List, Tuple)
 InputType = TypeVar("InputType", np.ndarray, torch.Tensor)
 OutputType = TypeVar("OutputType", np.ndarray, torch.Tensor)
 
@@ -23,8 +20,8 @@ def _convert_recursive(
 
 @overload
 def _convert_recursive(
-    x: ContainerIn, convert: Callable[[InputType], OutputType], input_type: type,
-) -> ContainerOut:
+    x: Container, convert: Callable[[InputType], OutputType], input_type: type,
+) -> Container:
     ...
 
 
@@ -83,15 +80,13 @@ def to_device(
 
 
 @overload
-def to_device(
-    x: ContainerIn, device: torch.device, detach: bool = False
-) -> ContainerOut:
+def to_device(x: Container, device: torch.device, detach: bool = False) -> Container:
     ...
 
 
 def to_device(
-    x: Union[ContainerIn, torch.Tensor], device: torch.device, detach: bool = False
-) -> Union[ContainerIn, torch.Tensor]:
+    x: Union[Container, torch.Tensor], device: torch.device, detach: bool = False
+) -> Union[Container, torch.Tensor]:
     """Move a torch tensor, list of tensors, dict, or dataclass of tensors to a
     different device. Recursively applied for nested containers.
 
@@ -123,8 +118,8 @@ def to_torch(
 
 @overload
 def to_torch(
-    x: ContainerIn, device: str = "cpu", convert_doubles_to_floats: bool = True,
-) -> ContainerOut:
+    x: Container, device: str = "cpu", convert_doubles_to_floats: bool = True,
+) -> Container:
     ...
 
 
@@ -162,7 +157,7 @@ def to_numpy(x: torch.Tensor) -> np.ndarray:
 
 
 @overload
-def to_numpy(x: ContainerIn) -> ContainerOut:
+def to_numpy(x: Container) -> Container:
     ...
 
 
