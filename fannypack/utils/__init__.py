@@ -4,6 +4,7 @@ from ._conversions import to_device, to_numpy, to_torch
 from ._deprecation import deprecation_wrapper, new_name_wrapper
 from ._git import get_git_commit_hash
 from ._math import (
+    cholupdate,
     gaussian_log_prob,
     matrix_dim_from_tril_count,
     quadratic_matmul,
@@ -25,3 +26,25 @@ TrajectoriesFile = new_name_wrapper(
     "fannypack.data.TrajectoriesFile",
     _trajectories_file.TrajectoriesFile,
 )
+
+__all__ = [
+    "Buddy",
+    "to_device",
+    "to_numpy",
+    "to_torch",
+    "deprecation_wrapper",
+    "new_name_wrapper",
+    "get_git_commit_hash",
+    "cholupdate",
+    "gaussian_log_prob",
+    "matrix_dim_from_tril_count",
+    "quadratic_matmul",
+    "tril_count_from_matrix_dim",
+    "tril_from_vector",
+    "vector_from_tril",
+    "freeze_module",
+    "unfreeze_module",
+    "pdb_safety_net",
+    "SliceWrapper",
+    "squeeze",
+]

@@ -4,6 +4,70 @@ import torch
 import fannypack.utils
 
 
+def test_cholupdate():
+    """Checks rank-1 Cholesky update forward pass.
+    """
+    batch_dims = (1,)  # (5, 3, 7)
+    matrix_dim = 2
+    L = fannypack.utils.tril_from_vector(
+        torch.randn(
+            batch_dims + (fannypack.utils.tril_count_from_matrix_dim(matrix_dim),)
+        )
+    )
+    x = torch.randn(batch_dims + (matrix_dim,))
+
+    updated_L = fannypack.utils.cholupdate(L, x, sign=1)
+
+    torch.testing.assert_allclose(
+        L @ L.transpose(-1, -2) + x[..., :, None] @ x[..., None, :],
+        updated_L @ updated_L.transpose(-1, -2),
+    )
+
+
+def test_cholupdate_negative():
+    """Checks rank-1 Cholesky update forward pass, with sign set to -1.
+    """
+    batch_dims = tuple()
+    matrix_dim = 3
+    L = fannypack.utils.tril_from_vector(
+        torch.randn(
+            batch_dims + (fannypack.utils.tril_count_from_matrix_dim(matrix_dim),)
+        )
+    ) + torch.eye(matrix_dim)
+    x = torch.ones(matrix_dim) * 0.2
+
+    # Make sure our output will be PSD
+    L = torch.cholesky(L @ L.transpose(-1, -2) + x[..., :, None] @ x[..., None, :])
+
+    updated_L = fannypack.utils.cholupdate(L, x, sign=-1)
+
+    torch.testing.assert_allclose(
+        L @ L.transpose(-1, -2) - x[..., :, None] @ x[..., None, :],
+        updated_L @ updated_L.transpose(-1, -2),
+    )
+
+
+def test_cholupdate_backward():
+    """Smoke test for rank-1 Cholesky update backward pass.
+    """
+    torch.autograd.set_detect_anomaly(True)
+    batch_dims = (5, 3, 7)
+    matrix_dim = 5
+    L = fannypack.utils.tril_from_vector(
+        torch.randn(
+            batch_dims + (fannypack.utils.tril_count_from_matrix_dim(matrix_dim),),
+            requires_grad=True,
+        )
+    )
+    x = torch.randn(batch_dims + (matrix_dim,))
+
+    updated_L = fannypack.utils.cholupdate(L, x, sign=1)
+
+    # If the Cholesky update is implemented incorrectly, we'll get an "inplace
+    # operation" RuntimeError here
+    torch.sum(updated_L).backward()
+
+
 def test_quadratic_matmul():
     """Tests quadratic_matmul() by checking its backward pass.
     """

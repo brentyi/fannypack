@@ -206,7 +206,7 @@ def test_out_of_bounds_index_read(trajectories_file_read):
     (read, positive)
     """
     with trajectories_file_read as traj_file, pytest.raises(IndexError):
-        trajectories_file_read[777]
+        traj_file[777]
 
 
 def test_out_of_bounds_index_read_negative(trajectories_file_read):
@@ -214,7 +214,7 @@ def test_out_of_bounds_index_read_negative(trajectories_file_read):
     (read, negative)
     """
     with trajectories_file_read as traj_file, pytest.raises(IndexError):
-        trajectories_file_read[-777]
+        traj_file[-777]
 
 
 def test_out_of_bounds_index_write(trajectories_file_read):
@@ -222,7 +222,7 @@ def test_out_of_bounds_index_write(trajectories_file_read):
     (write, positive)
     """
     with trajectories_file_read as traj_file, pytest.raises(IndexError):
-        trajectories_file_read[777] = {}
+        traj_file[777] = {}
 
 
 def test_out_of_bounds_index_write_negative(trajectories_file_read):
@@ -230,4 +230,4 @@ def test_out_of_bounds_index_write_negative(trajectories_file_read):
     (write, negative)
     """
     with trajectories_file_read as traj_file, pytest.raises(IndexError):
-        trajectories_file_read[-777] = {}
+        traj_file[-777] = {}

@@ -2,6 +2,58 @@ import numpy as np
 import torch
 
 
+def cholupdate(L: torch.Tensor, x: torch.Tensor, sign: int = 1) -> torch.Tensor:
+    """Batched rank-1 Cholesky update.
+
+    Computes the Cholesky decomposition of `RR^T +/- xx^T`.
+
+    Args:
+        L (torch.Tensor): Lower triangular Cholesky decomposition of a PSD matrix. Shape
+            should be `(*, matrix_dim, matrix_dim)`.
+        x (torch.Tensor): Rank-1 update vector. Shape should be `(*, matrix_dim)`.
+        sign (int, optional): Set to -1 for "downdate".
+
+    Returns:
+        torch.Tensor: New L matrix. Same shape as L.
+    """
+    assert sign in (1, -1), "Sign must be +1 or -1!"
+
+    # Expected shapes: (*, dim, dim) and (*, dim)
+    batch_dims = L.shape[:-2]
+    matrix_dim = x.shape[-1]
+    assert x.shape[:-1] == batch_dims
+    assert matrix_dim == L.shape[-1] == L.shape[-2]
+
+    # Flatten batch dimensions, and clone for tensors we need to mutate
+    L = L.reshape((-1, matrix_dim, matrix_dim))
+    x = x.reshape((-1, matrix_dim)).clone()
+    L_out_cols = []
+
+    # Cholesky update; pretty much just copied from Wikipedia:
+    # https://en.wikipedia.org/wiki/Cholesky_decomposition
+    for k in range(matrix_dim):
+        r = torch.sqrt(L[:, k, k] ** 2 + sign * x[:, k] ** 2)
+        c = (r / L[:, k, k])[:, None]
+        s = (x[:, k] / L[:, k, k])[:, None]
+
+        # We build output column-by-column to avoid in-place modification errors
+        L_out_col = torch.zeros_like(L[:, :, k])
+        L_out_col[:, k] = r
+        L_out_col[:, k + 1 :] = (L[:, k + 1 :, k] + sign * s * x[:, k + 1 :]) / c
+        L_out_cols.append(L_out_col)
+
+        # We clone x at each iteration, also to avoid in-place modification errors
+        x_next = x.clone()
+        x_next[:, k + 1 :] = c * x[:, k + 1 :] - s * L_out_col[:, k + 1 :]
+        x = x_next
+
+    # Stack columns together
+    L_out = torch.stack(L_out_cols, dim=2)
+
+    # Unflatten batch dimensions and return
+    return L_out.reshape(batch_dims + (matrix_dim, matrix_dim))
+
+
 def quadratic_matmul(x: torch.Tensor, A: torch.Tensor) -> torch.Tensor:
     r"""Computes $x^\top A x$, with support for arbitrary batch axes.
 
