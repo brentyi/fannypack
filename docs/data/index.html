@@ -228,7 +228,7 @@ sense to move this directory (eg to an NFS): see
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">collections.abc.Iterable</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">typing.Generic</span></code></p>
 <p>An interface for reading/writing trajectories via h5py.</p>
 <p>Each TrajectoriesFile represents an iterable list of trajectories, where trajectores
-are stored as dictionaries that maps <code class="docutils literal notranslate"><span class="pre">str</span></code> keys to <code class="docutils literal notranslate"><span class="pre">np.ndarray</span></code> contents.</p>
+are stored as dictionaries that map <code class="docutils literal notranslate"><span class="pre">str</span></code> keys to <code class="docutils literal notranslate"><span class="pre">np.ndarray</span></code> contents.</p>
 <p>Example usage (read):</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">TrajectoriesFile</span><span class="p">(</span><span class="s1">&#39;test.hdf5&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">traj_file</span><span class="p">:</span>
 

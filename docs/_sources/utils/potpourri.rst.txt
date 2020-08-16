@@ -9,6 +9,8 @@ Miscellaneous utilities.
 Math
 ******************************************
 
+.. autofunction:: fannypack.utils.cholupdate
+
 .. autofunction:: fannypack.utils.tril_count_from_matrix_dim
 .. autofunction:: fannypack.utils.matrix_dim_from_tril_count
 
