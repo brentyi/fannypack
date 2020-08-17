@@ -16,7 +16,7 @@ def test_cholupdate():
     )
     x = torch.randn(batch_dims + (matrix_dim,))
 
-    updated_L = fannypack.utils.cholupdate(L, x, sign=1)
+    updated_L = fannypack.utils.cholupdate(L, x)
 
     torch.testing.assert_allclose(
         L @ L.transpose(-1, -2) + x[..., :, None] @ x[..., None, :],
@@ -25,7 +25,7 @@ def test_cholupdate():
 
 
 def test_cholupdate_negative():
-    """Checks rank-1 Cholesky update forward pass, with sign set to -1.
+    """Checks rank-1 Cholesky update forward pass, with weight set to -2.
     """
     batch_dims = tuple()
     matrix_dim = 3
@@ -39,10 +39,12 @@ def test_cholupdate_negative():
     # Make sure our output will be PSD
     L = torch.cholesky(L @ L.transpose(-1, -2) + x[..., :, None] @ x[..., None, :])
 
-    updated_L = fannypack.utils.cholupdate(L, x, sign=-1)
+    updated_L = fannypack.utils.cholupdate(
+        L, x, weight=torch.tensor(-2.0, dtype=torch.float32)
+    )
 
     torch.testing.assert_allclose(
-        L @ L.transpose(-1, -2) - x[..., :, None] @ x[..., None, :],
+        L @ L.transpose(-1, -2) - 2 * x[..., :, None] @ x[..., None, :],
         updated_L @ updated_L.transpose(-1, -2),
     )
 
@@ -61,7 +63,7 @@ def test_cholupdate_backward():
     )
     x = torch.randn(batch_dims + (matrix_dim,))
 
-    updated_L = fannypack.utils.cholupdate(L, x, sign=1)
+    updated_L = fannypack.utils.cholupdate(L, x)
 
     # If the Cholesky update is implemented incorrectly, we'll get an "inplace
     # operation" RuntimeError here

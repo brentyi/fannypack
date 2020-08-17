@@ -1,23 +1,26 @@
+from typing import Optional
+
 import numpy as np
 import torch
 
 
-def cholupdate(L: torch.Tensor, x: torch.Tensor, sign: int = 1) -> torch.Tensor:
+def cholupdate(
+    L: torch.Tensor, x: torch.Tensor, weight: Optional[torch.Tensor] = None
+) -> torch.Tensor:
     """Batched rank-1 Cholesky update.
 
-    Computes the Cholesky decomposition of `RR^T +/- xx^T`.
+    Computes the Cholesky decomposition of `RR^T + weight * xx^T`.
 
     Args:
         L (torch.Tensor): Lower triangular Cholesky decomposition of a PSD matrix. Shape
             should be `(*, matrix_dim, matrix_dim)`.
         x (torch.Tensor): Rank-1 update vector. Shape should be `(*, matrix_dim)`.
-        sign (int, optional): Set to -1 for "downdate".
+        weight (torch.Tensor, optional): Set to -1 for "downdate". Shape must be
+            broadcastable with `(*, matrix_dim)`.
 
     Returns:
         torch.Tensor: New L matrix. Same shape as L.
     """
-    assert sign in (1, -1), "Sign must be +1 or -1!"
-
     # Expected shapes: (*, dim, dim) and (*, dim)
     batch_dims = L.shape[:-2]
     matrix_dim = x.shape[-1]
@@ -28,6 +31,12 @@ def cholupdate(L: torch.Tensor, x: torch.Tensor, sign: int = 1) -> torch.Tensor:
     L = L.reshape((-1, matrix_dim, matrix_dim))
     x = x.reshape((-1, matrix_dim)).clone()
     L_out_cols = []
+
+    if weight is None:
+        sign = L.new_ones(1)
+    else:
+        x = x * torch.sqrt(torch.abs(weight))
+        sign = torch.sign(weight)
 
     # Cholesky update; pretty much just copied from Wikipedia:
     # https://en.wikipedia.org/wiki/Cholesky_decomposition
