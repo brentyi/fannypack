@@ -33,12 +33,12 @@ def cholupdate(
     L_out_cols = []
 
     if weight is None:
-        sign = L.new_ones(1)
+        sign = L.new_ones((1,))
     else:
         x = x * torch.sqrt(torch.abs(weight))
         sign = torch.sign(weight)
 
-    # Cholesky update; pretty much just copied from Wikipedia:
+    # Cholesky update; mostly copied from Wikipedia:
     # https://en.wikipedia.org/wiki/Cholesky_decomposition
     for k in range(matrix_dim):
         r = torch.sqrt(L[:, k, k] ** 2 + sign * x[:, k] ** 2)

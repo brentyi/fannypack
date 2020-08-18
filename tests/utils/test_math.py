@@ -40,11 +40,11 @@ def test_cholupdate_negative():
     L = torch.cholesky(L @ L.transpose(-1, -2) + x[..., :, None] @ x[..., None, :])
 
     updated_L = fannypack.utils.cholupdate(
-        L, x, weight=torch.tensor(-2.0, dtype=torch.float32)
+        L, x, weight=torch.tensor(-0.5, dtype=torch.float32)
     )
 
     torch.testing.assert_allclose(
-        L @ L.transpose(-1, -2) - 2 * x[..., :, None] @ x[..., None, :],
+        L @ L.transpose(-1, -2) - 0.5 * x[..., :, None] @ x[..., None, :],
         updated_L @ updated_L.transpose(-1, -2),
     )
 
