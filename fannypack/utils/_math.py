@@ -1,11 +1,13 @@
-from typing import Optional
+from typing import Optional, Union
 
 import numpy as np
 import torch
 
 
 def cholupdate(
-    L: torch.Tensor, x: torch.Tensor, weight: Optional[torch.Tensor] = None
+    L: torch.Tensor,
+    x: torch.Tensor,
+    weight: Optional[Union[torch.Tensor, float]] = None,
 ) -> torch.Tensor:
     """Batched rank-1 Cholesky update.
 
@@ -15,8 +17,8 @@ def cholupdate(
         L (torch.Tensor): Lower triangular Cholesky decomposition of a PSD matrix. Shape
             should be `(*, matrix_dim, matrix_dim)`.
         x (torch.Tensor): Rank-1 update vector. Shape should be `(*, matrix_dim)`.
-        weight (torch.Tensor, optional): Set to -1 for "downdate". Shape must be
-            broadcastable with `(*, matrix_dim)`.
+        weight (torch.Tensor or float, optional): Set to -1 for "downdate". Shape must
+            be broadcastable with `(*, matrix_dim)`.
 
     Returns:
         torch.Tensor: New L matrix. Same shape as L.
@@ -34,6 +36,9 @@ def cholupdate(
 
     if weight is None:
         sign = L.new_ones((1,))
+    elif isinstance(weight, float):
+        x = x * np.sqrt(np.abs(weight))
+        sign = np.sign(weight)
     else:
         x = x * torch.sqrt(torch.abs(weight))
         sign = torch.sign(weight)
