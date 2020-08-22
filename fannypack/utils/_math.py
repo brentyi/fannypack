@@ -34,11 +34,12 @@ def cholupdate(
     x = x.reshape((-1, matrix_dim)).clone()
     L_out_cols = []
 
+    sign: Union[float, torch.Tensor]
     if weight is None:
         sign = L.new_ones((1,))
     elif isinstance(weight, float):
         x = x * np.sqrt(np.abs(weight))
-        sign = np.sign(weight)
+        sign = float(np.sign(weight))
     else:
         x = x * torch.sqrt(torch.abs(weight))
         sign = torch.sign(weight)
