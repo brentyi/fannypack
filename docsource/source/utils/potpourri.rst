@@ -40,3 +40,4 @@ Debugging
 ******************************************
 
 .. autofunction:: fannypack.utils.pdb_safety_net
+.. autofunction:: fannypack.utils.get_git_commit_hash
