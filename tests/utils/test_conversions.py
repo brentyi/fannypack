@@ -1,4 +1,4 @@
-from typing import Dict, Tuple
+from typing import Any, Dict, Tuple, NamedTuple
 
 import numpy as np
 import pytest
@@ -65,3 +65,19 @@ def test_to_device():
     X_new = fannypack.utils.to_device(X_torch, torch.device("cpu"), detach=True)
     assert X_torch["data"][0].shape == X_new["data"][0].shape
     assert type(X_new["data"][0]) == torch.Tensor
+
+def test_named_tuple():
+    """Check that we can convert named tuples.
+    """
+
+    class P(NamedTuple):
+        x: Any
+        y: Any
+
+    p = P(np.array(1), np.array(2))
+    p_torch = fannypack.utils.to_torch(p)
+    assert type(p_torch.x) == torch.Tensor
+    assert type(p_torch.y) == torch.Tensor
+    assert int(p_torch.x) == 1
+    assert int(p_torch.y) == 2
+

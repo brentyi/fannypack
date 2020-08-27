@@ -51,7 +51,10 @@ def _convert_recursive(x, convert, input_type):
     # Convert tuples of values
     if isinstance(x, tuple):
         x = cast(tuple, x)
-        return tuple(map(convert_recursive, x))
+        if hasattr(x, "_fields"): # NamedTuple
+            return type(x)(*map(convert_recursive, x))
+        else:
+            return tuple(map(convert_recursive, x))
 
     # Unsupported input types
     assert False, f"Unsupported datatype {type(x)}!"
