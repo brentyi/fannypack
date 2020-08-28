@@ -75,17 +75,19 @@ def to_device(x: Container, device: torch.device, detach: bool = False) -> Conta
 def to_device(
     x: Union[Container, torch.Tensor], device: torch.device, detach: bool = False
 ) -> Union[Container, torch.Tensor]:
-    """Move a torch tensor, list, tuple, or dict of tensors to a
+    """Move a torch tensor, list, tuple (standard or named), or dict of tensors to a
     different device. Recursively applied for nested containers.
 
     Args:
-        x (torch.Tensor, list, tuple, or dict): Tensor or container of tensors to move.
+        x (torch.Tensor, list, tuple (standard or named), or dict): Tensor or container
+            of tensors to move.
         device (torch.device): Target device.
         detach (bool, optional): If set, detaches tensors after moving. Defaults to
             False.
 
     Returns:
-        torch.Tensor, list, tuple, or dict: Output, type will mirror input.
+        torch.Tensor, list, tuple (standard or named), or dict: Output, type will mirror
+        input.
     """
 
     def convert(x):
@@ -113,19 +115,19 @@ def to_torch(
 def to_torch(
     x, device="cpu", convert_doubles_to_floats=True,
 ):
-    """Converts a NumPy array, list, tuple, or dict of NumPy arrays for use in PyTorch.
-    Recursively applied for nested containers.
+    """Converts a NumPy array, list, tuple (standard or named), or dict of NumPy arrays
+    for use in PyTorch.  Recursively applied for nested containers.
 
     Args:
-        x (np.ndarray, list, tuple, or dict): Array or container of arrays to convert to
-            torch tensors.
+        x (np.ndarray, list, tuple (standard or named), or dict): Array or container of
+            arrays to convert to torch tensors.
         device (torch.device, optional): Torch device to create tensors on. Defaults to
             `"cpu"`.
         convert_doubles_to_floats (bool, optional): If set, converts 64-bit floats to
             32-bit. Defaults to True.
 
     Returns:
-        torch.Tensor, list, tuple, or dict: Output, type will mirror input.
+        torch.Tensor, list, tuple (standard or named), or dict: Output, type will mirror input.
     """
 
     def convert(x: np.ndarray) -> torch.Tensor:
@@ -149,15 +151,15 @@ def to_numpy(x: Container) -> Container:
 
 
 def to_numpy(x):
-    """Converts a tensor, list, tuple, or dict of tensors for use in Numpy. Recursively
-    applied for nested containers.
+    """Converts a tensor, list, tuple (standard or named), or dict of tensors for use in
+    Numpy. Recursively applied for nested containers.
 
     Args:
-        x (torch.Tensor, list, tuple, or dict): Tensor or container of tensors to
-            convert to NumPy.
+        x (torch.Tensor, list, tuple (standard or named), or dict): Tensor or container
+            of tensors to convert to NumPy.
 
     Returns:
-        np.ndarray, list, tuple, or dict: Output, type will mirror input.
+        np.ndarray, list, tuple (standard or named), or dict: Output, type will mirror input.
     """
 
     def convert(x: torch.Tensor) -> np.ndarray:

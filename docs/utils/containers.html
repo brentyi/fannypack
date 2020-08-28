@@ -1,8 +1,7 @@
 
 
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8">
   
@@ -12,12 +11,18 @@
   
 
   
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
   
   
   
 
   
-  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
@@ -31,10 +36,6 @@
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
     
-
-  
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Potpourri" href="potpourri.html" />
@@ -52,7 +53,7 @@
           
 
           
-            <a href="../index.html" class="icon icon-home"> fannypack
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> fannypack
           
 
           
@@ -75,6 +76,7 @@
           
         </div>
 
+        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
@@ -101,6 +103,7 @@
             
           
         </div>
+        
       </div>
     </nav>
 
@@ -139,7 +142,7 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="../index.html">Docs</a> &raquo;</li>
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
         
           <li><a href="index.html">fannypack.utils</a> &raquo;</li>
         
@@ -178,53 +181,55 @@
 <code class="sig-prename descclassname">fannypack.utils.</code><code class="sig-name descname">to_device</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span><span class="p">:</span> <span class="n">torch.Tensor</span></em>, <em class="sig-param"><span class="n">device</span><span class="p">:</span> <span class="n">torch.device</span></em>, <em class="sig-param"><span class="n">detach</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">'False'</span></em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="headerlink" href="#fannypack.utils.to_device" title="Permalink to this definition">¶</a></dt>
 <dt>
 <code class="sig-prename descclassname">fannypack.utils.</code><code class="sig-name descname">to_device</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span><span class="p">:</span> <span class="n">Container</span></em>, <em class="sig-param"><span class="n">device</span><span class="p">:</span> <span class="n">torch.device</span></em>, <em class="sig-param"><span class="n">detach</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">'False'</span></em><span class="sig-paren">)</span> &#x2192; Container</dt>
-<dd><p>Move a torch tensor, list, tuple, or dict of tensors to a
+<dd><p>Move a torch tensor, list, tuple (standard or named), or dict of tensors to a
 different device. Recursively applied for nested containers.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> (<em>torch.Tensor</em><em>, </em><em>list</em><em>, </em><em>tuple</em><em>, or </em><em>dict</em>) – Tensor or container of tensors to move.</p></li>
+<li><p><strong>x</strong> (<em>torch.Tensor</em><em>, </em><em>list</em><em>, </em><em>tuple</em><em> (</em><em>standard</em><em> or </em><em>named</em><em>)</em><em>, or </em><em>dict</em>) – Tensor or container
+of tensors to move.</p></li>
 <li><p><strong>device</strong> (<em>torch.device</em>) – Target device.</p></li>
 <li><p><strong>detach</strong> (<em>bool</em><em>, </em><em>optional</em>) – If set, detaches tensors after moving. Defaults to
 False.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><em>torch.Tensor, list, tuple, or dict</em> – Output, type will mirror input.</p>
+<dd class="field-even"><p><em>torch.Tensor, list, tuple (standard or named), or dict</em> – Output, type will mirror
+input.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt id="fannypack.utils.to_numpy">
-<code class="sig-prename descclassname">fannypack.utils.</code><code class="sig-name descname">to_numpy</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span> &#x2192; np.ndarray<a class="headerlink" href="#fannypack.utils.to_numpy" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">fannypack.utils.</code><code class="sig-name descname">to_numpy</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="headerlink" href="#fannypack.utils.to_numpy" title="Permalink to this definition">¶</a></dt>
 <dt>
 <code class="sig-prename descclassname">fannypack.utils.</code><code class="sig-name descname">to_numpy</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span><span class="p">:</span> <span class="n">Container</span></em><span class="sig-paren">)</span> &#x2192; Container</dt>
-<dd><p>Converts a tensor, list, tuple, or dict of tensors for use in Numpy. Recursively
-applied for nested containers.</p>
+<dd><p>Converts a tensor, list, tuple (standard or named), or dict of tensors for use in
+Numpy. Recursively applied for nested containers.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>x</strong> (<em>torch.Tensor</em><em>, </em><em>list</em><em>, </em><em>tuple</em><em>, or </em><em>dict</em>) – Tensor or container of tensors to
-convert to NumPy.</p>
+<dd class="field-odd"><p><strong>x</strong> (<em>torch.Tensor</em><em>, </em><em>list</em><em>, </em><em>tuple</em><em> (</em><em>standard</em><em> or </em><em>named</em><em>)</em><em>, or </em><em>dict</em>) – Tensor or container
+of tensors to convert to NumPy.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><em>np.ndarray, list, tuple, or dict</em> – Output, type will mirror input.</p>
+<dd class="field-even"><p><em>np.ndarray, list, tuple (standard or named), or dict</em> – Output, type will mirror input.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt id="fannypack.utils.to_torch">
-<code class="sig-prename descclassname">fannypack.utils.</code><code class="sig-name descname">to_torch</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span><span class="p">:</span> <span class="n">np.ndarray</span></em>, <em class="sig-param"><span class="n">device</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">&quot;'cpu'&quot;</span></em>, <em class="sig-param"><span class="n">convert_doubles_to_floats</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">'True'</span></em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="headerlink" href="#fannypack.utils.to_torch" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">fannypack.utils.</code><code class="sig-name descname">to_torch</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span><span class="p">:</span> <span class="n">numpy.ndarray</span></em>, <em class="sig-param"><span class="n">device</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">&quot;'cpu'&quot;</span></em>, <em class="sig-param"><span class="n">convert_doubles_to_floats</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">'True'</span></em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="headerlink" href="#fannypack.utils.to_torch" title="Permalink to this definition">¶</a></dt>
 <dt>
 <code class="sig-prename descclassname">fannypack.utils.</code><code class="sig-name descname">to_torch</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span><span class="p">:</span> <span class="n">Container</span></em>, <em class="sig-param"><span class="n">device</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">&quot;'cpu'&quot;</span></em>, <em class="sig-param"><span class="n">convert_doubles_to_floats</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">'True'</span></em><span class="sig-paren">)</span> &#x2192; Container</dt>
-<dd><p>Converts a NumPy array, list, tuple, or dict of NumPy arrays for use in PyTorch.
-Recursively applied for nested containers.</p>
+<dd><p>Converts a NumPy array, list, tuple (standard or named), or dict of NumPy arrays
+for use in PyTorch.  Recursively applied for nested containers.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> (<em>np.ndarray</em><em>, </em><em>list</em><em>, </em><em>tuple</em><em>, or </em><em>dict</em>) – Array or container of arrays to convert to
-torch tensors.</p></li>
+<li><p><strong>x</strong> (<em>np.ndarray</em><em>, </em><em>list</em><em>, </em><em>tuple</em><em> (</em><em>standard</em><em> or </em><em>named</em><em>)</em><em>, or </em><em>dict</em>) – Array or container of
+arrays to convert to torch tensors.</p></li>
 <li><p><strong>device</strong> (<em>torch.device</em><em>, </em><em>optional</em>) – Torch device to create tensors on. Defaults to
 <code class="docutils literal notranslate"><span class="pre">&quot;cpu&quot;</span></code>.</p></li>
 <li><p><strong>convert_doubles_to_floats</strong> (<em>bool</em><em>, </em><em>optional</em>) – If set, converts 64-bit floats to
@@ -232,7 +237,7 @@ torch tensors.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><em>torch.Tensor, list, tuple, or dict</em> – Output, type will mirror input.</p>
+<dd class="field-even"><p><em>torch.Tensor, list, tuple (standard or named), or dict</em> – Output, type will mirror input.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -471,7 +476,7 @@ our wrapped values, starting from the leftmost dimension.</p>
 <h2><a class="toc-backref" href="#id3">Generic Squeeze</a><a class="headerlink" href="#generic-squeeze" title="Permalink to this headline">¶</a></h2>
 <dl class="py function">
 <dt id="fannypack.utils.squeeze">
-<code class="sig-prename descclassname">fannypack.utils.</code><code class="sig-name descname">squeeze</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span><span class="p">:</span> <span class="n">Any</span></em>, <em class="sig-param"><span class="n">axis</span><span class="p">:</span> <span class="n">Union[int, Tuple[int, …]]</span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; Any<a class="headerlink" href="#fannypack.utils.squeeze" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">fannypack.utils.</code><code class="sig-name descname">squeeze</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span><span class="p">:</span> <span class="n">Any</span></em>, <em class="sig-param"><span class="n">axis</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>int<span class="p">, </span>Tuple<span class="p">[</span>int<span class="p">, </span><span class="p">…</span><span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; Any<a class="headerlink" href="#fannypack.utils.squeeze" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generic squeeze function, for all sliceable objects with a <code class="docutils literal notranslate"><span class="pre">shape</span></code> field.</p>
 <p>Designed for <a class="reference internal" href="#fannypack.utils.SliceWrapper" title="fannypack.utils.SliceWrapper"><code class="xref py py-class docutils literal notranslate"><span class="pre">fannypack.utils.SliceWrapper</span></code></a>, but should also work with NumPy
 arrays, torch Tensors, etc.</p>
@@ -513,11 +518,19 @@ If None (default), squeezes all dimensions with value <code class="docutils lite
 
   <div role="contentinfo">
     <p>
+        
         &copy; Copyright 2020
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -528,7 +541,6 @@ If None (default), squeezes all dimensions with value <code class="docutils lite
 
   </div>
   
-
 
   <script type="text/javascript">
       jQuery(function () {
