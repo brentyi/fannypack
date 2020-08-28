@@ -2,9 +2,7 @@ from typing import TYPE_CHECKING
 
 # When not type-checking, submodules are loaded lazily to reduce import time
 if TYPE_CHECKING:
-    from . import data
-    from . import nn
-    from . import utils
+    from . import data, nn, utils
 
 __all__ = ["data", "nn", "utils"]
 

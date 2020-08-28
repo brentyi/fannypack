@@ -7,8 +7,8 @@ from typing import TYPE_CHECKING, Any, Callable, Dict, Optional, Union, cast
 import torch
 
 if TYPE_CHECKING:
-    from ._checkpointing import _BuddyCheckpointing
     from .._buddy import Buddy
+    from ._checkpointing import _BuddyCheckpointing
 
 
 class _BuddyOptimizer(abc.ABC):

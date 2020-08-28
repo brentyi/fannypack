@@ -1,4 +1,4 @@
-from typing import Any, Dict, Tuple, NamedTuple
+from typing import Any, Dict, NamedTuple, Tuple
 
 import numpy as np
 import pytest
@@ -66,6 +66,7 @@ def test_to_device():
     assert X_torch["data"][0].shape == X_new["data"][0].shape
     assert type(X_new["data"][0]) == torch.Tensor
 
+
 def test_named_tuple():
     """Check that we can convert named tuples.
     """
@@ -80,4 +81,3 @@ def test_named_tuple():
     assert type(p_torch.y) == torch.Tensor
     assert int(p_torch.x) == 1
     assert int(p_torch.y) == 2
-

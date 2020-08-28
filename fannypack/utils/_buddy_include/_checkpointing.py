@@ -13,8 +13,8 @@ import numpy as np
 import torch
 
 if TYPE_CHECKING:
-    from ._optimizer import _BuddyOptimizer
     from .._buddy import Buddy
+    from ._optimizer import _BuddyOptimizer
 
 
 class _BuddyCheckpointing(abc.ABC):

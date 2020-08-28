@@ -51,7 +51,7 @@ def _convert_recursive(x, convert, input_type):
     # Convert tuples of values
     if isinstance(x, tuple):
         x = cast(tuple, x)
-        if hasattr(x, "_fields"): # NamedTuple
+        if hasattr(x, "_fields"):  # NamedTuple
             return type(x)(*map(convert_recursive, x))
         else:
             return tuple(map(convert_recursive, x))
