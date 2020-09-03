@@ -1,10 +1,34 @@
 import functools
-from typing import Callable, Dict, List, Tuple, Type, TypeVar, Union, cast, overload
+from typing import (
+    Any,
+    Callable,
+    Dict,
+    List,
+    Tuple,
+    Type,
+    TypeVar,
+    Union,
+    cast,
+    overload,
+)
 
 import numpy as np
 import torch
 
-Container = TypeVar("Container", bound=Union[Dict, List, Tuple])
+# Note that we define two container TypeVars:
+# - A bound container, whose output type exactly matches the input type
+#       -> For moving across devices, for example, a List[torch.Tensor] will always
+#          return a List[torch.Tensor]
+# - And a constrained container, whose output type is only guaranteed to match at the
+#   top-level
+#       -> For converting NumPy -> Torch, a List[np.ndarray] will return a
+#          List[torch.Tensor]; this is really difficult to represent in Python, so we
+#          just mark the output as a List[Any]
+
+BoundContainer = TypeVar("BoundContainer", bound=Union[Dict, List, Tuple])
+Key = TypeVar("Key")
+
+_ConstrainedContainer = TypeVar("_ConstrainedContainer", Dict, List, Tuple)
 _InputType = TypeVar("_InputType", np.ndarray, torch.Tensor)
 _OutputType = TypeVar("_OutputType", np.ndarray, torch.Tensor)
 
@@ -18,8 +42,10 @@ def _convert_recursive(
 
 @overload
 def _convert_recursive(
-    x: Container, convert: Callable[[_InputType], _OutputType], input_type: Type,
-) -> Container:
+    x: _ConstrainedContainer,
+    convert: Callable[[_InputType], _OutputType],
+    input_type: Type,
+) -> _ConstrainedContainer:
     ...
 
 
@@ -68,13 +94,13 @@ def to_device(
 
 
 @overload
-def to_device(x: Container, device: torch.device, detach: bool = False) -> Container:
+def to_device(
+    x: BoundContainer, device: torch.device, detach: bool = False
+) -> BoundContainer:
     ...
 
 
-def to_device(
-    x: Union[Container, torch.Tensor], device: torch.device, detach: bool = False
-) -> Union[Container, torch.Tensor]:
+def to_device(x, device, detach=False):
     """Move a torch tensor, list, tuple (standard or named), or dict of tensors to a
     different device. Recursively applied for nested containers.
 
@@ -98,6 +124,10 @@ def to_device(
     return _convert_recursive(x, convert=convert, input_type=torch.Tensor)
 
 
+# This a lot of boilerplate, but seems impossible to reproduce same level of specificity
+# with TypeVars
+
+
 @overload
 def to_torch(
     x: np.ndarray, device: str = "cpu", convert_doubles_to_floats: bool = True,
@@ -107,8 +137,47 @@ def to_torch(
 
 @overload
 def to_torch(
-    x: Container, device: str = "cpu", convert_doubles_to_floats: bool = True,
-) -> Container:
+    x: List[np.ndarray], device: str = "cpu", convert_doubles_to_floats: bool = True,
+) -> List[torch.Tensor]:
+    ...
+
+
+@overload
+def to_torch(
+    x: List, device: str = "cpu", convert_doubles_to_floats: bool = True,
+) -> List:
+    ...
+
+
+@overload
+def to_torch(
+    x: Tuple[np.ndarray, ...],
+    device: str = "cpu",
+    convert_doubles_to_floats: bool = True,
+) -> Tuple[torch.Tensor, ...]:
+    ...
+
+
+@overload
+def to_torch(
+    x: Tuple, device: str = "cpu", convert_doubles_to_floats: bool = True,
+) -> Tuple:
+    ...
+
+
+@overload
+def to_torch(
+    x: Dict[Key, np.ndarray],
+    device: str = "cpu",
+    convert_doubles_to_floats: bool = True,
+) -> Dict[Key, torch.Tensor]:
+    ...
+
+
+@overload
+def to_torch(
+    x: Dict[Key, Any], device: str = "cpu", convert_doubles_to_floats: bool = True,
+) -> Dict[Key, Any]:
     ...
 
 
@@ -146,7 +215,32 @@ def to_numpy(x: torch.Tensor) -> np.ndarray:
 
 
 @overload
-def to_numpy(x: Container) -> Container:
+def to_numpy(x: List[torch.Tensor]) -> List[np.ndarray]:
+    ...
+
+
+@overload
+def to_numpy(x: List) -> List:
+    ...
+
+
+@overload
+def to_numpy(x: Tuple[torch.Tensor, ...]) -> Tuple[np.ndarray, ...]:
+    ...
+
+
+@overload
+def to_numpy(x: Tuple) -> Tuple:
+    ...
+
+
+@overload
+def to_numpy(x: Dict[Key, torch.Tensor]) -> Dict[Key, np.ndarray]:
+    ...
+
+
+@overload
+def to_numpy(x: Dict[Key, Any]) -> Dict[Key, Any]:
     ...
 
 
