@@ -14,10 +14,9 @@ from typing import (
     overload,
 )
 
+import fannypack
 import numpy as np
 import torch
-
-import fannypack
 
 # Valid raw types that we can wrap
 _raw_types = set([list, tuple, np.ndarray, torch.Tensor])
@@ -26,18 +25,16 @@ _raw_types = set([list, tuple, np.ndarray, torch.Tensor])
 MapOutputType = TypeVar("MapOutputType")
 WrappedType = TypeVar(
     "WrappedType",
-    List,
-    Tuple,
-    torch.Tensor,
-    np.ndarray,
-    Dict[Any, List],
-    Dict[Any, Tuple],
-    Dict[Any, torch.Tensor],
-    Dict[Any, np.ndarray],
-    Union[List, Dict[Any, List]],
-    Union[Tuple, Dict[Any, Tuple]],
-    Union[torch.Tensor, Dict[Any, torch.Tensor]],
-    Union[np.ndarray, Dict[Any, np.ndarray]],
+    bound=Union[
+        List,
+        Tuple,
+        torch.Tensor,
+        np.ndarray,
+        Dict[Any, List],
+        Dict[Any, Tuple],
+        Dict[Any, torch.Tensor],
+        Dict[Any, np.ndarray],
+    ],
 )
 
 
