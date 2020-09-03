@@ -14,9 +14,10 @@ from typing import (
     overload,
 )
 
-import fannypack
 import numpy as np
 import torch
+
+import fannypack
 
 # Valid raw types that we can wrap
 _raw_types = set([list, tuple, np.ndarray, torch.Tensor])
