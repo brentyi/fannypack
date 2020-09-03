@@ -4,7 +4,7 @@ from typing import Callable, Dict, List, Tuple, Type, TypeVar, Union, cast, over
 import numpy as np
 import torch
 
-Container = TypeVar("Container", Dict, List, Tuple)
+Container = TypeVar("Container", bound=Union[Dict, List, Tuple])
 _InputType = TypeVar("_InputType", np.ndarray, torch.Tensor)
 _OutputType = TypeVar("_OutputType", np.ndarray, torch.Tensor)
 
