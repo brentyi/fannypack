@@ -1,0 +1,469 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Potpourri &mdash; fannypack  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]]}})</script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex/" />
+    <link rel="search" title="Search" href="../../search/" />
+    <link rel="next" title="fannypack.data" href="../../data/" />
+    <link rel="prev" title="Working With Containers" href="../containers/" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../" class="icon icon-home" alt="Documentation Home"> fannypack
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search/" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../">fannypack.utils</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../experiment_management/">Experiment Management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../containers/">Working With Containers</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Potpourri</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#math">Math</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-freezing">Module Freezing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#deprecation-helpers">Deprecation Helpers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#debugging">Debugging</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../data/">fannypack.data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../nn/">fannypack.nn</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../">fannypack</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../">fannypack.utils</a> &raquo;</li>
+        
+      <li>Potpourri</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/utils/potpourri.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="potpourri">
+<h1>Potpourri<a class="headerlink" href="#potpourri" title="Permalink to this headline">¶</a></h1>
+<p>Miscellaneous utilities.</p>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#math" id="id1">Math</a></p></li>
+<li><p><a class="reference internal" href="#module-freezing" id="id2">Module Freezing</a></p></li>
+<li><p><a class="reference internal" href="#deprecation-helpers" id="id3">Deprecation Helpers</a></p></li>
+<li><p><a class="reference internal" href="#debugging" id="id4">Debugging</a></p></li>
+</ul>
+</div>
+<div class="section" id="math">
+<h2><a class="toc-backref" href="#id1">Math</a><a class="headerlink" href="#math" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="fannypack.utils.cholupdate">
+<code class="sig-prename descclassname">fannypack.utils.</code><code class="sig-name descname">cholupdate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">L</span><span class="p">:</span> <span class="n">torch.Tensor</span></em>, <em class="sig-param"><span class="n">x</span><span class="p">:</span> <span class="n">torch.Tensor</span></em>, <em class="sig-param"><span class="n">weight</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Union<span class="p">[</span>torch.Tensor<span class="p">, </span>float<span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="headerlink" href="#fannypack.utils.cholupdate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Batched rank-1 Cholesky update.</p>
+<p>Computes the Cholesky decomposition of <code class="docutils literal notranslate"><span class="pre">RR^T</span> <span class="pre">+</span> <span class="pre">weight</span> <span class="pre">*</span> <span class="pre">xx^T</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>L</strong> (<em>torch.Tensor</em>) – Lower triangular Cholesky decomposition of a PSD matrix. Shape
+should be <code class="docutils literal notranslate"><span class="pre">(*,</span> <span class="pre">matrix_dim,</span> <span class="pre">matrix_dim)</span></code>.</p></li>
+<li><p><strong>x</strong> (<em>torch.Tensor</em>) – Rank-1 update vector. Shape should be <code class="docutils literal notranslate"><span class="pre">(*,</span> <span class="pre">matrix_dim)</span></code>.</p></li>
+<li><p><strong>weight</strong> (<em>torch.Tensor</em><em> or </em><em>float</em><em>, </em><em>optional</em>) – Set to -1 for “downdate”. Shape must
+be broadcastable with <code class="docutils literal notranslate"><span class="pre">(*,</span> <span class="pre">matrix_dim)</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>torch.Tensor</em> – New L matrix. Same shape as L.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="fannypack.utils.tril_count_from_matrix_dim">
+<code class="sig-prename descclassname">fannypack.utils.</code><code class="sig-name descname">tril_count_from_matrix_dim</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">matrix_dim</span><span class="p">:</span> <span class="n">int</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils.tril_count_from_matrix_dim" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the number of lower triangular terms in a square matrix of a given
+dimension <code class="docutils literal notranslate"><span class="pre">(matrix_dim,</span> <span class="pre">matrix_dim)</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>matrix_dim</strong> (<em>int</em>) – Dimension of square matrix.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>int</em> – Count of lower-triangular terms.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="fannypack.utils.matrix_dim_from_tril_count">
+<code class="sig-prename descclassname">fannypack.utils.</code><code class="sig-name descname">matrix_dim_from_tril_count</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tril_count</span><span class="p">:</span> <span class="n">int</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils.matrix_dim_from_tril_count" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the dimension of a lower triangular square matrix given a count of its
+lower-triangular components.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>tril_count</strong> (<em>int</em>) – Count of lower-triangular terms.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>int</em> – Dimension of square matrix.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="fannypack.utils.tril_from_vector">
+<code class="sig-prename descclassname">fannypack.utils.</code><code class="sig-name descname">tril_from_vector</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">lower_vector</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="headerlink" href="#fannypack.utils.tril_from_vector" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes lower-triangular square matrices from a flattened vector of nonzero
+terms. Supports arbitrary batch dimensions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>lower_vector</strong> (<em>torch.Tensor</em>) – Vectors containing the nonzero terms of a
+square lower-triangular matrix. Shape should be <code class="docutils literal notranslate"><span class="pre">(*,</span> <span class="pre">tril_count)</span></code>.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>torch.Tensor</em> – Square matrices. Shape should be <code class="docutils literal notranslate"><span class="pre">(*,</span> <span class="pre">matrix_dim,</span> <span class="pre">matrix_dim)</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="fannypack.utils.vector_from_tril">
+<code class="sig-prename descclassname">fannypack.utils.</code><code class="sig-name descname">vector_from_tril</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tril_matrix</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="headerlink" href="#fannypack.utils.vector_from_tril" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves the lower triangular terms of square matrices as vectors. Supports
+arbitrary batch dimensions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>tril_matrix</strong> (<em>torch.Tensor</em>) – Square matrices. Shape should be
+<code class="docutils literal notranslate"><span class="pre">(*,</span> <span class="pre">matrix_dim,</span> <span class="pre">matrix_dim)</span></code></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>torch.Tensor</em> – Flattened vectors. Shape should be <code class="docutils literal notranslate"><span class="pre">(*,</span> <span class="pre">tril_count)</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="fannypack.utils.gaussian_log_prob">
+<code class="sig-prename descclassname">fannypack.utils.</code><code class="sig-name descname">gaussian_log_prob</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mean</span><span class="p">:</span> <span class="n">torch.Tensor</span></em>, <em class="sig-param"><span class="n">covariance</span><span class="p">:</span> <span class="n">torch.Tensor</span></em>, <em class="sig-param"><span class="n">value</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="headerlink" href="#fannypack.utils.gaussian_log_prob" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes log probabilities under multivariate Gaussian distributions,
+with support for arbitrary batch axes.</p>
+<p>Naive version of…</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">torch</span><span class="o">.</span><span class="n">distributions</span><span class="o">.</span><span class="n">MultivariateNormal</span><span class="p">(</span>
+    <span class="n">mean</span><span class="p">,</span> <span class="n">covariance</span>
+<span class="p">)</span><span class="o">.</span><span class="n">log_prob</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>that avoids some Cholesky-related CUDA errors.
+<a class="reference external" href="https://discuss.pytorch.org/t/cuda-illegal-memory-access-when-using-batched-torch-cholesky/51624">https://discuss.pytorch.org/t/cuda-illegal-memory-access-when-using-batched-torch-cholesky/51624</a></p>
+<p>Stolen from &#64;alberthli/&#64;wuphilipp.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mean</strong> (<em>torch.Tensor</em>) – Means vectors. Shape should be <code class="docutils literal notranslate"><span class="pre">(*,</span> <span class="pre">D)</span></code>.</p></li>
+<li><p><strong>covariance</strong> (<em>torch.Tensor</em>) – Covariances matrices. Shape should be <code class="docutils literal notranslate"><span class="pre">(*,</span> <span class="pre">D,</span> <span class="pre">D)</span></code>.</p></li>
+<li><p><strong>value</strong> (<em>torch.Tensor</em>) – State vectors. Shape should be <code class="docutils literal notranslate"><span class="pre">(*,</span> <span class="pre">D)</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>torch.Tensor</em> – Batched log probabilities. Shape should be <code class="docutils literal notranslate"><span class="pre">(*)</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="fannypack.utils.quadratic_matmul">
+<code class="sig-prename descclassname">fannypack.utils.</code><code class="sig-name descname">quadratic_matmul</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span><span class="p">:</span> <span class="n">torch.Tensor</span></em>, <em class="sig-param"><span class="n">A</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="headerlink" href="#fannypack.utils.quadratic_matmul" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes <span class="math notranslate nohighlight">\(x^\top A x\)</span>, with support for arbitrary batch axes.</p>
+<p>Stolen from &#64;alberthli/&#64;wuphilipp.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>torch.Tensor</em>) – Vectors. Shape should be <code class="docutils literal notranslate"><span class="pre">(*,</span> <span class="pre">D)</span></code>.</p></li>
+<li><p><strong>A</strong> (<em>torch.Tensor</em>) – Matrices. Shape should be <code class="docutils literal notranslate"><span class="pre">(*,</span> <span class="pre">D,</span> <span class="pre">D)</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>torch.Tensor</em> – Batched output of multiplication. Shape should be <code class="docutils literal notranslate"><span class="pre">(*)</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-freezing">
+<h2><a class="toc-backref" href="#id2">Module Freezing</a><a class="headerlink" href="#module-freezing" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="fannypack.utils.freeze_module">
+<code class="sig-prename descclassname">fannypack.utils.</code><code class="sig-name descname">freeze_module</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">module</span><span class="p">:</span> <span class="n">torch.nn.modules.module.Module</span></em>, <em class="sig-param"><span class="n">recurse</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#fannypack.utils.freeze_module" title="Permalink to this definition">¶</a></dt>
+<dd><p>Freeze the weights of a PyTorch module by setting the <code class="docutils literal notranslate"><span class="pre">requires_grad</span></code> attributes
+of enclosed parameters to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>module</strong> (<em>torch.nn.Module</em>) – Module to freeze.</p></li>
+<li><p><strong>recurse</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, then recursively freezes children.
+Otherwise, only freezes immediate parameters.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="fannypack.utils.unfreeze_module">
+<code class="sig-prename descclassname">fannypack.utils.</code><code class="sig-name descname">unfreeze_module</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">module</span><span class="p">:</span> <span class="n">torch.nn.modules.module.Module</span></em>, <em class="sig-param"><span class="n">recurse</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#fannypack.utils.unfreeze_module" title="Permalink to this definition">¶</a></dt>
+<dd><p>Unfreeze the weights of a PyTorch module, which needs to have been
+frozen with <a class="reference internal" href="#fannypack.utils.freeze_module" title="fannypack.utils.freeze_module"><code class="xref py py-func docutils literal notranslate"><span class="pre">fannypack.utils.freeze_module()</span></code></a>. Restores all original values
+<code class="docutils literal notranslate"><span class="pre">requires_grad</span></code> values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>module</strong> (<em>torch.nn.Module</em>) – Module to unfreeze.</p></li>
+<li><p><strong>recurse</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, then recursively unfreezes children.
+Otherwise, only unfreezes immediate parameters.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="deprecation-helpers">
+<h2><a class="toc-backref" href="#id3">Deprecation Helpers</a><a class="headerlink" href="#deprecation-helpers" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="fannypack.utils.new_name_wrapper">
+<code class="sig-prename descclassname">fannypack.utils.</code><code class="sig-name descname">new_name_wrapper</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">old_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">new_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">function_or_class</span><span class="p">:</span> <span class="n">Callable</span></em><span class="sig-paren">)</span> &#x2192; Callable<a class="headerlink" href="#fannypack.utils.new_name_wrapper" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a wrapper for a renamed function or class. Prints a warning the first
+time a function or class is called with the old name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>old_name</strong> (<em>str</em>) – Old name of function or class. Printed in warning.</p></li>
+<li><p><strong>new_name</strong> (<em>str</em>) – New name of function or class. Printed in warning.</p></li>
+<li><p><strong>function_or_class</strong> (<em>Callable</em>) – Function or class to wrap.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>Callable</em> – Wrapped function/class.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="fannypack.utils.deprecation_wrapper">
+<code class="sig-prename descclassname">fannypack.utils.</code><code class="sig-name descname">deprecation_wrapper</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">message</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">function_or_class</span><span class="p">:</span> <span class="n">Callable</span></em><span class="sig-paren">)</span> &#x2192; Callable<a class="headerlink" href="#fannypack.utils.deprecation_wrapper" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a wrapper for a deprecated function or class. Prints a warning
+the first time a function or class is called.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>message</strong> (<em>str</em>) – Warning message.</p></li>
+<li><p><strong>function_or_class</strong> (<em>Callable</em>) – Function or class to wrap.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>Callable</em> – Wrapped function/class.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="debugging">
+<h2><a class="toc-backref" href="#id4">Debugging</a><a class="headerlink" href="#debugging" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="fannypack.utils.pdb_safety_net">
+<code class="sig-prename descclassname">fannypack.utils.</code><code class="sig-name descname">pdb_safety_net</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils.pdb_safety_net" title="Permalink to this definition">¶</a></dt>
+<dd><p>Attaches a “safety net” for unexpected errors in a Python script.</p>
+<p>When called, PDB will be automatically opened when either (a) the user hits Ctrl+C
+or (b) we encounter an uncaught exception. Helpful for bypassing minor errors,
+diagnosing problems, and rescuing unsaved models.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="fannypack.utils.get_git_commit_hash">
+<code class="sig-prename descclassname">fannypack.utils.</code><code class="sig-name descname">get_git_commit_hash</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'./'</span></em><span class="sig-paren">)</span> &#x2192; str<a class="headerlink" href="#fannypack.utils.get_git_commit_hash" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the current Git commit hash.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>path</strong> (<em>str</em><em>, </em><em>optional</em>) – Path to check. Defaults to ‘./’.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../../data/" class="btn btn-neutral float-right" title="fannypack.data" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../containers/" class="btn btn-neutral float-left" title="Working With Containers" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
