@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>fannypack.utils &mdash; fannypack  documentation</title>
+  <title>Installation &mdash; fannypack  documentation</title>
   
 
   
@@ -38,8 +38,8 @@
     
     <link rel="index" title="Index" href="../genindex/" />
     <link rel="search" title="Search" href="../search/" />
-    <link rel="next" title="Experiment Management" href="experiment_management/" />
-    <link rel="prev" title="Installation" href="../installation/" /> 
+    <link rel="next" title="fannypack.utils" href="../utils/" />
+    <link rel="prev" title="fannypack" href="../" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -85,17 +85,12 @@
             
             
               <p class="caption"><span class="caption-text">User Guide</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../installation/">Installation</a></li>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a></li>
 </ul>
 <p class="caption"><span class="caption-text">API Reference</span></p>
-<ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">fannypack.utils</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="experiment_management/">Experiment Management</a></li>
-<li class="toctree-l2"><a class="reference internal" href="containers/">Working With Containers</a></li>
-<li class="toctree-l2"><a class="reference internal" href="potpourri/">Potpourri</a></li>
-</ul>
-</li>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../utils/">fannypack.utils</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../data/">fannypack.data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../nn/">fannypack.nn</a></li>
 </ul>
@@ -144,13 +139,13 @@
     
       <li><a href="../" class="icon icon-home"></a> &raquo;</li>
         
-      <li>fannypack.utils</li>
+      <li>Installation</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="../_sources/utils/index.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/installation.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -163,34 +158,18 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="fannypack-utils">
-<h1>fannypack.utils<a class="headerlink" href="#fannypack-utils" title="Permalink to this headline">¶</a></h1>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="experiment_management/">Experiment Management</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="experiment_management/#overview">Overview</a></li>
-<li class="toctree-l2"><a class="reference internal" href="experiment_management/#checkpointing">Checkpointing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="experiment_management/#optimization">Optimization</a></li>
-<li class="toctree-l2"><a class="reference internal" href="experiment_management/#tensorboard-logging">Tensorboard Logging</a></li>
-<li class="toctree-l2"><a class="reference internal" href="experiment_management/#experiment-metadata">Experiment Metadata</a></li>
-<li class="toctree-l2"><a class="reference internal" href="experiment_management/#command-line-interface">Command-line Interface</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="containers/">Working With Containers</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="containers/#recursive-conversions">Recursive Conversions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="containers/#grouped-slicing">Grouped Slicing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="containers/#generic-squeeze">Generic Squeeze</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="potpourri/">Potpourri</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="potpourri/#math">Math</a></li>
-<li class="toctree-l2"><a class="reference internal" href="potpourri/#module-freezing">Module Freezing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="potpourri/#deprecation-helpers">Deprecation Helpers</a></li>
-<li class="toctree-l2"><a class="reference internal" href="potpourri/#debugging">Debugging</a></li>
-</ul>
-</li>
-</ul>
+  <div class="section" id="installation">
+<h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
+<p>Standard installation:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install fannypack
+</pre></div>
 </div>
+<p>Install from source:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git clone https://github.com/brentyi/fannypack.git
+<span class="nb">cd</span> fannypack <span class="o">&amp;&amp;</span> pip install -e .
+</pre></div>
+</div>
+<p>Note: <cite>fannypack</cite> requires Python&gt;=3.7.</p>
 </div>
 
 
@@ -201,10 +180,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="experiment_management/" class="btn btn-neutral float-right" title="Experiment Management" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="../utils/" class="btn btn-neutral float-right" title="fannypack.utils" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="../installation/" class="btn btn-neutral float-left" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="../" class="btn btn-neutral float-left" title="fannypack" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
