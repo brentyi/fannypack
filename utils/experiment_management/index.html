@@ -549,13 +549,20 @@ only needs to be called if loading across experiments.</p>
 <dl class="py method">
 <dt id="fannypack.utils._buddy_include._metadata._BuddyMetadata.metadata">
 <em class="property">property </em><code class="sig-name descname">metadata</code><a class="headerlink" href="#fannypack.utils._buddy_include._metadata._BuddyMetadata.metadata" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a copy of our experiment metadata.</p>
+<dd><p>Read-only interface for experiment metadata.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="fannypack.utils._buddy_include._metadata._BuddyMetadata.metadata_path">
 <em class="property">property </em><code class="sig-name descname">metadata_path</code><a class="headerlink" href="#fannypack.utils._buddy_include._metadata._BuddyMetadata.metadata_path" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read-only path to my metadata file.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="fannypack.utils._buddy_include._metadata._BuddyMetadata.set_metadata">
+<code class="sig-name descname">set_metadata</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">content</span><span class="p">:</span> <span class="n">Dict<span class="p">[</span>str<span class="p">, </span>Any<span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#fannypack.utils._buddy_include._metadata._BuddyMetadata.set_metadata" title="Permalink to this definition">¶</a></dt>
+<dd><p>Assign human-readable metadata for this experiment. Input should be
+a dictionary that replaces existing metadata.</p>
 </dd></dl>
 
 </dd></dl>
