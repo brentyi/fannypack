@@ -5,11 +5,15 @@ fannypack
 
 A loose collection of helpers for training PyTorch models. Source code on `Github <https://github.com/brentyi/fannypack>`_.
 
+.. toctree::
+   :maxdepth: 5
+   :caption: User Guide
 
-Fannypack is separated into three submodules:
+   installation
 
 .. toctree::
    :maxdepth: 5
+   :caption: API Reference
 
    utils/index
    data/index

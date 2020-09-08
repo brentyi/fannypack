@@ -44,7 +44,8 @@ Command-line Interface
 
 Buddy's CLI currently supports four primary functions:
 
-- ``buddy delete {experiment_name}``: Delete an existing experiment.
+- ``buddy delete [experiment_name]``: Delete an existing experiment. Displays a
+  selection menu with metadata preview if no experiment name is passed in.
 - ``buddy info {experiment_name}``: Print summary + metadata of an existing
   experiment.
 - ``buddy list``: Print table of existing experiments + basic information.
