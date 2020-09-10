@@ -16,17 +16,11 @@ class _BuddyOptimizer(abc.ABC):
     """
 
     # Supported optimizer types
-    # TODO: improve typing here; Type[torch.optim.Optimizer] would works but the
+    # TODO: improve typing here; Type[torch.optim.Optimizer] would work but the
     # superclass constructor doesn't match the subclass constructors
     _OPTIMIZER_TYPES: Dict[str, Any] = {
         "adam": torch.optim.Adam,
         "adadelta": torch.optim.Adadelta,
-    }
-
-    # Default learning rates
-    _OPTIMIZER_DEFAULT_LEARNING_RATES: Dict[str, float] = {
-        "adam": 1e-4,
-        "adadelta": 1,
     }
 
     def __init__(
@@ -50,9 +44,9 @@ class _BuddyOptimizer(abc.ABC):
         self._optimizer_last_checkpoint_time: Optional[float] = None
 
         # Default learning rate
-        self._optimizer_default_learning_rate: Union[
-            float, Callable[[int], float]
-        ] = self._OPTIMIZER_DEFAULT_LEARNING_RATES[optimizer_type]
+        self._optimizer_default_learning_rate: Optional[
+            Union[float, Callable[[int], float]]
+        ] = None
 
     def minimize(
         self,
@@ -194,6 +188,9 @@ class _BuddyOptimizer(abc.ABC):
         self._optimizer_dict[optimizer_name] = optimizer_class(
             cast("Buddy", self).model.parameters()
         )
-        self.set_learning_rate(
-            self._optimizer_default_learning_rate, optimizer_name=optimizer_name
-        )
+
+        # Set default learning rate
+        if self._optimizer_default_learning_rate is not None:
+            self.set_learning_rate(
+                self._optimizer_default_learning_rate, optimizer_name=optimizer_name
+            )
