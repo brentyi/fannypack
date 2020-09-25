@@ -2,18 +2,16 @@ import argparse
 import os
 
 import beautifultable
+import fannypack
 import termcolor
 from pygments import formatters, highlight, lexers
-
-import fannypack
 
 from ._subcommand import Subcommand
 from ._utils import BuddyPaths, format_size, get_size
 
 
 class InfoSubcommand(Subcommand):
-    """Print info about a Buddy experiment: checkpoints, metadata, etc.
-    """
+    """Print info about a Buddy experiment: checkpoints, metadata, etc."""
 
     subcommand: str = "info"
 
@@ -67,12 +65,12 @@ class InfoSubcommand(Subcommand):
             for checkpoint_path in checkpoint_paths:
                 prefix = os.path.join(paths.checkpoint_dir, f"{experiment_name}-")
                 suffix = ".ckpt"
-                assert checkpoint_path.startswith(prefix)
-                assert checkpoint_path.endswith(suffix)
-                label = checkpoint_path[len(prefix) : -len(suffix)]
+                assert str(checkpoint_path).startswith(prefix)
+                assert str(checkpoint_path).endswith(suffix)
+                label = str(checkpoint_path)[len(prefix) : -len(suffix)]
 
                 checkpoint_labels.append(f"{label} (steps: {steps[checkpoint_path]})")
-                checkpoint_total_size += get_size(checkpoint_path)
+                checkpoint_total_size += get_size(str(checkpoint_path))
 
             add_table_row(
                 "Total checkpoint size",

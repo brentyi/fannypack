@@ -1,11 +1,10 @@
 from __future__ import annotations
 
 import abc
-import glob
-import os
 import pathlib
 import signal
 import warnings
+from glob import escape
 from typing import TYPE_CHECKING, Any, Dict, List, Tuple, cast
 
 import dill
@@ -18,12 +17,10 @@ if TYPE_CHECKING:
 
 
 class _BuddyCheckpointing(abc.ABC):
-    """Buddy's model checkpointing interface.
-    """
+    """Buddy's model checkpointing interface."""
 
     def __init__(self, checkpoint_dir: str, checkpoint_max_to_keep: int) -> None:
-        """Checkpointing-specific setup.
-        """
+        """Checkpointing-specific setup."""
         self._checkpoint_dir = checkpoint_dir
         self._checkpoint_max_to_keep = checkpoint_max_to_keep
 
@@ -35,8 +32,10 @@ class _BuddyCheckpointing(abc.ABC):
         )
 
     def save_checkpoint(self, label: str = None) -> None:
-        """Saves a checkpoint, which can optionally be labeled.
-        """
+        """Saves a checkpoint, which can optionally be labeled."""
+
+        checkpoint_dir = pathlib.Path(self._checkpoint_dir)
+
         # Determine path to checkpoint file
         if label is not None:
             # Label explicitly specified!
@@ -45,16 +44,14 @@ class _BuddyCheckpointing(abc.ABC):
             label = cast(str, label)
             assert not label.isdigit()
 
-            path = "{}/{}-{}.ckpt".format(
-                self._checkpoint_dir, cast("Buddy", self)._experiment_name, label
-            )
+            experiment_name = cast("Buddy", self)._experiment_name
+            path = checkpoint_dir / f"{experiment_name}-{label}.ckpt"
         else:
             # Automatically decide label using global step count
             optimizer_steps = cast("_BuddyOptimizer", self).optimizer_steps
-            path = "{}/{}-{:016d}.ckpt".format(
-                self._checkpoint_dir,
-                cast("Buddy", self)._experiment_name,
-                optimizer_steps,
+            path = (
+                checkpoint_dir
+                / f"{cast('Buddy', self)._experiment_name}-{optimizer_steps:016d}.ckpt"
             )
 
             if (
@@ -65,9 +62,8 @@ class _BuddyCheckpointing(abc.ABC):
                 return
 
         # Create directory if it doesn't exist yet
-        checkpoint_dir = pathlib.Path(path).parents[0]
-        if not os.path.isdir(checkpoint_dir):
-            os.makedirs(checkpoint_dir)
+        if not checkpoint_dir.exists():
+            checkpoint_dir.mkdir(parents=True)
 
         # Create state to save. This includes:
         # > Model state
@@ -95,11 +91,10 @@ class _BuddyCheckpointing(abc.ABC):
             orig_handler = None
 
         # Checkpoint saving
-        # > os.rename is POSIX-compliant and as such atomic
-        # > https://docs.python.org/3/library/os.html#os.rename
-        tmp_path = "{}/tmp-{}.ckpt".format(checkpoint_dir, np.random.randint(1e10))
+        # > rename is POSIX-compliant and atomic
+        tmp_path = checkpoint_dir / f"tmp-{np.random.randint(1e10)}.ckpt"
         torch.save(state, tmp_path, pickle_module=dill)
-        os.rename(tmp_path, path)
+        tmp_path.rename(path)
         cast("Buddy", self)._print("Saved checkpoint to path:", path)
 
         # Restore SIGINT handler
@@ -112,7 +107,7 @@ class _BuddyCheckpointing(abc.ABC):
 
         # Prune checkpoint files
         while len(self._checkpoint_unlabeled_files) > self._checkpoint_max_to_keep:
-            os.remove(self._checkpoint_unlabeled_files.pop(0))
+            self._checkpoint_unlabeled_files.pop(0).unlink()
 
     def load_checkpoint_module(
         self,
@@ -236,7 +231,7 @@ class _BuddyCheckpointing(abc.ABC):
 
     @property
     def checkpoint_labels(self) -> List[str]:
-        """ Accessor for listing available checkpoint labels.
+        """Accessor for listing available checkpoint labels.
         These should be saved as: `experiment_name-label.ckpt` in the
         `checkpoint_dir` directory.
 
@@ -245,29 +240,20 @@ class _BuddyCheckpointing(abc.ABC):
         """
 
         experiment_name = cast("Buddy", self)._experiment_name
-        checkpoint_dir = self._checkpoint_dir
+        checkpoint_dir = pathlib.Path(self._checkpoint_dir)
 
         # Find all matching checkpoint files
-        path_choices = glob.glob(
-            os.path.join(checkpoint_dir, f"{glob.escape(experiment_name)}-*.ckpt")
+        path_choices = checkpoint_dir.glob(f"{escape(experiment_name)}-*.ckpt")
+        path_choices = filter(
+            lambda path: path.stem.rpartition("-")[0] == experiment_name,
+            path_choices,
         )
-        path_choices = list(
-            filter(
-                lambda path: path.rpartition("-")[0].endswith(experiment_name),
-                path_choices,
-            )
-        )
-        if len(path_choices) == 0:
-            return []
 
         # Pull out labels
         output = []
         for choice in path_choices:
-            prefix_len = len(os.path.join(checkpoint_dir, f"{experiment_name}-"))
-
-            suffix_len = len(".ckpt")
-            string_label = choice[prefix_len:-suffix_len]
-            output.append(string_label)
+            label = choice.stem.partition("-")[2]
+            output.append(label)
 
         # Sort output alphabetically and return
         output.sort()
@@ -326,7 +312,9 @@ class _BuddyCheckpointing(abc.ABC):
             if experiment_name is None:
                 # Use our current experiment name by default
                 experiment_name = cast("Buddy", self)._experiment_name
-            path = os.path.join(self._checkpoint_dir, f"{experiment_name}-{label}.ckpt")
+            path = str(
+                pathlib.Path(self._checkpoint_dir) / f"{experiment_name}-{label}.ckpt"
+            )
         elif path is not None:
             # Load a checkpoint by its location
             path = path
@@ -378,41 +366,35 @@ class _BuddyCheckpointing(abc.ABC):
 
     def _find_checkpoints(
         self, checkpoint_dir: str, experiment_name: str, unlabeled_only: bool = False
-    ) -> Tuple[List[str], Dict[str, int]]:
+    ) -> Tuple[List[pathlib.Path], Dict[str, int]]:
         """(Private) Returns a list of all unlabeled checkpoints associated
         with this experiment, sorted from oldest to newest.
         """
 
         # Find all matching checkpoint files
-        path_choices = glob.glob(
-            os.path.join(checkpoint_dir, f"{glob.escape(experiment_name)}-*.ckpt")
+        path_choices = pathlib.Path(checkpoint_dir).glob(
+            f"{escape(experiment_name)}-*.ckpt"
         )
-        path_choices = list(
-            filter(
-                lambda path: path.rpartition("-")[0].endswith(experiment_name),
-                path_choices,
-            )
+        path_choices = filter(
+            lambda path: path.stem.rpartition("-")[0] == experiment_name,
+            path_choices,
         )
-        if len(path_choices) == 0:
-            return [], {}
 
         # Find checkpoint files + associated step counts
         paths = []
         step_counts = {}
         for choice in path_choices:
-            prefix_len = len("{}/{}-".format(checkpoint_dir, experiment_name))
-            suffix_len = len(".ckpt")
-
             steps = None
-            string_steps = choice[prefix_len:-suffix_len]
+            string_steps = choice.stem.partition("-")[2]
             try:
+                # Try unlabeled checkpoint
                 step_counts[choice] = int(string_steps)
-            except ValueError:
-                pass
-
-            # Only include unlabeled if unlabeld_only == True
-            if choice in step_counts or not unlabeled_only:
                 paths.append(choice)
+            except ValueError:
+                # If label can't be cast to integer: this is a labeled checkpoint
+                # Only incle unlabeled if unlabeled_only is False
+                if not unlabeled_only:
+                    paths.append(choice)
 
         # Add step counts for labeled checkpoints
         for path in paths:

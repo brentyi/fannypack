@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import abc
 import contextlib
+import pathlib
 from typing import TYPE_CHECKING, Generator, List, Optional, Union, cast
 
 import numpy as np
@@ -15,8 +16,7 @@ if TYPE_CHECKING:
 
 
 class _BuddyLogging(abc.ABC):
-    """Buddy's TensorBoard logging interface.
-    """
+    """Buddy's TensorBoard logging interface."""
 
     def __init__(self, log_dir: str) -> None:
         """Logging-specific setup.
@@ -232,10 +232,9 @@ class _BuddyLogging(abc.ABC):
 
     @property
     def log_writer(self) -> torch.utils.tensorboard.SummaryWriter:
-        """Accessor for standard Tensorboard SummaryWriter. Instantiated lazily.
-        """
+        """Accessor for standard Tensorboard SummaryWriter. Instantiated lazily."""
         if self._log_writer is None:
             self._log_writer = torch.utils.tensorboard.SummaryWriter(
-                self._log_dir + "/" + cast("Buddy", self)._experiment_name
+                pathlib.Path(self._log_dir) / cast("Buddy", self)._experiment_name
             )
         return self._log_writer
