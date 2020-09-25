@@ -243,10 +243,9 @@ class _BuddyCheckpointing(abc.ABC):
         checkpoint_dir = pathlib.Path(self._checkpoint_dir)
 
         # Find all matching checkpoint files
-        path_choices = checkpoint_dir.glob(f"{escape(experiment_name)}-*.ckpt")
         path_choices = filter(
             lambda path: path.stem.rpartition("-")[0] == experiment_name,
-            path_choices,
+            checkpoint_dir.glob(f"{escape(experiment_name)}-*.ckpt"),
         )
 
         # Pull out labels
@@ -305,7 +304,7 @@ class _BuddyCheckpointing(abc.ABC):
                 raise FileNotFoundError("Missing checkpoint file")
 
             # The list of paths will be sorted by optimizer step count
-            path = paths[-1]
+            path = str(paths[-1])
 
         elif path is None and label is not None:
             # Load a labeled checkpoint
@@ -366,18 +365,15 @@ class _BuddyCheckpointing(abc.ABC):
 
     def _find_checkpoints(
         self, checkpoint_dir: str, experiment_name: str, unlabeled_only: bool = False
-    ) -> Tuple[List[pathlib.Path], Dict[str, int]]:
+    ) -> Tuple[List[pathlib.Path], Dict[pathlib.Path, int]]:
         """(Private) Returns a list of all unlabeled checkpoints associated
         with this experiment, sorted from oldest to newest.
         """
 
         # Find all matching checkpoint files
-        path_choices = pathlib.Path(checkpoint_dir).glob(
-            f"{escape(experiment_name)}-*.ckpt"
-        )
         path_choices = filter(
             lambda path: path.stem.rpartition("-")[0] == experiment_name,
-            path_choices,
+            pathlib.Path(checkpoint_dir).glob(f"{escape(experiment_name)}-*.ckpt"),
         )
 
         # Find checkpoint files + associated step counts
@@ -404,7 +400,7 @@ class _BuddyCheckpointing(abc.ABC):
                 # This condition should never be hit
                 assert False
 
-            steps = self._read_checkpoint_file(path=path, verbose=False)[
+            steps = self._read_checkpoint_file(path=str(path), verbose=False)[
                 "optimizer_config"
             ]["global_steps"]
             step_counts[path] = steps
