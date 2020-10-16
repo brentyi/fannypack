@@ -184,3 +184,31 @@ def vector_from_tril(tril_matrix: torch.Tensor) -> torch.Tensor:
 
     tril_indices = torch.tril_indices(matrix_dim, matrix_dim)
     return tril_matrix[..., tril_indices[0], tril_indices[1]]
+
+
+def tril_inverse(tril_matrix: torch.Tensor) -> torch.Tensor:
+    """Invert a lower-triangular matrix.
+
+    Args:
+        tril_matrix (torch.Tensor): Lower-triangular matrix to invert. Shape should be
+            `(*, matrix_dim, matrix_dim)`.
+
+    Returns:
+        torch.Tensor: Inverted matrix. Shape should be `(*, matrix_dim, matrix_dim)`.
+    """
+    assert tril_matrix.shape[-1] == tril_matrix.shape[-2], "Input must be square!"
+    matrix_dim = tril_matrix.shape[-1]
+    batch_dims = tril_matrix.shape[:-2]
+
+    # Get an identity matrix
+    identity = torch.eye(tril_matrix.shape[-1], device=tril_matrix.device)
+
+    # View identity w/ batch dimensions
+    identity = identity.reshape(
+        (1,) * len(batch_dims) + (matrix_dim, matrix_dim)
+    ).expand(tril_matrix.shape)
+
+    # Invert with triangular solve
+    inverse = torch.triangular_solve(identity, tril_matrix, upper=False).solution
+    assert inverse.shape == tril_matrix.shape
+    return inverse

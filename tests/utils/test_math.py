@@ -5,8 +5,7 @@ import fannypack.utils
 
 
 def test_cholupdate():
-    """Checks rank-1 Cholesky update forward pass.
-    """
+    """Checks rank-1 Cholesky update forward pass."""
     batch_dims = (1,)  # (5, 3, 7)
     matrix_dim = 2
     L = fannypack.utils.tril_from_vector(
@@ -25,8 +24,7 @@ def test_cholupdate():
 
 
 def test_cholupdate_negative():
-    """Checks rank-1 Cholesky update forward pass, with weight set to -2.
-    """
+    """Checks rank-1 Cholesky update forward pass, with weight set to -2."""
     batch_dims = tuple()
     matrix_dim = 3
     L = fannypack.utils.tril_from_vector(
@@ -50,8 +48,7 @@ def test_cholupdate_negative():
 
 
 def test_cholupdate_negative_float_weight():
-    """Checks rank-1 Cholesky update forward pass, with weight set to -2.
-    """
+    """Checks rank-1 Cholesky update forward pass, with weight set to -2."""
     batch_dims = tuple()
     matrix_dim = 3
     L = fannypack.utils.tril_from_vector(
@@ -73,8 +70,7 @@ def test_cholupdate_negative_float_weight():
 
 
 def test_cholupdate_backward():
-    """Smoke test for rank-1 Cholesky update backward pass.
-    """
+    """Smoke test for rank-1 Cholesky update backward pass."""
     torch.autograd.set_detect_anomaly(True)
     batch_dims = (5, 3, 7)
     matrix_dim = 5
@@ -94,8 +90,7 @@ def test_cholupdate_backward():
 
 
 def test_quadratic_matmul():
-    """Tests quadratic_matmul() by checking its backward pass.
-    """
+    """Tests quadratic_matmul() by checking its backward pass."""
     N = 100
     D = 5
 
@@ -145,7 +140,9 @@ def test_gaussian_log_prob():
                     loc=mean, covariance_matrix=covariance
                 ).log_prob(value=value),
                 fannypack.utils.gaussian_log_prob(
-                    mean=mean, covariance=covariance, value=value,
+                    mean=mean,
+                    covariance=covariance,
+                    value=value,
                 ),
             ]
         ),
@@ -155,15 +152,13 @@ def test_gaussian_log_prob():
 
 
 def test_tril_count_simple():
-    """Basic counting utility check.
-    """
+    """Basic counting utility check."""
     assert fannypack.utils.matrix_dim_from_tril_count(6) == 3
     assert fannypack.utils.tril_count_from_matrix_dim(3) == 6
 
 
 def test_tril_count_bijective():
-    """Check bijectivity of our counting utilities.
-    """
+    """Check bijectivity of our counting utilities."""
 
     for matrix_dim in range(1, 100):
         assert (
@@ -187,3 +182,29 @@ def test_tril_vector_conversions():
 
             assert trils.shape == batch_dims + (matrix_dim, matrix_dim)
             assert torch.all(fannypack.utils.vector_from_tril(trils) == vectors)
+
+
+def test_tril_inverse():
+    """Check that our `tril_inverse` function correctly inverts some full-rank
+    matrices.
+    """
+    for matrix_dim in range(2, 5):
+        tril_matrix = fannypack.utils.tril_from_vector(
+            torch.randn((5, fannypack.utils.tril_count_from_matrix_dim(matrix_dim)))
+        )
+        inverse = fannypack.utils.tril_inverse(tril_matrix)
+
+        torch.testing.assert_allclose(tril_matrix @ inverse, torch.eye(matrix_dim))
+
+
+def test_tril_inverse():
+    """Check that our `tril_inverse` function correctly inverts some full-rank
+    matrices.
+    """
+    for matrix_dim in range(2, 5):
+        tril_matrix = fannypack.utils.tril_from_vector(
+            torch.randn((5, fannypack.utils.tril_count_from_matrix_dim(matrix_dim)))
+        )
+        inverse = fannypack.utils.tril_inverse(tril_matrix)
+        torch.testing.assert_allclose(tril_matrix @ inverse, torch.eye(matrix_dim))
+        torch.testing.assert_allclose(inverse @ tril_matrix, torch.eye(matrix_dim))

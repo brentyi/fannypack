@@ -10,6 +10,7 @@ from ._math import (
     quadratic_matmul,
     tril_count_from_matrix_dim,
     tril_from_vector,
+    tril_inverse,
     vector_from_tril,
 )
 from ._module_freezing import freeze_module, unfreeze_module
@@ -18,7 +19,9 @@ from ._slice_wrapper import SliceWrapper
 from ._squeeze import squeeze
 
 DictIterator = new_name_wrapper(
-    "fannypack.utils.DictIterator", "fannypack.utils.SliceWrapper", SliceWrapper,
+    "fannypack.utils.DictIterator",
+    "fannypack.utils.SliceWrapper",
+    SliceWrapper,
 )
 
 TrajectoriesFile = new_name_wrapper(
@@ -41,6 +44,7 @@ __all__ = [
     "quadratic_matmul",
     "tril_count_from_matrix_dim",
     "tril_from_vector",
+    "tril_inverse",
     "vector_from_tril",
     "freeze_module",
     "unfreeze_module",
