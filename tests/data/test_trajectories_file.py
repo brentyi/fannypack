@@ -7,8 +7,7 @@ import fannypack
 
 @pytest.fixture()
 def trajectories_file_write():
-    """Fixture for setting up a trajectories file to write to.
-    """
+    """Fixture for setting up a trajectories file to write to."""
 
     # Create object
     path = os.path.join(os.path.dirname(__file__), "temporary_trajectory.hdf5")
@@ -24,8 +23,7 @@ def trajectories_file_write():
 
 @pytest.fixture()
 def trajectories_file_read():
-    """Fixture for reading from an existing trajectories file.
-    """
+    """Fixture for reading from an existing trajectories file."""
 
     path = os.path.join(os.path.dirname(__file__), "../assets/trajectories/test.hdf5")
     trajectories_file = fannypack.data.TrajectoriesFile(path, read_only=True)
@@ -33,8 +31,7 @@ def trajectories_file_read():
 
 
 def test_write(trajectories_file_write):
-    """Checks that all of our write operations function as expected.
-    """
+    """Checks that all of our write operations function as expected."""
     # Populate our trajectories file
     with trajectories_file_write as traj_file:
         # Add some trajectories
@@ -147,8 +144,7 @@ def test_read_slice(trajectories_file_read):
 
 
 def test_read_backward(trajectories_file_read):
-    """Same as `test_read()`, but uses negative trajectory indexing.
-    """
+    """Same as `test_read()`, but uses negative trajectory indexing."""
     traj_file = trajectories_file_read
     with traj_file:
         # We should have added 5 trajectories
@@ -168,8 +164,7 @@ def test_read_backward(trajectories_file_read):
 
 
 def test_get_all_timestepped(trajectories_file_read):
-    """Checks our `get_all()` method with time series data.
-    """
+    """Checks our `get_all()` method with time series data."""
     with trajectories_file_read as traj_file:
         counter = 0
         for fives in traj_file.get_all("five"):
@@ -180,8 +175,7 @@ def test_get_all_timestepped(trajectories_file_read):
 
 
 def test_get_all_metadata(trajectories_file_read):
-    """Checks our `get_all()` method with per-trajectory metadata.
-    """
+    """Checks our `get_all()` method with per-trajectory metadata."""
     with trajectories_file_read as traj_file:
         counter = 0
         for index in traj_file.get_all("trajectory_index"):
@@ -191,8 +185,7 @@ def test_get_all_metadata(trajectories_file_read):
 
 
 def test_get_all_string(trajectories_file_read):
-    """Checks our `get_all()` method with a string-type per-trajectory metadata.
-    """
+    """Checks our `get_all()` method with a string-type per-trajectory metadata."""
     with trajectories_file_read as traj_file:
         counter = 0
         for index in traj_file.get_all("trajectory_index_string"):

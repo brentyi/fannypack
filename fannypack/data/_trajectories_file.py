@@ -91,16 +91,14 @@ class TrajectoriesFile(Iterable):
         self._file: Optional[h5py.File] = None
 
     def __enter__(self):
-        """Automatic file opening, for use in `with` statements.
-        """
+        """Automatic file opening, for use in `with` statements."""
         if self._file is None:
             self._print("Opening file...")
             self._file = self._h5py_file()
         return self
 
     def __exit__(self, *unused):
-        """Automatic file closing, for use in `with` statements.
-        """
+        """Automatic file closing, for use in `with` statements."""
         if self._file is not None:
             self._print("Closing file...")
             self._file.close()
@@ -160,14 +158,12 @@ class TrajectoriesFile(Iterable):
         return output
 
     def __iter__(self):
-        """Iterable __iter__() interface.
-        """
+        """Iterable __iter__() interface."""
         self._iter_index = 0
         return self
 
     def __next__(self) -> Dict[str, Union[np.ndarray, str]]:
-        """Iterable __next__() interface.
-        """
+        """Iterable __next__() interface."""
         try:
             output = self[self._iter_index]
             self._iter_index += 1
@@ -229,13 +225,11 @@ class TrajectoriesFile(Iterable):
                 )
 
     def __len__(self) -> int:
-        """Returns the number of recorded trajectories.
-        """
+        """Returns the number of recorded trajectories."""
         return self._trajectory_count
 
     def resize(self, count: int):
-        """Expand or contract our TrajectoriesFile.
-        """
+        """Expand or contract our TrajectoriesFile."""
         assert self._file is not None, "Not called in with statement!"
 
         if self._trajectory_count <= count:
@@ -312,8 +306,7 @@ class TrajectoriesFile(Iterable):
                 self._content_dict[key] = np.copy(value)
 
     def abandon_trajectory(self) -> None:
-        """Abandon the current trajectory.
-        """
+        """Abandon the current trajectory."""
         self._print("Abandoning trajectory")
         self._content_dict = {}
         self._current_trajectory_timesteps = 0
@@ -348,24 +341,21 @@ class TrajectoriesFile(Iterable):
         self._print("Existing trajectory count:", self._trajectory_count)
 
     def clear(self) -> None:
-        """Clear the contents of the TrajectoriesFile.
-        """
+        """Clear the contents of the TrajectoriesFile."""
         assert self._file is not None, "Not called in with statement!"
 
         for traj_key in self._file.keys():
             del self._file[traj_key]
 
     def _h5py_file(self, mode: str = None) -> h5py.File:
-        """Private helper for creating h5py file objects.
-        """
+        """Private helper for creating h5py file objects."""
         if mode is None:
             mode = "r" if self._read_only else "a"
 
         return h5py.File(self._path, mode)
 
     def _print(self, *args, **kwargs):
-        """Private helper for logging.
-        """
+        """Private helper for logging."""
         # Only print in verbose mode
         if self._verbose:
             identifier = self._path

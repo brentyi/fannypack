@@ -8,16 +8,14 @@ subcommand_registry: List[Type["Subcommand"]] = []
 
 
 class Subcommand(abc.ABC):
-    """Subcommand interface: defines arguments, runtime routine.
-    """
+    """Subcommand interface: defines arguments, runtime routine."""
 
     subcommand: str
     helptext: str
 
     @classmethod
     def __init_subclass__(cls, **kwargs):
-        """Registers a subcommand.
-        """
+        """Registers a subcommand."""
         super().__init_subclass__(**kwargs)
         subcommand_registry.append(cls)
 

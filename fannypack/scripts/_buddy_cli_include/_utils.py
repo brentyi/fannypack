@@ -5,8 +5,7 @@ from typing import Dict, List, Optional, Set, cast
 
 
 def _listdir(path: str) -> List[str]:
-    """Helper for listing files in a directory
-    """
+    """Helper for listing files in a directory"""
     try:
         return os.listdir(path)
     except FileNotFoundError:
@@ -15,8 +14,7 @@ def _listdir(path: str) -> List[str]:
 
 @dataclass(frozen=True)
 class FindOutput:
-    """Output of `find_experiments(...)`.
-    """
+    """Output of `find_experiments(...)`."""
 
     experiment_names: Set[str]
     checkpoint_counts: Dict[str, int]
@@ -26,8 +24,7 @@ class FindOutput:
 
 
 def get_size(path: str) -> int:
-    """Returns the size in bytes of the file or directory located at a path.
-    """
+    """Returns the size in bytes of the file or directory located at a path."""
     if os.path.isfile(path):
         return os.stat(path).st_size
     elif os.path.isdir(path):
@@ -42,8 +39,7 @@ def get_size(path: str) -> int:
 
 
 def format_size(size: float, short: bool = False):
-    """Converts a size in bytes to a human-readable string.
-    """
+    """Converts a size in bytes to a human-readable string."""
     units = ["B", "KiB", "MiB", "GiB", "TiB", "PiB"]
     unit_index = 0
     while size > 1024 and unit_index < len(units) - 1:
@@ -59,8 +55,7 @@ def format_size(size: float, short: bool = False):
 
 @dataclass
 class BuddyPaths:
-    """Dataclass for storing paths to experiment files.
-    """
+    """Dataclass for storing paths to experiment files."""
 
     checkpoint_dir: str
     log_dir: str
@@ -69,8 +64,7 @@ class BuddyPaths:
     _find_output_cache: Optional[FindOutput] = None
 
     def find_checkpoints(self, experiment_name: str):
-        """Finds checkpoints associated with an experiment.
-        """
+        """Finds checkpoints associated with an experiment."""
         # Glob for checkpoint files
         checkpoint_files = glob.glob(
             os.path.join(self.checkpoint_dir, f"{glob.escape(experiment_name)}-*.ckpt")
@@ -85,18 +79,15 @@ class BuddyPaths:
         )
 
     def get_log_dir(self, experiment_name: str):
-        """Returns a path to an experiment's log directory.
-        """
+        """Returns a path to an experiment's log directory."""
         return os.path.join(self.log_dir, experiment_name)
 
     def get_metadata_file(self, experiment_name: str):
-        """Returns a path to an experiment's metadata file.
-        """
+        """Returns a path to an experiment's metadata file."""
         return os.path.join(self.metadata_dir, f"{experiment_name}.yaml")
 
     def find_experiments(self, verbose: bool = False) -> FindOutput:
-        """Helper for listing experiments
-        """
+        """Helper for listing experiments"""
 
         # Return cached results
         if self._find_output_cache is not None:
@@ -179,6 +170,5 @@ class BuddyPaths:
         return self._find_output_cache
 
     def clear_cache(self):
-        """Clears the experiment list cache.
-        """
+        """Clears the experiment list cache."""
         self._find_output_cache = None

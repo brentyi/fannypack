@@ -9,8 +9,7 @@ from ..fixtures import simple_buddy_temporary_data, simple_net
 
 
 def test_freeze_integration(simple_buddy_temporary_data):
-    """Integration test for module freezing + minimizing with Buddy.
-    """
+    """Integration test for module freezing + minimizing with Buddy."""
     model, buddy, data, labels = simple_buddy_temporary_data
 
     # Minimize loss
@@ -41,8 +40,7 @@ def test_freeze_integration(simple_buddy_temporary_data):
 
 
 def test_freeze_unfreeze(simple_net):
-    """Check to make sure freezing/unfreezing a module behaves as expected.
-    """
+    """Check to make sure freezing/unfreezing a module behaves as expected."""
 
     # All parameters should be initially unfrozen
     _check_frozen(simple_net, False)
@@ -61,8 +59,7 @@ def test_freeze_unfreeze(simple_net):
 
 
 def test_unfreeze_children(simple_net):
-    """Check to make sure unfreezing child modules behaves as expected.
-    """
+    """Check to make sure unfreezing child modules behaves as expected."""
 
     # All parameters should be initially unfrozen
     _check_frozen(simple_net, False)
@@ -84,8 +81,7 @@ def test_unfreeze_children(simple_net):
 
 
 def test_freeze_children(simple_net):
-    """Check to make sure freezing child modules behaves as expected.
-    """
+    """Check to make sure freezing child modules behaves as expected."""
 
     # All parameters should be initially unfrozen
     _check_frozen(simple_net, False)

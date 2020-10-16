@@ -8,8 +8,7 @@ import fannypack
 
 
 def _run_command(command: Union[str, List[str]]) -> Tuple[AnyStr, AnyStr, int]:
-    """Helper for running a command & returning results.
-    """
+    """Helper for running a command & returning results."""
     proc = subprocess.Popen(
         command,
         stdout=subprocess.PIPE,
@@ -27,15 +26,13 @@ def _run_command(command: Union[str, List[str]]) -> Tuple[AnyStr, AnyStr, int]:
 
 
 def test_buddy_no_args():
-    """Make sure that `buddy` fails without arguments.
-    """
+    """Make sure that `buddy` fails without arguments."""
     out, err, exitcode = _run_command(["buddy"])
     assert exitcode == 2
 
 
 def test_buddy_delete_no_args():
-    """Make sure that `buddy delete` with no arguments shows a menu.
-    """
+    """Make sure that `buddy delete` with no arguments shows a menu."""
     out, err, exitcode = _run_command(["buddy", "delete"])
     assert "Navigate: j/k" in out
     assert "Select: <CR>" in out
@@ -43,15 +40,13 @@ def test_buddy_delete_no_args():
 
 
 def test_buddy_info_no_args():
-    """Make sure that `buddy info` fails without arguments.
-    """
+    """Make sure that `buddy info` fails without arguments."""
     out, err, exitcode = _run_command(["buddy", "info"])
     assert exitcode == 2
 
 
 def test_buddy_list():
-    """Check that we can list experiments.
-    """
+    """Check that we can list experiments."""
     out, err, exitcode = _run_command(["buddy", "list"])
     assert exitcode == 0
     assert out.startswith("Found 2 experiments")
@@ -59,15 +54,13 @@ def test_buddy_list():
 
 
 def test_buddy_rename_no_args():
-    """Make sure that `buddy rename` fails without arguments.
-    """
+    """Make sure that `buddy rename` fails without arguments."""
     out, err, exitcode = _run_command(["buddy", "rename"])
     assert exitcode == 2
 
 
 def test_buddy_info():
-    """Make sure that `buddy info` gives us sane results.
-    """
+    """Make sure that `buddy info` gives us sane results."""
 
     out, err, exitcode = _run_command(["buddy", "info", "simple_net"])
     assert exitcode == 0
@@ -75,8 +68,7 @@ def test_buddy_info():
 
 
 def test_buddy_rename():
-    """Make sure that we can rename experiments.
-    """
+    """Make sure that we can rename experiments."""
     # Pre-condition
     out, err, exitcode = _run_command(["buddy", "list"])
     assert exitcode == 0
@@ -99,8 +91,7 @@ def test_buddy_rename():
 
 
 def test_buddy_rename():
-    """Make sure that we can delete experiments.
-    """
+    """Make sure that we can delete experiments."""
 
     # Create experiment
     buddy = fannypack.utils.Buddy(

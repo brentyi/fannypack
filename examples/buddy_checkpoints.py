@@ -4,8 +4,7 @@ import fannypack
 
 
 class SimpleNet(nn.Module):
-    """ Simple PyTorch model. Scalar input, scalar output.
-    """
+    """Simple PyTorch model. Scalar input, scalar output."""
 
     def __init__(self):
         super().__init__()

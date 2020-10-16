@@ -2,8 +2,7 @@ from fannypack.nn import resblocks
 
 
 def test_resblock_smoke_test():
-    """Make sure we can build all resblocks.
-    """
+    """Make sure we can build all resblocks."""
 
     for inplace in (True, False):
         for activation in resblocks.Base._activation_types.keys():

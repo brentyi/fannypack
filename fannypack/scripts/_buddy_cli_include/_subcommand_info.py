@@ -2,9 +2,10 @@ import argparse
 import os
 
 import beautifultable
-import fannypack
 import termcolor
 from pygments import formatters, highlight, lexers
+
+import fannypack
 
 from ._subcommand import Subcommand
 from ._utils import BuddyPaths, format_size, get_size

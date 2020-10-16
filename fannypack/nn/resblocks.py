@@ -29,8 +29,7 @@ class Base(nn.Module, abc.ABC):
         )
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:  # type: ignore
-        """ResBlock forward pass.
-        """
+        """ResBlock forward pass."""
         residual = x
         x = self.block1(x)
         x = self.activation(x)
@@ -42,8 +41,7 @@ class Base(nn.Module, abc.ABC):
 
 
 class Linear(Base):
-    """Standard linear residual block.
-    """
+    """Standard linear residual block."""
 
     def __init__(self, units: int, bottleneck_units: int = None, **resblock_base_args):
         super().__init__(**resblock_base_args)
@@ -55,8 +53,7 @@ class Linear(Base):
 
 
 class Conv2d(Base):
-    """Standard convolutional residual block.
-    """
+    """Standard convolutional residual block."""
 
     def __init__(
         self,

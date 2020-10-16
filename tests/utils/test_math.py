@@ -195,16 +195,3 @@ def test_tril_inverse():
         inverse = fannypack.utils.tril_inverse(tril_matrix)
 
         torch.testing.assert_allclose(tril_matrix @ inverse, torch.eye(matrix_dim))
-
-
-def test_tril_inverse():
-    """Check that our `tril_inverse` function correctly inverts some full-rank
-    matrices.
-    """
-    for matrix_dim in range(2, 5):
-        tril_matrix = fannypack.utils.tril_from_vector(
-            torch.randn((5, fannypack.utils.tril_count_from_matrix_dim(matrix_dim)))
-        )
-        inverse = fannypack.utils.tril_inverse(tril_matrix)
-        torch.testing.assert_allclose(tril_matrix @ inverse, torch.eye(matrix_dim))
-        torch.testing.assert_allclose(inverse @ tril_matrix, torch.eye(matrix_dim))

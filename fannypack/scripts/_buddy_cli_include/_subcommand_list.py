@@ -10,8 +10,7 @@ from ._utils import BuddyPaths, format_size, get_size
 
 
 class ListSubcommand(Subcommand):
-    """Get & summarize existing Buddy experiments.
-    """
+    """Get & summarize existing Buddy experiments."""
 
     subcommand: str = "list"
     table_column_headers = [
@@ -57,7 +56,8 @@ class ListSubcommand(Subcommand):
 
         # Add experiment rows, oldest to newest
         sorted_experiment_names = sorted(
-            results.experiment_names, key=lambda n: results.timestamps.get(n, 0.0),
+            results.experiment_names,
+            key=lambda n: results.timestamps.get(n, 0.0),
         )
         for name in sorted_experiment_names:
             # Get checkpoint count

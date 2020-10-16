@@ -16,24 +16,21 @@ def nested_conversion() -> Tuple[Dict, Dict, Dict]:
 
 
 def test_not_same(nested_conversion: Tuple[Dict, Dict, Dict]):
-    """Make sure we've received three distinct dictionaries.
-    """
+    """Make sure we've received three distinct dictionaries."""
     X, X_torch, X_numpy = nested_conversion
     assert X is not X_torch
     assert X is not X_numpy
 
 
 def test_conversion_shapes(nested_conversion: Tuple[Dict, Dict, Dict]):
-    """Check numpy <=> torch conversions.
-    """
+    """Check numpy <=> torch conversions."""
     X, X_torch, X_numpy = nested_conversion
     assert X_torch["data"][0][0].shape == X_numpy["data"][0][0].shape
     assert X_torch["data"][1].shape == X_numpy["data"][1].shape
 
 
 def test_conversion_types(nested_conversion: Tuple[Dict, Dict, Dict]):
-    """Check numpy <=> torch conversions.
-    """
+    """Check numpy <=> torch conversions."""
     X, X_torch, X_numpy = nested_conversion
     assert type(X_numpy["data"][0][0]) == np.ndarray
     assert type(X_torch["data"][0][0]) == torch.Tensor
@@ -42,23 +39,20 @@ def test_conversion_types(nested_conversion: Tuple[Dict, Dict, Dict]):
 
 
 def test_conversion_values(nested_conversion: Tuple[Dict, Dict, Dict]):
-    """Check numpy <=> torch conversions.
-    """
+    """Check numpy <=> torch conversions."""
     X, X_torch, X_numpy = nested_conversion
     assert np.allclose(X["data"][0][0], X_numpy["data"][0][0])
     assert np.allclose(X["data"][1], X_numpy["data"][1])
 
 
 def test_conversion_failure():
-    """Smoke test for an unsupported input type.
-    """
+    """Smoke test for an unsupported input type."""
     with pytest.raises(AssertionError):
         fannypack.utils.to_torch(None)
 
 
 def test_to_device():
-    """Smoke test for to_device.
-    """
+    """Smoke test for to_device."""
     X = {"data": [np.zeros((10, 1, 5, 1, 10))]}
     X_torch = fannypack.utils.to_torch(X)
 
@@ -68,8 +62,7 @@ def test_to_device():
 
 
 def test_named_tuple():
-    """Check that we can convert named tuples.
-    """
+    """Check that we can convert named tuples."""
 
     class P(NamedTuple):
         x: Any

@@ -9,8 +9,7 @@ from ..fixtures import simple_buddy_temporary_data
 
 
 def test_buddy_no_model():
-    """Check that errors are raised if a Buddy is used without a model attached.
-    """
+    """Check that errors are raised if a Buddy is used without a model attached."""
     buddy = fannypack.utils.Buddy("no_model")
 
     with pytest.raises(AssertionError):
@@ -28,8 +27,7 @@ def test_buddy_no_model():
 
 
 def test_buddy_log_scopes(simple_buddy_temporary_data):
-    """Check that log scope functions as expected.
-    """
+    """Check that log scope functions as expected."""
     model, buddy, data, labels = simple_buddy_temporary_data
 
     assert buddy.log_scope_prefix() == ""
@@ -42,8 +40,7 @@ def test_buddy_log_scopes(simple_buddy_temporary_data):
 
 
 def test_buddy_log_histograms_no_grads(simple_buddy_temporary_data):
-    """Check behavior of histogram logging when no gradients exist.
-    """
+    """Check behavior of histogram logging when no gradients exist."""
     model, buddy, data, labels = simple_buddy_temporary_data
 
     # If we log parameters with no gradients, nothing should happen
@@ -55,8 +52,7 @@ def test_buddy_log_histograms_no_grads(simple_buddy_temporary_data):
 
 
 def test_buddy_learning_rates(simple_buddy_temporary_data):
-    """Check that we can set learning rates. (scalar)
-    """
+    """Check that we can set learning rates. (scalar)"""
     model, buddy, data, labels = simple_buddy_temporary_data
 
     buddy.set_learning_rate(1e-5)
@@ -70,8 +66,7 @@ def test_buddy_learning_rates(simple_buddy_temporary_data):
 
 
 def test_buddy_learning_rates_lambda(simple_buddy_temporary_data):
-    """Check that we can set learning rates. (lambda)
-    """
+    """Check that we can set learning rates. (lambda)"""
     model, buddy, data, labels = simple_buddy_temporary_data
 
     buddy.set_learning_rate(lambda s: 1e-2)
@@ -82,8 +77,7 @@ def test_buddy_learning_rates_lambda(simple_buddy_temporary_data):
 
 
 def test_buddy_train(simple_buddy_temporary_data):
-    """Make sure Buddy losses go down, and that we can write log files without errors.
-    """
+    """Make sure Buddy losses go down, and that we can write log files without errors."""
     model, buddy, data, labels = simple_buddy_temporary_data
     assert buddy.optimizer_steps == 0
     model.train()

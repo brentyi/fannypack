@@ -7,8 +7,7 @@ from ._utils import BuddyPaths
 
 
 class RenameSubcommand(Subcommand):
-    """Rename a Buddy experiment.
-    """
+    """Rename a Buddy experiment."""
 
     subcommand: str = "rename"
 

@@ -12,8 +12,7 @@ if TYPE_CHECKING:
 
 
 class _BuddyOptimizer(abc.ABC):
-    """Buddy's optimization interface.
-    """
+    """Buddy's optimization interface."""
 
     # Supported optimizer types
     # TODO: improve typing here; Type[torch.optim.Optimizer] would work but the
@@ -26,8 +25,7 @@ class _BuddyOptimizer(abc.ABC):
     def __init__(
         self, optimizer_type: str, optimizer_checkpoint_interval: float
     ) -> None:
-        """Optimizer-specific setup.
-        """
+        """Optimizer-specific setup."""
         # Assign our training configuration.
         self._optimizer_config: Dict[str, Any] = {
             "global_steps": 0,
@@ -56,8 +54,7 @@ class _BuddyOptimizer(abc.ABC):
         retain_graph: bool = False,
         checkpoint_interval: float = None,
     ) -> None:
-        """Compute gradients and use them to minimize a loss function.
-        """
+        """Compute gradients and use them to minimize a loss function."""
         assert cast("Buddy", self)._model is not None, "No model attached!"
         self._instantiate_optimizer(optimizer_name)
 
@@ -97,8 +94,7 @@ class _BuddyOptimizer(abc.ABC):
             self._optimizer_last_checkpoint_time = time.time()
 
     def get_learning_rate(self, optimizer_name: str = "primary") -> float:
-        """Gets an optimizer learning rate.
-        """
+        """Gets an optimizer learning rate."""
         assert cast("Buddy", self)._model is not None, "No model attached!"
         assert optimizer_name in self._optimizer_dict
 
@@ -145,19 +141,16 @@ class _BuddyOptimizer(abc.ABC):
     def set_default_learning_rate(
         self, value: Union[float, Callable[[int], float]]
     ) -> None:
-        """Sets a default learning rate for new optimizers.
-        """
+        """Sets a default learning rate for new optimizers."""
         self._optimizer_default_learning_rate = value
 
     @property
     def optimizer_steps(self) -> int:
-        """Read-only interface for # of steps taken by optimizer.
-        """
+        """Read-only interface for # of steps taken by optimizer."""
         return self._optimizer_config["global_steps"]
 
     def _set_learning_rate(self, value: float, optimizer_name: str) -> None:
-        """(Private) Sets an optimizer's learning rate.
-        """
+        """(Private) Sets an optimizer's learning rate."""
 
         self._instantiate_optimizer(optimizer_name)
 

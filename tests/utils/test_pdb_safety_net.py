@@ -13,8 +13,7 @@ class FakePDB:
 
 
 def test_sigint():
-    """Check that we open PDB when a SIGINT event is handled.
-    """
+    """Check that we open PDB when a SIGINT event is handled."""
     fake_pdb = FakePDB()
 
     fannypack.utils.pdb_safety_net()

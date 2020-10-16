@@ -11,7 +11,10 @@ from ._buddy_include._optimizer import _BuddyOptimizer
 
 
 class Buddy(
-    _BuddyCheckpointing, _BuddyOptimizer, _BuddyLogging, _BuddyMetadata,
+    _BuddyCheckpointing,
+    _BuddyOptimizer,
+    _BuddyLogging,
+    _BuddyMetadata,
 ):
 
     """Buddy is a model manager that abstracts away PyTorch boilerplate.
@@ -61,8 +64,7 @@ class Buddy(
         verbose: bool = True,
         cpu_only: bool = False,
     ) -> None:
-        """Constructor
-        """
+        """Constructor"""
         # Validate and assign core parameters.
         assert isinstance(experiment_name, str)
         assert isinstance(verbose, bool)
@@ -139,8 +141,7 @@ class Buddy(
         return self._device
 
     def _print(self, *args, **kwargs) -> None:
-        """Private helper for logging.
-        """
+        """Private helper for logging."""
         # Only print in verbose mode
         if self._verbose:
             arglist = list(args)

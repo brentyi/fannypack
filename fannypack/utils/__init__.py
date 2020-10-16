@@ -19,9 +19,7 @@ from ._slice_wrapper import SliceWrapper
 from ._squeeze import squeeze
 
 DictIterator = new_name_wrapper(
-    "fannypack.utils.DictIterator",
-    "fannypack.utils.SliceWrapper",
-    SliceWrapper,
+    "fannypack.utils.DictIterator", "fannypack.utils.SliceWrapper", SliceWrapper
 )
 
 TrajectoriesFile = new_name_wrapper(

@@ -2,8 +2,7 @@ from ..fixtures import resblock_buddy_temporary_data
 
 
 def test_buddy_metadata(resblock_buddy_temporary_data):
-    """Do some checks on rapid continuous checkpointing.
-    """
+    """Do some checks on rapid continuous checkpointing."""
     model, buddy, data, labels = resblock_buddy_temporary_data
 
     # Check initial metadata state

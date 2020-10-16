@@ -168,14 +168,12 @@ class SliceWrapper(Iterable, Generic[WrappedType]):
         return self.shape[0]
 
     def __iter__(self):
-        """Iterable __iter__() interface.
-        """
+        """Iterable __iter__() interface."""
         self._iter_index = 0
         return self
 
     def __next__(self):
-        """Iterable __next__() interface.
-        """
+        """Iterable __next__() interface."""
         try:
             output = self[self._iter_index]
             self._iter_index += 1

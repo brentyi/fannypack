@@ -8,22 +8,19 @@ from ..fixtures import resblock_buddy_temporary_data, simple_buddy
 
 
 def test_buddy_device(simple_buddy):
-    """Make sure Buddy can list the existing checkpoint labels.
-    """
+    """Make sure Buddy can list the existing checkpoint labels."""
     model, buddy, data, labels = simple_buddy
     assert isinstance(buddy.device, torch.device)
 
 
 def test_buddy_checkpoint_labels(simple_buddy):
-    """Make sure Buddy can list the existing checkpoint labels.
-    """
+    """Make sure Buddy can list the existing checkpoint labels."""
     model, buddy, data, labels = simple_buddy
     assert set(buddy.checkpoint_labels) == set(["0000000000000200", "new", "legacy"])
 
 
 def test_buddy_load_checkpoint_new_format_label(simple_buddy):
-    """Make sure Buddy can load checkpoints via a label specifier.
-    """
+    """Make sure Buddy can load checkpoints via a label specifier."""
     model, buddy, data, labels = simple_buddy
     initial_loss = F.mse_loss(model(data), labels)
 
@@ -35,8 +32,7 @@ def test_buddy_load_checkpoint_new_format_label(simple_buddy):
 
 
 def test_buddy_load_checkpoint_new_format_path(simple_buddy):
-    """Make sure Buddy can load checkpoints directly by path.
-    """
+    """Make sure Buddy can load checkpoints directly by path."""
     model, buddy, data, labels = simple_buddy
     initial_loss = F.mse_loss(model(data), labels)
 
@@ -88,21 +84,20 @@ def test_buddy_load_checkpoint_legacy_format_path(simple_buddy):
 
 
 def test_buddy_load_missing_checkpoint_path(simple_buddy):
-    """Make sure Buddy raises an error if we load a nonexistent checkpoint.
-    """
+    """Make sure Buddy raises an error if we load a nonexistent checkpoint."""
     model, buddy, data, labels = simple_buddy
 
     with pytest.raises(FileNotFoundError):
         buddy.load_checkpoint(
             path=os.path.join(
-                os.path.dirname(__file__), "checkpoints/this_file_doesnt_exist.ckpt",
+                os.path.dirname(__file__),
+                "checkpoints/this_file_doesnt_exist.ckpt",
             )
         )
 
 
 def test_buddy_load_missing_checkpoint_label(simple_buddy):
-    """Make sure Buddy raises an error if we load a nonexistent checkpoint.
-    """
+    """Make sure Buddy raises an error if we load a nonexistent checkpoint."""
     model, buddy, data, labels = simple_buddy
 
     with pytest.raises(FileNotFoundError):
@@ -110,8 +105,7 @@ def test_buddy_load_missing_checkpoint_label(simple_buddy):
 
 
 def test_buddy_load_missing_checkpoint(simple_buddy):
-    """Make sure Buddy raises an error if we load a nonexistent checkpoint.
-    """
+    """Make sure Buddy raises an error if we load a nonexistent checkpoint."""
     model, buddy, data, labels = simple_buddy
 
     with pytest.raises(FileNotFoundError):
@@ -119,8 +113,7 @@ def test_buddy_load_missing_checkpoint(simple_buddy):
 
 
 def test_buddy_load_checkpoint_experiment_name(simple_buddy):
-    """Make sure Buddy can save/load a checkpoint.
-    """
+    """Make sure Buddy can save/load a checkpoint."""
     model, buddy, data, labels = simple_buddy
 
     buddy.load_checkpoint(experiment_name="simple_net")
@@ -128,8 +121,7 @@ def test_buddy_load_checkpoint_experiment_name(simple_buddy):
 
 
 def test_buddy_save_checkpoint(resblock_buddy_temporary_data):
-    """Make sure Buddy can save/load a checkpoint.
-    """
+    """Make sure Buddy can save/load a checkpoint."""
     model, buddy, data, labels = resblock_buddy_temporary_data
 
     # Save initial state
@@ -147,8 +139,7 @@ def test_buddy_save_checkpoint(resblock_buddy_temporary_data):
 
 
 def test_buddy_save_checkpoint_label(resblock_buddy_temporary_data):
-    """Make sure Buddy can save/load a checkpoint with a label specifier.
-    """
+    """Make sure Buddy can save/load a checkpoint with a label specifier."""
     model, buddy, data, labels = resblock_buddy_temporary_data
 
     # Save initial state
@@ -169,8 +160,7 @@ def test_buddy_save_checkpoint_label(resblock_buddy_temporary_data):
 
 
 def test_buddy_save_checkpoint_labels(resblock_buddy_temporary_data):
-    """Make sure Buddy's list of existing checkpoints is correctly updated.
-    """
+    """Make sure Buddy's list of existing checkpoints is correctly updated."""
     model, buddy, data, labels = resblock_buddy_temporary_data
 
     # No initial checkpoints
@@ -192,8 +182,7 @@ def test_buddy_save_checkpoint_labels(resblock_buddy_temporary_data):
 
 
 def test_buddy_checkpoint_modules(resblock_buddy_temporary_data):
-    """Test that Buddy can load individual modules from checkpoint files.
-    """
+    """Test that Buddy can load individual modules from checkpoint files."""
     model, buddy, data, labels = resblock_buddy_temporary_data
 
     # Check that layer parameters are different
@@ -227,8 +216,7 @@ def test_buddy_checkpoint_modules(resblock_buddy_temporary_data):
 
 
 def test_buddy_checkpoint_optimizers(resblock_buddy_temporary_data):
-    """Sanity-check for Buddy's optimizer loading interface.
-    """
+    """Sanity-check for Buddy's optimizer loading interface."""
     model, buddy, data, labels = resblock_buddy_temporary_data
 
     # Create some optimizer parameters
@@ -269,8 +257,7 @@ def test_buddy_checkpoint_optimizers(resblock_buddy_temporary_data):
 
 
 def test_buddy_checkpointed_train(resblock_buddy_temporary_data):
-    """Do some checks on rapid continuous checkpointing.
-    """
+    """Do some checks on rapid continuous checkpointing."""
     model, buddy, data, labels = resblock_buddy_temporary_data
     model.train()
 

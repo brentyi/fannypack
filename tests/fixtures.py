@@ -10,8 +10,7 @@ import fannypack
 
 
 class SimpleNet(nn.Module):
-    """ Simple PyTorch model. Scalar input, scalar output.
-    """
+    """Simple PyTorch model. Scalar input, scalar output."""
 
     def __init__(self):
         super().__init__()
@@ -38,8 +37,7 @@ class SimpleNet(nn.Module):
 
 
 class ResBlockNet(nn.Module):
-    """ Simple PyTorch model. Scalar input, scalar output.
-    """
+    """Simple PyTorch model. Scalar input, scalar output."""
 
     def __init__(self):
         super().__init__()
@@ -62,8 +60,7 @@ class ResBlockNet(nn.Module):
 
 @pytest.fixture
 def simple_net():
-    """Constructs an MLP implemented in PyTorch.
-    """
+    """Constructs an MLP implemented in PyTorch."""
     # Deterministic tests are nice..
     torch.manual_seed(0)
     return SimpleNet()
@@ -71,8 +68,7 @@ def simple_net():
 
 @pytest.fixture()
 def simple_buddy():
-    """Fixture for setting up a Buddy, as well as some dummy training data.
-    """
+    """Fixture for setting up a Buddy, as well as some dummy training data."""
     # Deterministic tests are nice..
     np.random.seed(0)
     torch.manual_seed(0)
@@ -101,8 +97,7 @@ def simple_buddy():
 
 @pytest.fixture()
 def simple_buddy_temporary_data():
-    """Fixture for setting up a Buddy, as well as some dummy training data.
-    """
+    """Fixture for setting up a Buddy, as well as some dummy training data."""
     # Deterministic tests are nice..
     np.random.seed(0)
     torch.manual_seed(0)

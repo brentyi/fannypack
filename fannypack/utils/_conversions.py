@@ -35,7 +35,9 @@ _OutputType = TypeVar("_OutputType", np.ndarray, torch.Tensor)
 
 @overload
 def _convert_recursive(
-    x: _InputType, convert: Callable[[_InputType], _OutputType], input_type: Type,
+    x: _InputType,
+    convert: Callable[[_InputType], _OutputType],
+    input_type: Type,
 ) -> _OutputType:
     ...
 
@@ -130,21 +132,27 @@ def to_device(x, device, detach=False):
 
 @overload
 def to_torch(
-    x: np.ndarray, device: str = "cpu", convert_doubles_to_floats: bool = True,
+    x: np.ndarray,
+    device: str = "cpu",
+    convert_doubles_to_floats: bool = True,
 ) -> torch.Tensor:
     ...
 
 
 @overload
 def to_torch(
-    x: List[np.ndarray], device: str = "cpu", convert_doubles_to_floats: bool = True,
+    x: List[np.ndarray],
+    device: str = "cpu",
+    convert_doubles_to_floats: bool = True,
 ) -> List[torch.Tensor]:
     ...
 
 
 @overload
 def to_torch(
-    x: List, device: str = "cpu", convert_doubles_to_floats: bool = True,
+    x: List,
+    device: str = "cpu",
+    convert_doubles_to_floats: bool = True,
 ) -> List:
     ...
 
@@ -160,7 +168,9 @@ def to_torch(
 
 @overload
 def to_torch(
-    x: Tuple, device: str = "cpu", convert_doubles_to_floats: bool = True,
+    x: Tuple,
+    device: str = "cpu",
+    convert_doubles_to_floats: bool = True,
 ) -> Tuple:
     ...
 
@@ -176,13 +186,17 @@ def to_torch(
 
 @overload
 def to_torch(
-    x: Dict[Key, Any], device: str = "cpu", convert_doubles_to_floats: bool = True,
+    x: Dict[Key, Any],
+    device: str = "cpu",
+    convert_doubles_to_floats: bool = True,
 ) -> Dict[Key, Any]:
     ...
 
 
 def to_torch(
-    x, device="cpu", convert_doubles_to_floats=True,
+    x,
+    device="cpu",
+    convert_doubles_to_floats=True,
 ):
     """Converts a NumPy array, list, tuple (standard or named), or dict of NumPy arrays
     for use in PyTorch.  Recursively applied for nested containers.
