@@ -56,7 +56,8 @@ class _BuddyOptimizer(abc.ABC):
         max_norm: Optional[float] = None,
     ) -> None:
         """Compute gradients and use them to minimize a loss function."""
-        assert cast("Buddy", self)._model is not None, "No model attached!"
+        model = cast("Buddy", self)._model
+        assert model is not None, "No model attached!"
         self._instantiate_optimizer(optimizer_name)
 
         # Update learning rate using scheduler if possible
@@ -71,7 +72,7 @@ class _BuddyOptimizer(abc.ABC):
         self._optimizer_dict[optimizer_name].zero_grad()
         loss.backward(retain_graph=retain_graph)  # type: ignore
         if max_norm is not None:
-            torch.nn.utils.clip_grad_norm_(self._model.parameters(), max_norm)
+            torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm)
         self._optimizer_dict[optimizer_name].step()
 
         # Update global step count
