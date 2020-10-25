@@ -116,15 +116,11 @@ def test_buddy_gradient_clipping(simple_buddy_temporary_data):
     def _gradient_norm(f: torch.nn.Module) -> float:
         """Compute the gradient norm.
 
-        Parameters
-        ----------
-        f : torch.nn.Module
-            A torch Module
+        Args:
+            f (torch.nn.Module): Module to check gradients of..
 
-        Returns
-        -------
-        float
-            The gradient norm.
+        Returns:
+            float: The gradient norm.
         """
         total_norm = 0.0
         for p in f.parameters():
