@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import abc
 import time
+from dataclasses import dataclass
 from typing import TYPE_CHECKING, Any, Callable, Dict, Optional, Union, cast
 
 import torch
@@ -9,6 +10,23 @@ import torch
 if TYPE_CHECKING:
     from .._buddy import Buddy
     from ._checkpointing import _BuddyCheckpointing
+
+
+@dataclass
+class _BuddyOptimizerConfig:
+    """Optimizer configuration.
+
+    Along with the state dict of each optimizer, this is saved with each checkpoint.
+    """
+
+    global_steps: int
+    """int: Total number of optimization steps taken. This is used for logging, LR schedulers, etc."""
+
+    optimizer_type: str
+    """str: Type of optimizer to used. Currently only `adam` or `adadelta`."""
+
+    learning_rate_schedulers: Dict[str, Callable[[int], float]]
+    """dict: Dictionary mapping optimizer names to LR scheduling functions."""
 
 
 class _BuddyOptimizer(abc.ABC):
@@ -27,11 +45,11 @@ class _BuddyOptimizer(abc.ABC):
     ) -> None:
         """Optimizer-specific setup."""
         # Assign our training configuration.
-        self._optimizer_config: Dict[str, Any] = {
-            "global_steps": 0,
-            "optimizer_type": optimizer_type,
-            "learning_rate_schedulers": {},
-        }
+        self._optimizer_config = _BuddyOptimizerConfig(
+            global_steps=0,
+            optimizer_type=optimizer_type,
+            learning_rate_schedulers={},
+        )
 
         # Map from optimizer name to optimizers
         # These are constructed lazily!
@@ -64,10 +82,10 @@ class _BuddyOptimizer(abc.ABC):
         optimizer: torch.optim.Optimizer = self._optimizer_dict[optimizer_name]
 
         # Update learning rate using scheduler if possible
-        schedulers = self._optimizer_config["learning_rate_schedulers"]
+        schedulers = self._optimizer_config.learning_rate_schedulers
         if optimizer_name in schedulers:
             self._set_learning_rate(
-                schedulers[optimizer_name](self._optimizer_config["global_steps"]),
+                schedulers[optimizer_name](self._optimizer_config.global_steps),
                 optimizer_name,
             )
 
@@ -82,7 +100,7 @@ class _BuddyOptimizer(abc.ABC):
         optimizer.step()
 
         # Update global step count
-        self._optimizer_config["global_steps"] += 1
+        self._optimizer_config.global_steps += 1
 
         # Autocheckpoint procedure
         if checkpoint_interval is None:
@@ -109,7 +127,7 @@ class _BuddyOptimizer(abc.ABC):
         assert optimizer_name in self._optimizer_dict
 
         # Return scheduled learning rate
-        schedulers = self._optimizer_config["learning_rate_schedulers"]
+        schedulers = self._optimizer_config.learning_rate_schedulers
         if optimizer_name in schedulers:
             return schedulers[optimizer_name](self.optimizer_steps)
 
@@ -128,7 +146,7 @@ class _BuddyOptimizer(abc.ABC):
         learning rate or a schedule function (int steps -> float LR).
         """
         assert cast("Buddy", self)._model is not None, "No model attached!"
-        schedulers = self._optimizer_config["learning_rate_schedulers"]
+        schedulers = self._optimizer_config.learning_rate_schedulers
         if callable(value):
             assert isinstance(value(0), float)
 
@@ -157,7 +175,7 @@ class _BuddyOptimizer(abc.ABC):
     @property
     def optimizer_steps(self) -> int:
         """Read-only interface for # of steps taken by optimizer."""
-        return self._optimizer_config["global_steps"]
+        return self._optimizer_config.global_steps
 
     def _set_learning_rate(self, value: float, optimizer_name: str) -> None:
         """(Private) Sets an optimizer's learning rate."""
@@ -181,7 +199,7 @@ class _BuddyOptimizer(abc.ABC):
         cast("Buddy", self)._print("Instantiating optimizer: ", optimizer_name)
 
         # Make sure we're creating a valid optimizer
-        optimizer_type = self._optimizer_config["optimizer_type"]
+        optimizer_type = self._optimizer_config.optimizer_type
         assert optimizer_type in self._OPTIMIZER_TYPES
 
         # Parameters

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import abc
+import dataclasses
 import pathlib
 import signal
 import warnings
@@ -76,7 +77,9 @@ class _BuddyCheckpointing(abc.ABC):
             optimizer_states[name] = optimizer.state_dict()
 
         state = {
-            "optimizer_config": cast("_BuddyOptimizer", self)._optimizer_config,
+            "optimizer_config": dataclasses.asdict(
+                cast("_BuddyOptimizer", self)._optimizer_config
+            ),
             "optimizer_states": optimizer_states,
             "state_dict": cast("Buddy", self).model.state_dict(),
         }
@@ -262,8 +265,9 @@ class _BuddyCheckpointing(abc.ABC):
         # Load Buddy optimizer configuration
         optimizer_config = cast("_BuddyOptimizer", self)._optimizer_config
         for key, value in checkpoint["optimizer_config"].items():
-            if key in optimizer_config.keys():
-                optimizer_config[key] = value
+            if hasattr(optimizer_config, key):
+                assert type(value) == type(getattr(optimizer_config, key))
+                setattr(optimizer_config, key, value)
             else:
                 warnings.warn(f"Skipping missing configuration key: {key}={value}")
 
@@ -355,7 +359,7 @@ class _BuddyCheckpointing(abc.ABC):
         if (
             hasattr(self, "_optimizer_config")
             and checkpoint["optimizer_config"]["optimizer_type"]
-            != cast("_BuddyOptimizer", self)._optimizer_config["optimizer_type"]
+            != cast("_BuddyOptimizer", self)._optimizer_config.optimizer_type
         ):
             warnings.warn("Checkpoint loading: overriding optimizer type.")
 
