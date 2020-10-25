@@ -141,7 +141,7 @@ def test_buddy_gradient_clipping(simple_buddy_temporary_data):
     for _ in range(10):
         # Optimize
         loss = F.mse_loss(model(data), labels)
-        buddy.minimize(loss, max_norm=max_norm_value)
+        buddy.minimize(loss, clip_grad_max_norm=max_norm_value)
         norm_value = _gradient_norm(model)
         assert norm_value <= max_norm_value
 

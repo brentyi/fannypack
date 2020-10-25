@@ -35,7 +35,7 @@ class _BuddyOptimizer(abc.ABC):
 
         # Map from optimizer name to optimizers
         # These are constructed lazily!
-        self._optimizer_dict: Dict[str, torch.optim.Optimizer] = {}  # type: ignore
+        self._optimizer_dict: Dict[str, torch.optim.Optimizer] = {}
 
         # Autocheckpoint variables
         self._optimizer_checkpoint_interval: float = optimizer_checkpoint_interval
@@ -53,12 +53,15 @@ class _BuddyOptimizer(abc.ABC):
         *,
         retain_graph: bool = False,
         checkpoint_interval: Optional[float] = None,
-        max_norm: Optional[float] = None,
+        clip_grad_max_norm: Optional[float] = None,
     ) -> None:
         """Compute gradients and use them to minimize a loss function."""
         model = cast("Buddy", self)._model
         assert model is not None, "No model attached!"
+
+        # Get optimizer
         self._instantiate_optimizer(optimizer_name)
+        optimizer: torch.optim.Optimizer = self._optimizer_dict[optimizer_name]
 
         # Update learning rate using scheduler if possible
         schedulers = self._optimizer_config["learning_rate_schedulers"]
@@ -69,11 +72,14 @@ class _BuddyOptimizer(abc.ABC):
             )
 
         # Take gradient step
-        self._optimizer_dict[optimizer_name].zero_grad()
+        optimizer.zero_grad()
         loss.backward(retain_graph=retain_graph)  # type: ignore
-        if max_norm is not None:
-            torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm)
-        self._optimizer_dict[optimizer_name].step()
+        if clip_grad_max_norm is not None:
+            torch.nn.utils.clip_grad_norm_(
+                optimizer.param_groups[0]["params"],
+                max_norm=clip_grad_max_norm,
+            )
+        optimizer.step()
 
         # Update global step count
         self._optimizer_config["global_steps"] += 1
