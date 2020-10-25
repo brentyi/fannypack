@@ -53,7 +53,7 @@ class _BuddyOptimizer(abc.ABC):
         *,
         retain_graph: bool = False,
         checkpoint_interval: Optional[float] = None,
-        max_norm: Optional[float] = None
+        max_norm: Optional[float] = None,
     ) -> None:
         """Compute gradients and use them to minimize a loss function."""
         assert cast("Buddy", self)._model is not None, "No model attached!"
