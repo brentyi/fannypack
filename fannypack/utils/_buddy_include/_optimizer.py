@@ -52,7 +52,8 @@ class _BuddyOptimizer(abc.ABC):
         optimizer_name: str = "primary",
         *,
         retain_graph: bool = False,
-        checkpoint_interval: float = None,
+        checkpoint_interval: Optional[float] = None,
+        max_norm: Optional[float] = None
     ) -> None:
         """Compute gradients and use them to minimize a loss function."""
         assert cast("Buddy", self)._model is not None, "No model attached!"
@@ -69,6 +70,8 @@ class _BuddyOptimizer(abc.ABC):
         # Take gradient step
         self._optimizer_dict[optimizer_name].zero_grad()
         loss.backward(retain_graph=retain_graph)  # type: ignore
+        if max_norm is not None:
+            torch.nn.utils.clip_grad_norm_(self._model.parameters(), max_norm)
         self._optimizer_dict[optimizer_name].step()
 
         # Update global step count

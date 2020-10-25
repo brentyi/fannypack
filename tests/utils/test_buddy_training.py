@@ -110,6 +110,46 @@ def test_buddy_train(simple_buddy_temporary_data):
     buddy.save_checkpoint()
 
 
+def test_buddy_gradient_clipping(simple_buddy_temporary_data):
+    """Test that setting the max gradient norm correctly clips the gradients."""
+
+    def _gradient_norm(f: torch.nn.Module) -> float:
+        """Compute the gradient norm.
+
+        Parameters
+        ----------
+        f : torch.nn.Module
+            A torch Module
+
+        Returns
+        -------
+        float
+            The gradient norm.
+        """
+        total_norm = 0.0
+        for p in f.parameters():
+            if p.grad is not None:
+                param_norm = p.grad.data.norm(2)
+                total_norm += param_norm.item() ** 2
+        total_norm = total_norm ** (1.0 / 2)
+        return total_norm
+
+    model, buddy, data, labels = simple_buddy_temporary_data
+    assert buddy.optimizer_steps == 0
+    model.train()
+
+    # Try using default learning rate
+    buddy.set_default_learning_rate(lambda steps: 1e-3)
+    max_norm_value = 0.01
+
+    for _ in range(10):
+        # Optimize
+        loss = F.mse_loss(model(data), labels)
+        buddy.minimize(loss, max_norm=max_norm_value)
+        norm_value = _gradient_norm(model)
+        assert norm_value <= max_norm_value
+
+
 def test_buddy_train_multiloss_unstable(simple_buddy_temporary_data):
     """Training should be less happy if we (a) use a single optimizer and (b)
     switch abruptly between loss functions with very different scales.
