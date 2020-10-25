@@ -134,16 +134,24 @@ def test_buddy_gradient_clipping(simple_buddy_temporary_data):
     assert buddy.optimizer_steps == 0
     model.train()
 
-    # Try using default learning rate
-    buddy.set_default_learning_rate(lambda steps: 1e-3)
+    # Use an extremely small norm value
     max_norm_value = 0.01
 
-    for _ in range(10):
-        # Optimize
+    for _ in range(5):
+        # Optimize without gradient clipping
+        loss = F.mse_loss(model(data), labels)
+        buddy.minimize(loss)
+        norm_value = _gradient_norm(model)
+        assert norm_value > max_norm_value
+
+    for _ in range(5):
+        # Optimize with gradient clipping
         loss = F.mse_loss(model(data), labels)
         buddy.minimize(loss, clip_grad_max_norm=max_norm_value)
         norm_value = _gradient_norm(model)
-        assert norm_value <= max_norm_value
+
+        # All gradients should be clipped
+        assert abs(norm_value - max_norm_value) < 1e-5
 
 
 def test_buddy_train_multiloss_unstable(simple_buddy_temporary_data):
