@@ -4,6 +4,7 @@ from ._conversions import to_device, to_numpy, to_torch
 from ._deprecation import deprecation_wrapper, new_name_wrapper
 from ._git import get_git_commit_hash
 from ._math import (
+    cholesky_inverse,
     cholupdate,
     gaussian_log_prob,
     matrix_dim_from_tril_count,
@@ -36,6 +37,7 @@ __all__ = [
     "deprecation_wrapper",
     "new_name_wrapper",
     "get_git_commit_hash",
+    "cholesky_inverse",
     "cholupdate",
     "gaussian_log_prob",
     "matrix_dim_from_tril_count",

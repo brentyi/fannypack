@@ -4,6 +4,24 @@ import numpy as np
 import torch
 
 
+def cholesky_inverse(u: torch.Tensor, upper: bool = False) -> torch.Tensor:
+    """Alternative to `torch.cholesky_inverse()`, with support for batch dimensions.
+
+    Relevant issue tracker: https://github.com/pytorch/pytorch/issues/7500
+
+    Args:
+        u (torch.Tensor): Triangular Cholesky factor. Shape should be `(*, N, N)`.
+        upper (bool, optional): Whether to consider the Cholesky factor as a lower or
+            upper triangular matrix.
+
+    Returns:
+        torch.Tensor:
+    """
+    if u.dim() == 2 and not u.requires_grad:
+        return torch.cholesky_inverse(u, upper=upper)
+    return torch.cholesky_solve(torch.eye(u.size(-1)).expand(u.size()), u, upper=upper)
+
+
 def cholupdate(
     L: torch.Tensor,
     x: torch.Tensor,

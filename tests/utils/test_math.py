@@ -1,7 +1,46 @@
+import fannypack.utils
 import numpy as np
 import torch
 
-import fannypack.utils
+
+def test_cholesky_inverse():
+    """Checks that our Cholesky inverse matches `torch.cholesky_inverse()`."""
+    torch.autograd.set_detect_anomaly(True)
+    batch_dims = (5,)
+    matrix_dim = 3
+    L = fannypack.utils.tril_from_vector(
+        torch.randn(
+            batch_dims + (fannypack.utils.tril_count_from_matrix_dim(matrix_dim),),
+        )
+    )
+
+    for i, our_inverse in enumerate(fannypack.utils.cholesky_inverse(L)):
+        torch.testing.assert_allclose(our_inverse, torch.cholesky_inverse(L[i]))
+
+
+def test_cholesky_inverse_no_batch():
+    """Checks that our Cholesky inverse matches `torch.cholesky_inverse()`."""
+    torch.autograd.set_detect_anomaly(True)
+    matrix_dim = 3
+    L = fannypack.utils.tril_from_vector(
+        torch.randn(fannypack.utils.tril_count_from_matrix_dim(matrix_dim))
+    )
+    torch.testing.assert_allclose(
+        fannypack.utils.cholesky_inverse(L), torch.cholesky_inverse(L)
+    )
+
+
+def test_cholesky_inverse_backward():
+    """Checks backward pass support for Cholesky inverses."""
+    batch_dims = (5,)
+    matrix_dim = 3
+    L = fannypack.utils.tril_from_vector(
+        torch.randn(
+            batch_dims + (fannypack.utils.tril_count_from_matrix_dim(matrix_dim),),
+            requires_grad=True,
+        )
+    )
+    torch.sum(fannypack.utils.cholesky_inverse(L)).backward()
 
 
 def test_cholupdate():
