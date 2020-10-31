@@ -9,6 +9,9 @@ Miscellaneous utilities.
 Math
 ******************************************
 
+.. autofunction:: fannypack.utils.cholesky_inverse
+.. autofunction:: fannypack.utils.tril_inverse
+
 .. autofunction:: fannypack.utils.cholupdate
 
 .. autofunction:: fannypack.utils.tril_count_from_matrix_dim
