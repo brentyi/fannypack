@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from typing import (
     Any,
     Callable,
@@ -271,10 +269,10 @@ class SliceWrapper(Iterable, Generic[WrappedType]):
     @overload
     def map(
         self: Union[
-            SliceWrapper[Dict[Any, List]],
-            SliceWrapper[Dict[Any, Tuple]],
-            SliceWrapper[Dict[Any, torch.Tensor]],
-            SliceWrapper[Dict[Any, np.ndarray]],
+            "SliceWrapper[Dict[Any, List]]",
+            "SliceWrapper[Dict[Any, Tuple]]",
+            "SliceWrapper[Dict[Any, torch.Tensor]]",
+            "SliceWrapper[Dict[Any, np.ndarray]]",
         ],
         function: Callable[[Any], MapOutputType],
     ) -> Dict[Any, MapOutputType]:
@@ -283,10 +281,10 @@ class SliceWrapper(Iterable, Generic[WrappedType]):
     @overload
     def map(
         self: Union[
-            SliceWrapper[List],
-            SliceWrapper[Tuple],
-            SliceWrapper[torch.Tensor],
-            SliceWrapper[np.ndarray],
+            "SliceWrapper[List]",
+            "SliceWrapper[Tuple]",
+            "SliceWrapper[torch.Tensor]",
+            "SliceWrapper[np.ndarray]",
         ],
         function: Callable[[Any], MapOutputType],
     ) -> MapOutputType:

@@ -31,12 +31,14 @@ def test_buddy_no_args():
     assert exitcode == 2
 
 
-def test_buddy_delete_no_args():
-    """Make sure that `buddy delete` with no arguments shows a menu."""
-    out, err, exitcode = _run_command(["buddy", "delete"])
-    assert "Navigate: j/k" in out
-    assert "Select: <CR>" in out
-    assert exitcode == 1
+# Out of scope: testing for interactive features
+#
+# def test_buddy_delete_no_args():
+#     """Make sure that `buddy delete` with no arguments shows a menu."""
+#     out, err, exitcode = _run_command(["buddy", "delete"])
+#     assert "Navigate: j/k" in out
+#     assert "Select: <CR>" in out
+#     assert exitcode == 1
 
 
 def test_buddy_info_no_args():

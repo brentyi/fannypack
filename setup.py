@@ -13,10 +13,10 @@ setup(
     author="brentyi",
     author_email="brentyi@berkeley.edu",
     license="MIT",
-    packages=find_packages(exclude=["examples", "tests"]),
+    packages=find_packages(),
     package_data={"fannypack": ["py.typed"]},
     entry_points={"console_scripts": ["buddy = fannypack.scripts.buddy_cli:main"]},
-    python_requires=">=3.7",
+    python_requires=">=3.6",
     install_requires=[
         "argcomplete",
         "beautifultable >= 1.0.0",

@@ -34,7 +34,7 @@ def main() -> None:
 
     # Separate parsers for subcommands
     subparsers = parser.add_subparsers(
-        required=True,
+        # required=True, <= Not supported in Python 3.6
         dest="subcommand",
         help="Get help by running `$ buddy {subcommand} --help`.",
     )
@@ -52,7 +52,11 @@ def main() -> None:
     args = parser.parse_args()
 
     # Run subcommand
-    subcommand_map[args.subcommand].main(args=args, paths=paths)
+    if args.subcommand is None:
+        print(parser.format_help())
+        exit(2)
+    else:
+        subcommand_map[args.subcommand].main(args=args, paths=paths)
 
 
 if __name__ == "__main__":

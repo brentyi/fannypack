@@ -53,7 +53,7 @@ class DeleteSubcommand(Subcommand):
                 except RuntimeError as e:
                     print(f"Encountered error for {name}")
                     print(e)
-        else:
+        else: #  pragma: no cover
             print("Navigate: j/k \t Select: <CR>")
             print(
                 termcolor.colored(
