@@ -3,9 +3,9 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
+  <meta charset="utf-8" />
   
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
   <title>Working With Containers &mdash; fannypack  documentation</title>
   
@@ -16,7 +16,10 @@
 
   
   
+
   
+  
+
   
 
   
@@ -29,7 +32,6 @@
         <script src="../../_static/jquery.js"></script>
         <script src="../../_static/underscore.js"></script>
         <script src="../../_static/doctools.js"></script>
-        <script src="../../_static/language_data.js"></script>
         <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
         <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]]}})</script>
     
@@ -53,7 +55,7 @@
           
 
           
-            <a href="../../" class="icon icon-home" alt="Documentation Home"> fannypack
+            <a href="../../" class="icon icon-home"> fannypack
           
 
           
@@ -143,6 +145,8 @@
 
 
 
+
+
 <div role="navigation" aria-label="breadcrumbs navigation">
 
   <ul class="wy-breadcrumbs">
@@ -156,7 +160,7 @@
     
       <li class="wy-breadcrumbs-aside">
         
-            
+          
             <a href="../../_sources/utils/containers.rst.txt" rel="nofollow"> View page source</a>
           
         
@@ -272,8 +276,8 @@ arrays to convert to torch tensors.</p></li>
 <h2><a class="toc-backref" href="#id2">Grouped Slicing</a><a class="headerlink" href="#grouped-slicing" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="fannypack.utils.SliceWrapper">
-<em class="property">class </em><code class="sig-prename descclassname">fannypack.utils.</code><code class="sig-name descname">SliceWrapper</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwds</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils.SliceWrapper" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">collections.abc.Iterable</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">typing.Generic</span></code></p>
+<em class="property">class </em><code class="sig-prename descclassname">fannypack.utils.</code><code class="sig-name descname">SliceWrapper</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n">WrappedType</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.utils.SliceWrapper" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Generic</span></code>[<code class="xref py py-obj docutils literal notranslate"><span class="pre">fannypack.utils._slice_wrapper.WrappedType</span></code>]</p>
 <p>A wrapper class for creating a unified interface for slicing and manipulating:</p>
 <ul class="simple">
 <li><p>Lists</p></li>
@@ -501,7 +505,7 @@ our wrapped values, starting from the leftmost dimension.</p>
 <h2><a class="toc-backref" href="#id3">Generic Squeeze</a><a class="headerlink" href="#generic-squeeze" title="Permalink to this headline">¶</a></h2>
 <dl class="py function">
 <dt id="fannypack.utils.squeeze">
-<code class="sig-prename descclassname">fannypack.utils.</code><code class="sig-name descname">squeeze</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span><span class="p">:</span> <span class="n">Any</span></em>, <em class="sig-param"><span class="n">axis</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>int<span class="p">, </span>Tuple<span class="p">[</span>int<span class="p">, </span><span class="p">…</span><span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; Any<a class="headerlink" href="#fannypack.utils.squeeze" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">fannypack.utils.</code><code class="sig-name descname">squeeze</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span><span class="p">:</span> <span class="n">Any</span></em>, <em class="sig-param"><span class="n">axis</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Union<span class="p">[</span>int<span class="p">, </span>Tuple<span class="p">[</span>int<span class="p">, </span><span class="p">…</span><span class="p">]</span><span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; Any<a class="headerlink" href="#fannypack.utils.squeeze" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generic squeeze function, for all sliceable objects with a <code class="docutils literal notranslate"><span class="pre">shape</span></code> field.</p>
 <p>Designed for <a class="reference internal" href="#fannypack.utils.SliceWrapper" title="fannypack.utils.SliceWrapper"><code class="xref py py-class docutils literal notranslate"><span class="pre">fannypack.utils.SliceWrapper</span></code></a>, but should also work with NumPy
 arrays, torch Tensors, etc.</p>
@@ -528,37 +532,29 @@ If None (default), squeezes all dimensions with value <code class="docutils lite
            
           </div>
           <footer>
-  
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="../potpourri/" class="btn btn-neutral float-right" title="Potpourri" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="../experiment_management/" class="btn btn-neutral float-left" title="Experiment Management" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+        <a href="../potpourri/" class="btn btn-neutral float-right" title="Potpourri" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../experiment_management/" class="btn btn-neutral float-left" title="Experiment Management" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
     <p>
-        
-        &copy; Copyright 2020
+        &#169; Copyright 2020.
 
     </p>
   </div>
     
     
     
-    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     
-    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
     
     provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
-
         </div>
       </div>
 
