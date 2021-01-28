@@ -213,14 +213,13 @@ class TrajectoriesFile(Iterable):
             if data.dtype == np.float64 and self._convert_doubles:
                 data = data.astype(np.float32)
 
-            # Disable chunking, compression for scalars
+            # Disable compression for scalars
             if len(data.shape) == 0:
                 group.create_dataset(key, data=data)
             else:
                 group.create_dataset(
                     key,
                     data=data,
-                    chunks=True,
                     compression="gzip" if self._compress else None,
                 )
 
