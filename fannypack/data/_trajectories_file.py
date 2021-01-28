@@ -352,7 +352,7 @@ class TrajectoriesFile(Iterable):
         if mode is None:
             mode = "r" if self._read_only else "a"
 
-        return h5py.File(self._path, mode)
+        return h5py.File(self._path, mode=mode, libver="latest")
 
     def _print(self, *args, **kwargs):
         """Private helper for logging."""

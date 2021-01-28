@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name="fannypack",
-    version="0.0.22",
+    version="0.0.23",
     description="PyTorch utilities",
     long_description=long_description,
     long_description_content_type="text/markdown",
