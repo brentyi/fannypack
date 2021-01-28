@@ -40,9 +40,6 @@ buddy.save_checkpoint()
 # Save a labeled checkpoint
 buddy.save_checkpoint(label="memorable_name")
 
-# Save a checkpoint to a specific path
-buddy.save_checkpoint(path="checkpoints/specific_path.ckpt")
-
 # Load a checkpoint (latest)
 buddy.load_checkpoint()
 

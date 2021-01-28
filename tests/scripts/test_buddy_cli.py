@@ -1,13 +1,13 @@
 import os
 import subprocess
-from typing import AnyStr, List, Tuple, Union
+from typing import List, Tuple, Union
 
 import torch
 
 import fannypack
 
 
-def _run_command(command: Union[str, List[str]]) -> Tuple[AnyStr, AnyStr, int]:
+def _run_command(command: Union[str, List[str]]) -> Tuple[str, str, int]:
     """Helper for running a command & returning results."""
     proc = subprocess.Popen(
         command,
@@ -17,10 +17,11 @@ def _run_command(command: Union[str, List[str]]) -> Tuple[AnyStr, AnyStr, int]:
     )
     out, err = proc.communicate()
 
-    def convert(x: AnyStr):
+    def convert(x: Union[str, bytes]) -> str:
         if isinstance(x, bytes):
-            x = x.decode("utf8")
-        return x
+            return x.decode("utf8")
+        else:
+            return x
 
     return convert(out), convert(err), proc.returncode
 
@@ -92,7 +93,7 @@ def test_buddy_rename():
     assert exitcode == 0
 
 
-def test_buddy_rename():
+def test_buddy_delete():
     """Make sure that we can delete experiments."""
 
     # Create experiment
