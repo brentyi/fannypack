@@ -220,7 +220,7 @@ class TrajectoriesFile(Iterable):
                 group.create_dataset(
                     key,
                     data=data,
-                    compression="gzip" if self._compress else None,
+                    compression="lzf" if self._compress else None,
                 )
 
     def __len__(self) -> int:
