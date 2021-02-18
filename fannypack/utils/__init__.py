@@ -18,6 +18,7 @@ from ._module_freezing import freeze_module, unfreeze_module
 from ._pdb_safety_net import pdb_safety_net
 from ._slice_wrapper import SliceWrapper
 from ._squeeze import squeeze
+from ._stopwatch import stopwatch
 
 DictIterator = new_name_wrapper(
     "fannypack.utils.DictIterator", "fannypack.utils.SliceWrapper", SliceWrapper
@@ -51,4 +52,5 @@ __all__ = [
     "pdb_safety_net",
     "SliceWrapper",
     "squeeze",
+    "stopwatch",
 ]
