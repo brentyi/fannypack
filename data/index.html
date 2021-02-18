@@ -32,8 +32,6 @@
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
-        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
-        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]]}})</script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -178,7 +176,7 @@
 <h2><a class="toc-backref" href="#id1">Google Drive Downloads</a><a class="headerlink" href="#google-drive-downloads" title="Permalink to this headline">¶</a></h2>
 <dl class="py function">
 <dt id="fannypack.data.download_drive_file">
-<code class="sig-prename descclassname">fannypack.data.</code><code class="sig-name descname">download_drive_file</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">url</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">target_path</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">chunk_size</span><span class="o">=</span><span class="default_value">32768</span></em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#fannypack.data.download_drive_file" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">fannypack.data.</span></code><code class="sig-name descname"><span class="pre">download_drive_file</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_path</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chunk_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">32768</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="headerlink" href="#fannypack.data.download_drive_file" title="Permalink to this definition">¶</a></dt>
 <dd><p>Download a file via a public Google Drive url.</p>
 <p>Example usage:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">download_file_from_google_drive</span><span class="p">(</span>
@@ -199,7 +197,7 @@
 
 <dl class="py function">
 <dt id="fannypack.data.cached_drive_file">
-<code class="sig-prename descclassname">fannypack.data.</code><code class="sig-name descname">cached_drive_file</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">url</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span> &#x2192; str<a class="headerlink" href="#fannypack.data.cached_drive_file" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">fannypack.data.</span></code><code class="sig-name descname"><span class="pre">cached_drive_file</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="headerlink" href="#fannypack.data.cached_drive_file" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a local path to a file from Google Drive. Downloads the file if it doesn’t
 exist yet locally.</p>
 <p>By default, cached files live in <code class="docutils literal notranslate"><span class="pre">~/.cache/fannypack-drive-files/</span></code>. It often makes
@@ -221,7 +219,7 @@ sense to move this directory (eg to an NFS): see
 
 <dl class="py function">
 <dt id="fannypack.data.set_cache_path">
-<code class="sig-prename descclassname">fannypack.data.</code><code class="sig-name descname">set_cache_path</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.data.set_cache_path" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">fannypack.data.</span></code><code class="sig-name descname"><span class="pre">set_cache_path</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.data.set_cache_path" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the cache location for <a class="reference internal" href="#fannypack.data.cached_drive_file" title="fannypack.data.cached_drive_file"><code class="xref py py-func docutils literal notranslate"><span class="pre">fannypack.data.cached_drive_file()</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -236,7 +234,7 @@ sense to move this directory (eg to an NFS): see
 <h2><a class="toc-backref" href="#id2">HDF5 for Trajectories</a><a class="headerlink" href="#hdf5-for-trajectories" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="fannypack.data.TrajectoriesFile">
-<em class="property">class </em><code class="sig-prename descclassname">fannypack.data.</code><code class="sig-name descname">TrajectoriesFile</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">convert_doubles</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em>, <em class="sig-param"><span class="n">read_only</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em>, <em class="sig-param"><span class="n">compress</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.data.TrajectoriesFile" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">fannypack.data.</span></code><code class="sig-name descname"><span class="pre">TrajectoriesFile</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">convert_doubles</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">read_only</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compress</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.data.TrajectoriesFile" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code></p>
 <p>An interface for reading/writing trajectories via h5py.</p>
 <p>Each TrajectoriesFile represents an iterable list of trajectories, where trajectores
@@ -282,13 +280,13 @@ need to be called within a <code class="docutils literal notranslate"><span clas
 </dl>
 <dl class="py method">
 <dt id="fannypack.data.TrajectoriesFile.abandon_trajectory">
-<code class="sig-name descname">abandon_trajectory</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#fannypack.data.TrajectoriesFile.abandon_trajectory" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">abandon_trajectory</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="headerlink" href="#fannypack.data.TrajectoriesFile.abandon_trajectory" title="Permalink to this definition">¶</a></dt>
 <dd><p>Abandon the current trajectory.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="fannypack.data.TrajectoriesFile.add_meta">
-<code class="sig-name descname">add_meta</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">content</span><span class="p">:</span> <span class="n">Dict<span class="p">[</span>str<span class="p">, </span>numpy.ndarray<span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#fannypack.data.TrajectoriesFile.add_meta" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">add_meta</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">content</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="headerlink" href="#fannypack.data.TrajectoriesFile.add_meta" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add some metadata to the current trajectory.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -299,7 +297,7 @@ need to be called within a <code class="docutils literal notranslate"><span clas
 
 <dl class="py method">
 <dt id="fannypack.data.TrajectoriesFile.add_timestep">
-<code class="sig-name descname">add_timestep</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">content</span><span class="p">:</span> <span class="n">Dict<span class="p">[</span>str<span class="p">, </span>numpy.ndarray<span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#fannypack.data.TrajectoriesFile.add_timestep" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">add_timestep</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">content</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="headerlink" href="#fannypack.data.TrajectoriesFile.add_timestep" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add a timestep to the current trajectory.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -310,13 +308,13 @@ need to be called within a <code class="docutils literal notranslate"><span clas
 
 <dl class="py method">
 <dt id="fannypack.data.TrajectoriesFile.clear">
-<code class="sig-name descname">clear</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#fannypack.data.TrajectoriesFile.clear" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">clear</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="headerlink" href="#fannypack.data.TrajectoriesFile.clear" title="Permalink to this definition">¶</a></dt>
 <dd><p>Clear the contents of the TrajectoriesFile.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="fannypack.data.TrajectoriesFile.complete_trajectory">
-<code class="sig-name descname">complete_trajectory</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#fannypack.data.TrajectoriesFile.complete_trajectory" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">complete_trajectory</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="headerlink" href="#fannypack.data.TrajectoriesFile.complete_trajectory" title="Permalink to this definition">¶</a></dt>
 <dd><p>Write the current trajectory to disk, and mark the start of a new
 trajectory.
 Must be called with the TrajectoriesFile object in a <code class="docutils literal notranslate"><span class="pre">with</span></code> statement.</p>
@@ -325,7 +323,7 @@ Must be called with the TrajectoriesFile object in a <code class="docutils liter
 
 <dl class="py method">
 <dt id="fannypack.data.TrajectoriesFile.get_all">
-<code class="sig-name descname">get_all</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">key</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span> &#x2192; list<a class="headerlink" href="#fannypack.data.TrajectoriesFile.get_all" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">get_all</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">list</span><a class="headerlink" href="#fannypack.data.TrajectoriesFile.get_all" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get contents associated with a key from all trajectories.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -339,7 +337,7 @@ Must be called with the TrajectoriesFile object in a <code class="docutils liter
 
 <dl class="py method">
 <dt id="fannypack.data.TrajectoriesFile.resize">
-<code class="sig-name descname">resize</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">count</span><span class="p">:</span> <span class="n">int</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.data.TrajectoriesFile.resize" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">resize</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">count</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fannypack.data.TrajectoriesFile.resize" title="Permalink to this definition">¶</a></dt>
 <dd><p>Expand or contract our TrajectoriesFile.</p>
 </dd></dl>
 
